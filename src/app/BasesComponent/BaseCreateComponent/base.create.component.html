@@ -1,0 +1,24 @@
+<div class="ui padded grid">
+  <div class="ten wide column">
+    <agm-map [latitude]="lat" [longitude]="lng" [scrollwheel]="false" [zoom]="zoom">
+        <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
+    </agm-map>
+  </div>
+  <div class="six wide column">
+    <h3>Crear nueva base</h3>
+    <form class="ui form" [formGroup]="baseForm">
+      <sm-loader [complete]="!loading" class="inverted" text="Guardando"></sm-loader>
+
+      <div class="field">
+        <sm-input label="Nombre" [control]="name" placeholder="Nombre base"></sm-input>
+      </div>
+      <div class="field">
+        <!-- <sm-input label="Dirección" [control]="address" placeholder="Dirección base" #search></sm-input> -->
+        <label>Dirección</label>
+        <input type="text" formControlName="address" #search>
+      </div>
+
+      <sm-button (click)="base_save()" [disabled]="baseForm.invalid" class="primary">Crear base</sm-button>
+    </form>
+  </div>
+</div>

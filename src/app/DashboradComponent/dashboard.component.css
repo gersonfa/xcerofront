@@ -1,0 +1,11 @@
+/deep/ .logo-xcero {
+  width: 6em !important;
+}
+
+/deep/ .ui.inverted.menu .yellow.active.item, .ui.inverted.yellow.menu {
+  background-color: #FEEE02;
+}
+
+/deep/ .ui.menu .yellow.active.item, .ui.yellow.menu .active.item {
+  border-color: #FEEE02 !important;
+}
