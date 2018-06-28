@@ -20,6 +20,13 @@ import { GroupService } from './_services/group.service';
 import { ColonyService } from './_services/colony.service';
 import { TariffComponent } from './TariffComponent/tariff.component';
 import { TariffService } from './_services/tariff.service';
+import { DriversComponent } from './DriversComponent/drivers.component';
+import { DriverFormComponent } from './DriversComponent/DriverFormComponent/driver.form.component';
+import { DriversService } from './_services/drivers.service';
+import { PlacesService } from './_services/places.service';
+import { PlacesComponent } from './PlacesComponent/places.component';
+import { SiteService } from './_services/site.service';
+import { GroupsComponent } from './BasesComponent/BaseComponent/GroupsComponent/groups.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -34,8 +41,15 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], children: [
     { path: 'bases', component: BasesComponent},
     { path: 'bases/new', component: BaseCreateComponent},
-    { path: 'base/:id', component: BaseComponent},
-    { path: 'tariff', component: TariffComponent }
+    { path: 'base/:id', component: BaseComponent, children: [
+      { path: '', redirectTo: 'groups', pathMatch: 'full' },
+      { path: 'groups', component: GroupsComponent },
+      { path: 'places', component: PlacesComponent }
+    ]},
+    { path: 'tariff', component: TariffComponent },
+    { path: 'drivers', component: DriversComponent },
+    { path: 'drivers/create', component: DriverFormComponent },
+    { path: 'places', component: PlacesComponent }
   ]}
 ]
 
@@ -47,7 +61,11 @@ const routes: Routes = [
     BasesComponent,
     BaseCreateComponent,
     BaseComponent,
-    TariffComponent
+    TariffComponent,
+    DriversComponent,
+    DriverFormComponent,
+    PlacesComponent,
+    GroupsComponent
   ],
   imports: [
     BrowserModule,
@@ -72,7 +90,10 @@ const routes: Routes = [
     BaseService,
     GroupService,
     ColonyService,
-    TariffService
+    TariffService,
+    DriversService,
+    PlacesService,
+    SiteService
   ],
   bootstrap: [AppComponent]
 })

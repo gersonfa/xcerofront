@@ -19,7 +19,12 @@ export class AuthenticationService {
       .map(response => response.json());
   }
 
+  user_create(driver: any): Observable<any> {
+    return this.http.post(`${API_URL}/api/auth/register`, driver)
+      .map(r => r.json());
+  }
+
   logOut() {
-    localStorage.clear()
+    localStorage.clear();
   }
 }

@@ -32,4 +32,9 @@ export class GroupService {
       .map(r => r.json())
   }
 
+  group_place_list(): Observable<any[]> {
+    return this.http.get(`${API_URL}/api/group/place`)
+      .map(r => r.json());
+  }
+
 }

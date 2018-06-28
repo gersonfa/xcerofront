@@ -1,34 +1,37 @@
 <div class="ui padded grid">
-    <h3 style="margin-top: 1em;">Nueva tarifa</h3>
   <div class="row">
-    <div class="six wide column">
-      <sm-select [(model)]="group_selected" (onChange)="selectGroup($event)" placeholder="Buscar grupo" class="fluid search">
-        <option *ngFor="let group of groups" [value]="group._id">{{group.name}}</option>
+    <div class="five wide column">
+      <sm-select [(model)]="group_selected" (onChange)="selectGroup($event)" placeholder="Buscar grupo o lugar" class="fluid search">
+        <option *ngFor="let gp of groups_places" [value]="gp._id">{{gp.name}}</option>
       </sm-select>
-    </div>
-    <div class="six wide column">
-      <sm-select [(model)]="second_group_selected" placeholder="Buscar grupo" class="fluid search">
-        <option *ngFor="let group of groups_available" [value]="group._id">{{group.name}}</option>
+
+      <br>
+
+      <sm-select [(model)]="second_group_selected" placeholder="Buscar grupo o lugar" class="fluid search">
+        <option *ngFor="let gp of groups_places_available" [value]="gp._id">{{gp.name}}</option>
       </sm-select>
-    </div>
-    <div class="four wide column">
-      <div class="ui input">
+
+      <br>
+
+      <div class="ui input fluid">
         <input type="number" placeholder="Costo" [(ngModel)]="cost">
       </div>
 
-      <button class="ui button primary" [disabled]="!group_selected || !second_group_selected || !cost" (click)="saveTariff()">
+      <button class="ui button yellow" style="margin-top: 10px;" [disabled]="!group_selected || !second_group_selected || !cost" (click)="saveTariff()">
         Guardar
       </button>
-    </div>
-  </div>
-  <h3>Tarifas</h3>
-  <div class="row">
-    <div class="sixteen wide column">
+
+      <div class="ui horizontal divider">
+          Tarifas
+        </div>
+
       <sm-list class="divided">
         <sm-item *ngFor="let tariff of tariffs">
-          {{tariff.groups[0].name}} - {{tariff.groups[1].name}} - {{tariff.cost | currency:'MXN':true}}
+          {{tariff.origin_group ? tariff.origin_group?.name : tariff.origin_place?.name}} - {{tariff.destiny_group ? tariff.destiny_group?.name : tariff.destiny_place?.name}}
+          - {{tariff.cost | currency:'MXN':true}}
         </sm-item>
       </sm-list>
     </div>
   </div>
+
 </div>

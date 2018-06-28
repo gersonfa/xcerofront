@@ -1,0 +1,28 @@
+<div class="ui padded grid">
+  <div class="sixteen wide column">
+    <sm-button class="yellow" icon="plus" routerLink="/dashboard/drivers/create">Añadir nuevo conductor</sm-button>
+
+    <table class="ui very basic collapsing celled table" style="margin-top: 2em;">
+      <thead>
+        <tr>
+          <th>Conductor</th>
+          <th>Nombre</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let driver of drivers">
+          <td>
+            <img [src]="driver.image" class="ui mini rounded image" style="margin-left: auto; margin-right: auto;">
+          </td>
+          <td>
+            {{driver.full_name}}
+          </td>
+          <td>
+            {{driver.email}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

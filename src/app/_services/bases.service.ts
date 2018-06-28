@@ -17,6 +17,11 @@ export class BaseService {
       .map(r => r.json())
   }
 
+  base_details(baseId: string): Observable<Base> {
+    return this.http.get(`${API_URL}/api/base/${baseId}`)
+      .map(r => r.json());
+  }
+
   base_list(): Observable<Base[]> {
     return this.http.get(`${API_URL}/api/base`)
       .map(r => r.json())

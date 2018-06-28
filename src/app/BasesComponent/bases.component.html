@@ -1,7 +1,5 @@
 <div class="ui padded grid">
   <div class="four wide column">
-    <sm-button class="fluid yellow" icon="plus" routerLink="/dashboard/bases/new">Crear nueva base</sm-button>
-    <br>
     <sm-list class="divided animated">
       <sm-item *ngFor="let base of bases" [header]="base.name" routerLink="/dashboard/base/{{base._id}}">
         {{base.address}}
@@ -12,6 +10,22 @@
     <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom">
         <agm-marker *ngFor="let marker of markers" [label]="marker.label" [latitude]="marker.latitude" [longitude]="marker.longitude"></agm-marker>
     </agm-map>
+
+    <form class="ui form" [formGroup]="baseForm" style="margin-top: 1em;">
+      <sm-loader [complete]="!loading" class="inverted" text="Guardando"></sm-loader>
+
+      <div class="field">
+        <sm-input label="Nombre" [control]="name" placeholder="Nombre base"></sm-input>
+      </div>
+      <div class="field">
+        <!-- <sm-input label="Dirección" [control]="address" placeholder="Dirección base" #search></sm-input> -->
+        <label>Dirección</label>
+        <input type="text" formControlName="address" #search>
+      </div>
+
+      <sm-button (click)="base_save()" [disabled]="baseForm.invalid" class="primary">Crear base</sm-button>
+    </form>
+
   </div>
 </div>
 

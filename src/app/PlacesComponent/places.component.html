@@ -1,0 +1,29 @@
+<div class="ui padded grid">
+  <div class="four wide column">
+    <sm-list class="divided animated">
+      <sm-item *ngFor="let place of places" [header]="place.name">
+        {{place.address}}
+      </sm-item>
+    </sm-list>
+
+    <h5 *ngIf="places.length == 0">Aún no hay lugares registrados.</h5>
+  </div>
+  <div class="twelve wide column">
+    <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom">
+      <agm-marker *ngFor="let marker of markers" [label]="marker.label" [latitude]="marker.latitude" [longitude]="marker.longitude"></agm-marker>
+    </agm-map>
+
+    <form class="ui form" style="margin-top: 1em;">
+        <div class="field">
+          <label>Nombre</label>
+          <input type="text" name="place_name" [(ngModel)]="place_name" placeholder="Nombre lugar">
+        </div>
+
+        <div class="field">
+          <label>Dirección</label>
+          <input type="text" #search placeholder="Nuevo lugar">
+        </div>
+    </form>
+
+  </div>
+</div>

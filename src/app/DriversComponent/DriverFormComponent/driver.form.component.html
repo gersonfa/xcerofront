@@ -1,0 +1,32 @@
+<div class="ui container grid" style="padding-top: 2em;">
+  <div class="ten wide column">
+    <form class="ui form" [formGroup]="driverForm">
+      <div class="field">
+        <label>Nombre completo</label>
+        <input type="text" name="first-name" placeholder="Nombre completo" formControlName="full_name">
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" name="email" placeholder="Email" formControlName="email">
+      </div>
+      <div class="field">
+        <label>Nombre de usuario</label>
+        <input type="text" name="full_name" placeholder="Usuario" formControlName="account">
+      </div>
+      <div class="field">
+        <label>Contraseña</label>
+        <input type="password" name="password" placeholder="Contraseña" formControlName="password">
+      </div>
+      <button class="ui yellow button" [disabled]="driverForm.invalid" (click)="create_driver()">Crear conductor</button>
+    </form>
+  </div>
+  <div class="four wide column">
+      <div class="field">
+        <img style="max-width: 100%; margin-top:10px; display: block; margin-left: auto; margin-right: auto;" class="ui small circular image" [src]="imageURL" alt="">
+        <label id="uploader">
+          Selecciona imagen
+          <input type="file" name="myfile" [(ngModel)]="val" #image (change)="readURL(image, val)" accept="image/*" />
+        </label>
+      </div>
+    </div>
+</div>

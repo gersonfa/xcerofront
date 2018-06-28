@@ -40,50 +40,7 @@ export class BaseCreateComponent implements OnInit {
       this.lng = position.coords.longitude;
     })
 
-    this.name = this.fb.control('', Validators.required)
-    this.address = this.fb.control('', Validators.required)
 
-    this.baseForm = this.fb.group({
-      name: this.name,
-      address: this.address,
-      lat: '',
-      lng: ''
-    })
-
-    this.mapsAPILoader.load().then(() => {
-      let autocomplete = new google.maps.places.Autocomplete(
-        this.searchElementRef.nativeElement,
-        {
-          types: ["address"]
-        }
-      );
-      autocomplete.addListener("place_changed", () => {
-        this.ngZone.run(() => {
-          //get the place result
-          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-
-          //verify result
-          if (place.geometry === undefined || place.geometry === null) {
-            return;
-          }
-          //set latitude, longitude and zoom
-          this.address.setValue(place.formatted_address)
-          this.latitude = place.geometry.location.lat();
-          this.baseForm.value.lat = this.latitude;
-
-          this.longitude = place.geometry.location.lng();
-          this.baseForm.value.lng = this.longitude;
-          this.zoom = 12;
-        });
-      });
-    });
   }
 
-  base_save() {
-    this.baseService.base_create(this.baseForm.value).subscribe(
-      base => {
-        this.route.navigate(['/dashboard/bases'])
-      }
-    )
-  }
 }
