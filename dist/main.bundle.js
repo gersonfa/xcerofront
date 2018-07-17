@@ -1286,7 +1286,7 @@ var AuthGuard = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return API_URL; });
 //export const API_URL = 'http://45.33.55.120';
-var API_URL = 'http://localhost:3019';
+var API_URL = 'http://45.56.121.162';
 
 
 /***/ }),
