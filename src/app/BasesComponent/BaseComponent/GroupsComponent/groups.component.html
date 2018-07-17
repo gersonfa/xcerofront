@@ -16,7 +16,7 @@
   <div class="two wide column" style="border-right: 1px solid black;">
     <sm-list class="divided">
       <sm-item *ngFor="let colony of colonies">
-        <i style="color: red; cursor: pointer; ">x</i>
+        <i style="color: red; cursor: pointer;" (click)="delete_colony(colony)">x</i>
         {{colony.label}}
       </sm-item>
     </sm-list>

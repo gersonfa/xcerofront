@@ -24,6 +24,8 @@ export class PlacesComponent implements OnInit {
 
   public place_name: string;
 
+  place_selected: any;
+
   @ViewChild("search") public searchElementRef: ElementRef;
 
   constructor(
@@ -71,7 +73,6 @@ export class PlacesComponent implements OnInit {
           if (place.geometry === undefined || place.geometry === null) {
             return;
           }
-          console.log(place);
 
           const new_place = {
             name: this.place_name,
@@ -98,5 +99,18 @@ export class PlacesComponent implements OnInit {
         });
       });
     });
+  }
+
+  selectPlace(place) {
+    this.place_selected = place;
+  }
+
+  deletePlace(modal) {
+    this.placeService.place_delete(this.base_id, this.place_selected._id).subscribe(
+      place => {
+        this.places = this.places.filter(p => p._id != place._id);
+        modal.hide();
+      }
+    )
   }
 }

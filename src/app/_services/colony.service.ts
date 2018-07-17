@@ -21,4 +21,9 @@ export class ColonyService {
     return this.http.get(`${API_URL}/api/group/${groupId}/colony`)
       .map(r => r.json())
   }
+
+  colony_delete(colony_id: string): Observable<Colony> {
+    return this.http.delete(`${API_URL}/api/colony/${colony_id}`)
+      .map(r => r.json());
+  }
 }

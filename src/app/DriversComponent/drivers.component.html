@@ -1,28 +1,43 @@
-<div class="ui padded grid">
-  <div class="sixteen wide column">
+<div class="ui internally celled padded grid" style="height: 92vh;;">
+  <div class="four wide column" style="max-height: 100%; overflow-y: scroll;">
     <sm-button class="yellow" icon="plus" routerLink="/dashboard/drivers/create">Añadir nuevo conductor</sm-button>
 
     <table class="ui very basic collapsing celled table" style="margin-top: 2em;">
-      <thead>
-        <tr>
-          <th>Conductor</th>
-          <th>Nombre</th>
-          <th>Email</th>
-        </tr>
-      </thead>
+
       <tbody>
         <tr *ngFor="let driver of drivers">
-          <td>
-            <img [src]="driver.image" class="ui mini rounded image" style="margin-left: auto; margin-right: auto;">
+          <td [ngClass]="{'selected-driver': driver_selected == driver._id}">
+            <h4 class="ui image header">
+              <!-- <img [src]="driver.image" class="ui mini rounded image" style="margin-left: auto; margin-right: auto;"> -->
+              <div class="content">
+                {{driver.full_name}} <span class="ui mini orange label" *ngIf="driver.inService">En servicio</span>
+                <div class="sub header">Unidad: {{driver.unit_number}}</div>
+              </div>
+            </h4>
           </td>
           <td>
-            {{driver.full_name}}
-          </td>
-          <td>
-            {{driver.email}}
+              <sm-button class="" icon="user" routerLink="/dashboard/driver/{{driver._id}}"></sm-button>
+              <sm-button class="" icon="zoom in" (click)="zoomDriver(driver)"></sm-button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
+  <div class="twelve wide column">
+    <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom">
+      <agm-marker *ngFor="let marker of driver_markers" (markerClick)="selectDriver(marker)" [iconUrl]="'https://cdn2.iconfinder.com/data/icons/fatcow/32x32/car_taxi.png'"
+        [label]="marker.label" [latitude]="marker.latitude" [longitude]="marker.longitude"></agm-marker>
+    </agm-map>
+  </div>
 </div>
+
+<style>
+  agm-map {
+    height: 90vh;
+  }
+
+  .selected-driver {
+    border: 1px solid #FFC107 !important;
+    padding: 10px !important;
+  }
+</style>

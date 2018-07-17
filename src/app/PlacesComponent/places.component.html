@@ -1,10 +1,12 @@
 <div class="ui padded grid">
   <div class="four wide column">
-    <sm-list class="divided animated">
-      <sm-item *ngFor="let place of places" [header]="place.name">
-        {{place.address}}
-      </sm-item>
-    </sm-list>
+
+    <div class="ui list">
+        <div class="item" *ngFor="let place of places">
+          <div class="header"> <i style="color: red; cursor: pointer;" (click)="selectPlace(place); modal.show()">x</i> {{place.name}}</div>
+          {{place.address}}
+        </div>
+      </div>
 
     <h5 *ngIf="places.length == 0">Aún no hay lugares registrados.</h5>
   </div>
@@ -27,3 +29,14 @@
 
   </div>
 </div>
+
+<sm-modal class="basic" #modal>
+    <modal-content *ngIf="place_selected">
+        <h2>¿Estás seguro de querer borrar {{place_selected.name}}?</h2>
+        <p>Se borrarán todas las tarifas relacionadas a este lugar.</p>
+    </modal-content>
+    <modal-actions>
+      <button class="ui button" style="margin-right: 10px;" (click)="modal.hide()">Cancelar</button>
+      <button class="ui button red" (click)="deletePlace(modal)">Eliminar</button>
+    </modal-actions>
+  </sm-modal>

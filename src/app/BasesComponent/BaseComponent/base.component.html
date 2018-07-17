@@ -5,6 +5,7 @@
       <i class="right chevron icon divider"></i>
       <div class="active section">{{base?.name}}</div>
     </div>
+    <button class="ui red button" style="float: right;" (click)="modal.show()">Eliminar base</button>
     <div class="ui top attached tabular menu" style="margin-top: 2em;">
       <a class="item" routerLink="groups" routerLinkActive="active">
         Grupos
@@ -20,3 +21,14 @@
 
   </div>
 </div>
+
+<sm-modal class="basic" #modal>
+  <modal-content>
+      <h2>¿Estás seguro de querer borrar la base?</h2>
+      <p>IMPORTANTE: Se eliminaran los grupos, colonias, lugares y tarifas relacionadas a esta base.</p>
+  </modal-content>
+  <modal-actions>
+    <button class="ui button" style="margin-right: 10px;" (click)="modal.hide()">Cancelar</button>
+    <button class="ui button red" (click)="baseDelete(modal)">Eliminar</button>
+  </modal-actions>
+</sm-modal>

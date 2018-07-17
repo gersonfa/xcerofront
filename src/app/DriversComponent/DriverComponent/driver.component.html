@@ -1,0 +1,44 @@
+<div class="ui padded grid">
+  <div class="row">
+    <div class="sixteen wide column" style="margin-bottom: 20px;">
+        <div class="ui large breadcrumb">
+            <a class="section" routerLink="/dashboard/drivers">Conductores</a>
+            <i class="right chevron icon divider"></i>
+            <div class="active section">{{driver?.full_name}}</div>
+          </div>
+    </div>
+
+    <div class="three wide column">
+      <div class="ui card">
+        <div class="image">
+          <img src="{{driver?.image}}">
+        </div>
+        <div class="content">
+          <a class="header">{{driver?.full_name}}</a>
+          <div class="meta">
+            <span class="date">{{driver?.email}}</span>
+          </div>
+          <div class="description">
+              <bar-rating *ngIf="driver" [(rate)]="driver.rating" [max]="5" [readOnly]="true"></bar-rating>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="thirteen wide column">
+      <div class="ui tabular menu">
+        <a routerLink="services" routerLinkActive="active" class=" item">
+          Servicios
+        </a>
+        <a routerLink="inbox" routerLinkActive="active" class="item">
+          Mensajes
+        </a>
+        <a class="item">
+          Comentarios
+        </a>
+      </div>
+
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

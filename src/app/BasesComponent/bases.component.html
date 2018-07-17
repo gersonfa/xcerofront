@@ -1,14 +1,14 @@
 <div class="ui padded grid">
   <div class="four wide column">
     <sm-list class="divided animated">
-      <sm-item *ngFor="let base of bases" [header]="base.name" routerLink="/dashboard/base/{{base._id}}">
+      <sm-item *ngFor="let base of bases" [header]="base.name" routerLink="/dashboard/base/{{base._id}}" [ngClass]="{'base-selected': base._id == base_selected}">
         {{base.address}}
       </sm-item>
     </sm-list>
   </div>
   <div class="twelve wide column">
     <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom">
-        <agm-marker *ngFor="let marker of markers" [label]="marker.label" [latitude]="marker.latitude" [longitude]="marker.longitude"></agm-marker>
+        <agm-marker (markerClick)="selectBase(marker)" [iconUrl]="'../../assets/base.png'" [openInfoWindow]="true" *ngFor="let marker of markers" [label]="marker.label" [latitude]="marker.latitude" [longitude]="marker.longitude"></agm-marker>
     </agm-map>
 
     <form class="ui form" [formGroup]="baseForm" style="margin-top: 1em;">
@@ -28,4 +28,11 @@
 
   </div>
 </div>
+
+<style>
+  .base-selected {
+    border: 1px solid #FFC107;
+    padding: 10px !important;
+  }
+</style>
 

@@ -6,6 +6,7 @@ import { FormControl, FormGroup, FormBuilder, Validators } from "@angular/forms"
 import { MapsAPILoader } from "@agm/core";
 import { } from "@types/googlemaps";
 import { ColonyService } from "../../../_services/colony.service";
+import {SnotifyService} from 'ng-snotify'
 
 @Component({
   templateUrl: './groups.component.html'
@@ -37,6 +38,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
+    private snotifyService: SnotifyService
   ) { }
 
   ngOnInit() {
@@ -92,11 +94,19 @@ export class GroupsComponent implements OnInit, OnDestroy {
               const marker = {
                 longitude: Number(colony.coords[0]),
                 latitude: Number(colony.coords[1]),
-                label: colony.name
+                label: colony.name,
+                _id: colony._id
               }
 
               this.colonies.push(marker);
               this.colonyForm.reset();
+            },
+            error => {
+              const body = JSON.parse(error._body);
+              console.log(body)
+              if (body.error.includes('duplicate key')) {
+                this.snotifyService.error('La colonia ya esta registrada.');
+              }
             }
           )
         });
@@ -138,7 +148,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
     )
   }
 
-  delete_colony(colony_id) {
-
+  delete_colony(colony) {
+    this.colonyService.colony_delete(colony._id).subscribe(
+      colony_deleted => this.colonies = this.colonies.filter(c => c._id !== colony_deleted._id)
+    )
   }
 }

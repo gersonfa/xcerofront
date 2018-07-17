@@ -22,8 +22,8 @@ export class GroupService {
       .map(r => r.json());
   }
 
-  group_list_available(groupId: string): Observable<Group[]> {
-    return this.http.get(`${API_URL}/api/group/${groupId}/available`)
+  group_list_available(gp: any): Observable<Group[]> {
+    return this.http.get(`${API_URL}/api/group/place/available`, {params: gp})
       .map(r => r.json());
   }
 

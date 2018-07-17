@@ -27,6 +27,8 @@ export class BasesComponent implements OnInit {
   public bases: Base[] = [];
   markers: any[] = [];
 
+  base_selected: string;
+
   public baseForm: FormGroup;
   public name: FormControl;
   public address: FormControl;
@@ -48,7 +50,7 @@ export class BasesComponent implements OnInit {
     this.longitude = -98.263005;
 
     this.baseService.base_list().subscribe(bases => {
-      this.bases = bases;
+      this.bases = bases.sort(this.sortBases);
       this.bases.map(b => {
         const marker = {
           longitude: Number(b.coords[0]),
@@ -85,11 +87,11 @@ export class BasesComponent implements OnInit {
             return;
           }
           this.address.setValue(place.formatted_address);
-          this.latitude = place.geometry.location.lat();
-          this.baseForm.value.lat = this.latitude;
+          //this.latitude = place.geometry.location.lat();
+          this.baseForm.value.lat = place.geometry.location.lat();
 
-          this.longitude = place.geometry.location.lng();
-          this.baseForm.value.lng = this.longitude;
+          //this.longitude = place.geometry.location.lng();
+          this.baseForm.value.lng = place.geometry.location.lng();
           this.zoom = 12;
         });
       });
@@ -99,15 +101,30 @@ export class BasesComponent implements OnInit {
   base_save() {
     this.baseService.base_create(this.baseForm.value).subscribe(base => {
       this.bases.push(base);
+      this.bases = this.bases.sort(this.sortBases);
 
       const marker = {
         longitude: Number(base.coords[0]),
         latitude: Number(base.coords[1]),
-        label: base.name
+        label: base.name,
+        _id: base._id
       };
 
       this.markers.push(marker);
       this.baseForm.reset();
     });
+  }
+
+  selectBase(base) {
+    this.base_selected = this.bases.find(b => b.name == base.label)._id
+    console.log(base)
+  }
+
+  sortBases(a, b) {
+    if (a.name < b.name) { return -1; }
+    if (a.name > b.name) { return 1; }
+
+    return 0;
+
   }
 }

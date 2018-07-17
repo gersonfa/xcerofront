@@ -1,0 +1,34 @@
+<div class="ui padded grid">
+  <div class="row">
+    <div class="sixteen wide column">
+        <table class="ui celled table">
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Origen</th>
+                <th>Destino</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let service of services" [ngClass]="{'negative': service.state == 'canceled', 'positive': service.state == 'completed'}">
+                <td>{{service.user?.full_name}}</td>
+                <td>{{
+                  service.origin_colony ? service.origin_colony?.name : service.origin_place?.name
+                  }}</td>
+                <td>
+                  {{
+                    service.destiny_colony ? service.destiny_colony?.name : service.destiny_place?.name
+                  }}
+                </td>
+                <td>{{service.state == 'completed' ? 'Completado' :
+                  service.state == 'pending' ? 'Pendiente' :
+                  service.state == 'on_the_way' ? 'En camino' :
+                  service.state == 'in_progress' ? 'En proceso' : 'Cancelado'
+                }}</td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+  </div>
+</div>

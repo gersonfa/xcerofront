@@ -1,0 +1,22 @@
+<div class="ui padded grid">
+  <div class="row">
+    <div class="sixteen wide column">
+        <form class="ui reply form" style="margin-bottom: 20px;">
+            <div class="field">
+              <textarea cols="3" rows="3" placeholder="Ingresa un nuevo mensaje" name="body" [(ngModel)]="body"></textarea>
+            </div>
+            <button class="ui primary submit labeled icon button" (click)="send()">
+              <i class="icon edit"></i> Enviar mensaje
+            </button>
+          </form>
+
+          <div class="ui raised segment" *ngFor="let inbox of inboxs">
+            <b>{{inbox.date | date:'dd/MM/yy'}}</b>
+            <p>{{
+              inbox.body
+            }}
+            </p>
+          </div>
+    </div>
+  </div>
+</div>

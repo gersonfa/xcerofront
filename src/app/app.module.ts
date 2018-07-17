@@ -6,6 +6,8 @@ import { AgmCoreModule } from '@agm/core';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { BarRatingModule } from "ngx-bar-rating";
+
 import { Routes, RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './LoginComponent/login.component';
@@ -27,6 +29,10 @@ import { PlacesService } from './_services/places.service';
 import { PlacesComponent } from './PlacesComponent/places.component';
 import { SiteService } from './_services/site.service';
 import { GroupsComponent } from './BasesComponent/BaseComponent/GroupsComponent/groups.component';
+import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify'
+import { DriverComponent } from './DriversComponent/DriverComponent/driver.component';
+import { ServicesComponent } from './DriversComponent/DriverComponent/ServicesComponent/services.component';
+import { MessagesComponent } from './DriversComponent/DriverComponent/MessagesComponent/messages.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -39,6 +45,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], children: [
+    { path: '', redirectTo: 'drivers', pathMatch: 'full'},
     { path: 'bases', component: BasesComponent},
     { path: 'bases/new', component: BaseCreateComponent},
     { path: 'base/:id', component: BaseComponent, children: [
@@ -49,9 +56,14 @@ const routes: Routes = [
     { path: 'tariff', component: TariffComponent },
     { path: 'drivers', component: DriversComponent },
     { path: 'drivers/create', component: DriverFormComponent },
+    { path: 'driver/:id', component: DriverComponent, children: [
+      {path: '', redirectTo: 'services', pathMatch: 'full'},
+      {path: 'services', component: ServicesComponent},
+      { path: 'inbox', component: MessagesComponent}
+    ]},
     { path: 'places', component: PlacesComponent }
   ]}
-]
+];
 
 @NgModule({
   declarations: [
@@ -64,8 +76,11 @@ const routes: Routes = [
     TariffComponent,
     DriversComponent,
     DriverFormComponent,
+    DriverComponent,
     PlacesComponent,
-    GroupsComponent
+    GroupsComponent,
+    ServicesComponent,
+    MessagesComponent
   ],
   imports: [
     BrowserModule,
@@ -73,6 +88,8 @@ const routes: Routes = [
     HttpModule,
     ReactiveFormsModule,
     NgSemanticModule,
+    SnotifyModule,
+    BarRatingModule,
     RouterModule.forRoot(routes, {useHash: true}),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAogodmHuA-P4Ais69knDP1HBlLOWCrCdg',
@@ -93,7 +110,9 @@ const routes: Routes = [
     TariffService,
     DriversService,
     PlacesService,
-    SiteService
+    SiteService,
+    { provide: 'SnotifyToastConfig', useValue: ToastDefaults},
+    SnotifyService
   ],
   bootstrap: [AppComponent]
 })

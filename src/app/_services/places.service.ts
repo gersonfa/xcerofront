@@ -24,4 +24,9 @@ export class PlacesService {
     return this.http.post(`${API_URL}/api/base/${baseId}/place`, place)
       .map(r => r.json());
   }
+
+  place_delete(baseId: string, placeId: string): Observable<any> {
+    return this.http.delete(`${API_URL}/api/base/${baseId}/place/${placeId}`)
+      .map(r => r.json());
+  }
 }

@@ -27,6 +27,11 @@ export class BaseService {
       .map(r => r.json())
   }
 
+  base_delete(baseId: string): Observable<any> {
+    return this.http.delete(`${API_URL}/api/base/${baseId}`)
+      .map(r => r.json())
+  }
+
   group_create(group: Group): Observable<Group> {
     return this.http.post(`${API_URL}/api/group`, group)
       .map(r => r.json())

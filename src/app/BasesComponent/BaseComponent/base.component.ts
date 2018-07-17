@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone } from "@angular/core";
 import { Base } from "../../_models/base";
 import { BaseService } from "../../_services/bases.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   templateUrl: './base.component.html'
@@ -13,7 +13,8 @@ export class BaseComponent implements OnInit {
 
   constructor(
     private baseService: BaseService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -23,6 +24,15 @@ export class BaseComponent implements OnInit {
 
     this.baseService.base_details(this.base_id).subscribe(
       base => this.base = base
+    )
+  }
+
+  baseDelete(modal) {
+    this.baseService.base_delete(this.base_id).subscribe(
+      base => {
+        modal.hide();
+        this.router.navigate(['/dashboard/bases']);
+      }
     )
   }
 

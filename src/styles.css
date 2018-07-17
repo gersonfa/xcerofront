@@ -2,3 +2,12 @@
 agm-map {
   height: 450px;
 }
+
+
+.ui.dimmer {
+  display: flex !important;
+}
+
+.ui.modal {
+  margin-top: 0;
+}
