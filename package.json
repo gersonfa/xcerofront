@@ -23,14 +23,11 @@
     "@angular/platform-browser-dynamic": "^5.2.0",
     "@angular/router": "^5.2.0",
     "angular2-jwt": "^0.2.3",
-    "angular2-web-worker": "0.0.6",
     "core-js": "^2.4.1",
     "ng-semantic": "^1.1.13",
     "ng-snotify": "^4.3.1",
     "ngx-bar-rating": "^1.1.0",
-    "ngx-web-worker": "0.0.4",
     "rxjs": "^5.5.6",
-    "semantic-ui": "^2.3.2",
     "zone.js": "^0.8.19"
   },
   "devDependencies": {
