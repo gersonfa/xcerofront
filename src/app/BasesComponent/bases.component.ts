@@ -92,7 +92,7 @@ export class BasesComponent implements OnInit {
 
           //this.longitude = place.geometry.location.lng();
           this.baseForm.value.lng = place.geometry.location.lng();
-          this.zoom = 12;
+          this.zoom = 13;
         });
       });
     });
