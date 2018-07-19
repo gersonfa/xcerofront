@@ -8,7 +8,7 @@
   </div>
   <div class="twelve wide column">
     <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom">
-        <agm-marker (markerClick)="selectBase(marker)" [iconUrl]="'./assets/base.png'" [openInfoWindow]="true" *ngFor="let marker of markers" [label]="marker.label" [latitude]="marker.latitude" [longitude]="marker.longitude"></agm-marker>
+        <agm-marker (markerClick)="selectBase(marker)" [iconUrl]="'assets/base.png'" [openInfoWindow]="true" *ngFor="let marker of markers" [label]="marker.label" [latitude]="marker.latitude" [longitude]="marker.longitude"></agm-marker>
     </agm-map>
 
     <form class="ui form" [formGroup]="baseForm" style="margin-top: 1em;">
