@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod",
+    "build": "ng build --deploy-url=http://45.56.121.162/app/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
