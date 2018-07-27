@@ -600,7 +600,7 @@ var ServicesComponent = /** @class */ (function () {
 /***/ "./src/app/DriversComponent/DriverComponent/driver.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"ui padded grid\">\r\n  <div class=\"row\">\r\n    <div class=\"sixteen wide column\" style=\"margin-bottom: 20px;\">\r\n        <div class=\"ui large breadcrumb\">\r\n            <a class=\"section\" routerLink=\"/dashboard/drivers\">Conductores</a>\r\n            <i class=\"right chevron icon divider\"></i>\r\n            <div class=\"active section\">{{driver?.full_name}}</div>\r\n          </div>\r\n    </div>\r\n\r\n    <div class=\"three wide column\">\r\n      <div class=\"ui card\">\r\n        <div class=\"image\">\r\n          <img src=\"{{driver?.image}}\">\r\n        </div>\r\n        <div class=\"content\">\r\n          <a class=\"header\">{{driver?.full_name}}</a>\r\n          <div class=\"meta\">\r\n            <span class=\"date\">{{driver?.email}}</span>\r\n          </div>\r\n          <div class=\"description\">\r\n              <bar-rating *ngIf=\"driver\" [(rate)]=\"driver.rating\" [max]=\"5\" [readOnly]=\"true\"></bar-rating>\r\n          </div>\r\n\r\n          <sm-checkbox *ngIf=\"enable\" label=\"Usuario activo\" [control]=\"enable\" (change)=\"changeEnable()\" type=\"toggle\"></sm-checkbox>\r\n\r\n          <!-- <div class=\"field\">\r\n            <div class=\"ui toggle checkbox\">\r\n              <input type=\"checkbox\" tabindex=\"0\" name=\"enable\" class=\"hidden\" [checked]=\"driver?.enable\" (change)=\"changeEnable()\">\r\n              <label>Usuario activo</label>\r\n            </div>\r\n          </div> -->\r\n\r\n          <button class=\"ui negative fluid button\" style=\"margin-top: 50px;\" (click)=\"modal.show()\">Eliminar</button>\r\n\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n    <div class=\"thirteen wide column\">\r\n      <div class=\"ui tabular menu\">\r\n        <a routerLink=\"services\" routerLinkActive=\"active\" class=\" item\">\r\n          Servicios\r\n        </a>\r\n        <a routerLink=\"inbox\" routerLinkActive=\"active\" class=\"item\">\r\n          Mensajes\r\n        </a>\r\n        <a class=\"item\">\r\n          Comentarios\r\n        </a>\r\n      </div>\r\n\r\n      <router-outlet></router-outlet>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n<sm-modal class=\"basic\" #modal>\r\n  <modal-content>\r\n      <h2>¿Estás seguro de querer borrar la unidad permanentemente?</h2>\r\n  </modal-content>\r\n  <modal-actions>\r\n    <button class=\"ui button\" style=\"margin-right: 10px;\" (click)=\"modal.hide()\">Cancelar</button>\r\n    <button class=\"ui button red\" (click)=\"deleteDriver(modal)\">Eliminar</button>\r\n  </modal-actions>\r\n</sm-modal>\r\n"
+module.exports = "<div class=\"ui padded grid\">\r\n  <div class=\"row\">\r\n    <div class=\"sixteen wide column\" style=\"margin-bottom: 20px;\">\r\n        <div class=\"ui large breadcrumb\">\r\n            <a class=\"section\" routerLink=\"/dashboard/drivers\">Conductores</a>\r\n            <i class=\"right chevron icon divider\"></i>\r\n            <div class=\"active section\">{{driver?.full_name}}</div>\r\n          </div>\r\n    </div>\r\n\r\n    <div class=\"three wide column\">\r\n      <div class=\"ui card\">\r\n        <div class=\"image\">\r\n          <img src=\"{{driver?.image}}\">\r\n        </div>\r\n        <div class=\"content\">\r\n          <div class=\"header\">{{driver?.full_name}}\r\n            <div class=\"ui icon button\" style=\"float: right;\" (click)=\"modaldriver.show({blurring: true})\">\r\n              <i class=\"icon edit\"></i>\r\n            </div>\r\n          </div>\r\n          <div class=\"meta\">\r\n            Unidad: {{driver?.unit_number}} <br>\r\n            <span class=\"date\">{{driver?.email}}</span>\r\n          </div>\r\n          <div class=\"description\">\r\n              <bar-rating *ngIf=\"driver\" [(rate)]=\"driver.rating\" [max]=\"5\" [readOnly]=\"true\"></bar-rating>\r\n          </div>\r\n\r\n          <sm-checkbox *ngIf=\"enable\" label=\"Usuario activo\" [control]=\"enable\" (change)=\"changeEnable()\" type=\"toggle\"></sm-checkbox>\r\n\r\n          <!-- <div class=\"field\">\r\n            <div class=\"ui toggle checkbox\">\r\n              <input type=\"checkbox\" tabindex=\"0\" name=\"enable\" class=\"hidden\" [checked]=\"driver?.enable\" (change)=\"changeEnable()\">\r\n              <label>Usuario activo</label>\r\n            </div>\r\n          </div> -->\r\n\r\n          <button class=\"ui negative fluid button\" style=\"margin-top: 50px;\" (click)=\"modal.show()\">Eliminar</button>\r\n\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n    <div class=\"thirteen wide column\">\r\n      <div class=\"ui tabular menu\">\r\n        <a routerLink=\"services\" routerLinkActive=\"active\" class=\" item\">\r\n          Servicios\r\n        </a>\r\n        <a routerLink=\"inbox\" routerLinkActive=\"active\" class=\"item\">\r\n          Mensajes\r\n        </a>\r\n        <a class=\"item\">\r\n          Comentarios\r\n        </a>\r\n      </div>\r\n\r\n      <router-outlet></router-outlet>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n<sm-modal class=\"basic\" #modal>\r\n  <modal-content>\r\n      <h2>¿Estás seguro de querer borrar la unidad permanentemente?</h2>\r\n  </modal-content>\r\n  <modal-actions>\r\n    <button class=\"ui button\" style=\"margin-right: 10px;\" (click)=\"modal.hide()\">Cancelar</button>\r\n    <button class=\"ui button red\" (click)=\"deleteDriver(modal)\">Eliminar</button>\r\n  </modal-actions>\r\n</sm-modal>\r\n\r\n<sm-modal title=\"Editar unidad\" class=\"\" #modaldriver>\r\n  <modal-content>\r\n    <div class=\"ui container grid\" style=\"padding-top: 2em;\">\r\n      <div class=\"ten wide column\">\r\n        <form class=\"ui form\" *ngIf=\"driver\">\r\n          <div class=\"field\">\r\n            <label>Nombre completo</label>\r\n            <input type=\"text\" name=\"first-name\" placeholder=\"Nombre completo\" [(ngModel)]=\"driver_updated.full_name\">\r\n          </div>\r\n          <div class=\"field\">\r\n            <label>Email</label>\r\n            <input type=\"email\" name=\"email\" placeholder=\"Email\" [(ngModel)]=\"driver_updated.email\">\r\n          </div>\r\n          <div class=\"field\">\r\n            <label>Número de unidad</label>\r\n            <input type=\"number\" name=\"unit_number\" placeholder=\"Número de unidad\" [(ngModel)]=\"driver_updated.unit_number\">\r\n          </div>\r\n          <div class=\"field\">\r\n            <label>Nombre de usuario</label>\r\n            <input type=\"text\" name=\"full_name\" placeholder=\"Usuario\" [(ngModel)]=\"driver_updated.account\">\r\n          </div>\r\n          <div class=\"field\">\r\n            <label>Contraseña</label>\r\n            <input type=\"password\" name=\"password\" placeholder=\"Contraseña\" [(ngModel)]=\"driver_updated.password\">\r\n          </div>\r\n        </form>\r\n      </div>\r\n      <div class=\"four wide column\" *ngIf=\"driver_updated\">\r\n          <div class=\"field\">\r\n            <img style=\"max-width: 100%; margin-top:10px; display: block; margin-left: auto; margin-right: auto;\" class=\"ui small circular image\" [src]=\"driver_updated.image\" alt=\"\">\r\n            <label id=\"uploader\">\r\n              Selecciona imagen\r\n              <input type=\"file\" name=\"myfile\" [(ngModel)]=\"val\" #image (change)=\"readURL(image, val)\" accept=\"image/*\" />\r\n            </label>\r\n          </div>\r\n        </div>\r\n    </div>\r\n  </modal-content>\r\n  <modal-actions>\r\n      <div class=\"ui buttons\">\r\n          <button class=\"ui button red\" style=\"margin-right: 10px;\" (click)=\"modaldriver.hide()\">Cancelar</button>\r\n          <div class=\"ui button primary\" (click)=\"updateDriver(modaldriver)\" [ngClass]=\"{'loading disabled': updating}\">Guardar</div>\r\n      </div>\r\n  </modal-actions>\r\n</sm-modal>\r\n\r\n\r\n\r\n"
 
 /***/ }),
 
@@ -631,6 +631,7 @@ var DriverComponent = /** @class */ (function () {
         this.route = route;
         this.driverService = driverService;
         this.router = router;
+        this.updating = false;
     }
     DriverComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -638,6 +639,7 @@ var DriverComponent = /** @class */ (function () {
         this.driverService.driver_details(this.driver_id).subscribe(function (driver) {
             _this.driver = driver;
             _this.enable = new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["FormControl"](_this.driver.enable);
+            _this.driver_updated = Object.assign({}, _this.driver);
         });
     };
     DriverComponent.prototype.changeEnable = function () {
@@ -652,6 +654,28 @@ var DriverComponent = /** @class */ (function () {
         this.driverService.driver_delete(this.driver._id).subscribe(function (driver) {
             _this.router.navigate(['/dashboard/drivers']);
             modal.hide();
+        });
+    };
+    DriverComponent.prototype.readURL = function (input) {
+        var _this = this;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                _this.driver_updated.image = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    };
+    DriverComponent.prototype.updateDriver = function (modal) {
+        var _this = this;
+        this.updating = true;
+        this.driverService.driver_update(this.driver_id, this.driver_updated).subscribe(function (driver) {
+            _this.driver = driver;
+            _this.updating = false;
+            modal.hide();
+        }, function (error) {
+            _this.driver_updated = Object.assign({}, _this.driver);
+            _this.updating = false;
         });
     };
     DriverComponent = __decorate([

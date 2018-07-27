@@ -11,6 +11,9 @@ export class DriverComponent implements OnInit {
   driver: any;
   driver_id: string;
   enable: FormControl;
+  new_image: string;
+  updating: boolean = false;
+  driver_updated: any;
   constructor(
     private route: ActivatedRoute,
     private driverService: DriversService,
@@ -26,6 +29,7 @@ export class DriverComponent implements OnInit {
       driver => {
         this.driver = driver;
         this.enable = new FormControl(this.driver.enable)
+        this.driver_updated = Object.assign({}, this.driver)
       }
     )
   }
@@ -44,6 +48,33 @@ export class DriverComponent implements OnInit {
       driver => {
         this.router.navigate(['/dashboard/drivers'])
         modal.hide();
+      }
+    )
+  }
+
+  readURL(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+
+      reader.onload = (e: any) => {
+        this.driver_updated.image = e.target.result;
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  updateDriver(modal) {
+    this.updating = true;
+    this.driverService.driver_update(this.driver_id, this.driver_updated).subscribe(
+      driver => {
+        this.driver = driver;
+        this.updating = false;
+        modal.hide();
+      },
+      error => {
+        this.driver_updated = Object.assign({}, this.driver);
+        this.updating = false;
       }
     )
   }

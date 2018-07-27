@@ -14,8 +14,13 @@
           <img src="{{driver?.image}}">
         </div>
         <div class="content">
-          <a class="header">{{driver?.full_name}}</a>
+          <div class="header">{{driver?.full_name}}
+            <div class="ui icon button" style="float: right;" (click)="modaldriver.show({blurring: true})">
+              <i class="icon edit"></i>
+            </div>
+          </div>
           <div class="meta">
+            Unidad: {{driver?.unit_number}} <br>
             <span class="date">{{driver?.email}}</span>
           </div>
           <div class="description">
@@ -64,3 +69,52 @@
     <button class="ui button red" (click)="deleteDriver(modal)">Eliminar</button>
   </modal-actions>
 </sm-modal>
+
+<sm-modal title="Editar unidad" class="" #modaldriver>
+  <modal-content>
+    <div class="ui container grid" style="padding-top: 2em;">
+      <div class="ten wide column">
+        <form class="ui form" *ngIf="driver">
+          <div class="field">
+            <label>Nombre completo</label>
+            <input type="text" name="first-name" placeholder="Nombre completo" [(ngModel)]="driver_updated.full_name">
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="Email" [(ngModel)]="driver_updated.email">
+          </div>
+          <div class="field">
+            <label>Número de unidad</label>
+            <input type="number" name="unit_number" placeholder="Número de unidad" [(ngModel)]="driver_updated.unit_number">
+          </div>
+          <div class="field">
+            <label>Nombre de usuario</label>
+            <input type="text" name="full_name" placeholder="Usuario" [(ngModel)]="driver_updated.account">
+          </div>
+          <div class="field">
+            <label>Contraseña</label>
+            <input type="password" name="password" placeholder="Contraseña" [(ngModel)]="driver_updated.password">
+          </div>
+        </form>
+      </div>
+      <div class="four wide column" *ngIf="driver_updated">
+          <div class="field">
+            <img style="max-width: 100%; margin-top:10px; display: block; margin-left: auto; margin-right: auto;" class="ui small circular image" [src]="driver_updated.image" alt="">
+            <label id="uploader">
+              Selecciona imagen
+              <input type="file" name="myfile" [(ngModel)]="val" #image (change)="readURL(image, val)" accept="image/*" />
+            </label>
+          </div>
+        </div>
+    </div>
+  </modal-content>
+  <modal-actions>
+      <div class="ui buttons">
+          <button class="ui button red" style="margin-right: 10px;" (click)="modaldriver.hide()">Cancelar</button>
+          <div class="ui button primary" (click)="updateDriver(modaldriver)" [ngClass]="{'loading disabled': updating}">Guardar</div>
+      </div>
+  </modal-actions>
+</sm-modal>
+
+
+
