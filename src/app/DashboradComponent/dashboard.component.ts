@@ -1,4 +1,6 @@
 import { Component } from "@angular/core";
+import { AuthenticationService } from "../_services/authentication.service";
+import { Router } from "@angular/router";
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -6,5 +8,13 @@ import { Component } from "@angular/core";
 })
 
 export class DashboardComponent {
-  constructor() {}
+  constructor(
+    private authenticationService: AuthenticationService,
+    private router: Router
+  ) {}
+
+  logOut() {
+    this.authenticationService.logOut()
+    this.router.navigate(['/login'])
+  }
 }

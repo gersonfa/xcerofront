@@ -446,7 +446,7 @@ module.exports = "/deep/ .logo-xcero {\r\n  width: 6em !important;\r\n}\r\n\r\n/
 /***/ "./src/app/DashboradComponent/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<sm-menu title=\"XCero\" logoClass=\"logo-xcero\" class=\"ui inverted\" logo=\"assets/xcero_oficial.png\">\r\n\r\n  <sm-menu class=\"menu right secondary\">\r\n    <a class=\"item yellow\" sm-item routerLink=\"drivers\" routerLinkActive=\"active\">Conductores</a>\r\n    <a class=\"item yellow\" routerLink=\"tariff\" routerLinkActive=\"active\" sm-item>Tarifas</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"bases\" routerLinkActive=\"active\">Bases</a>\r\n  </sm-menu>\r\n</sm-menu>\r\n\r\n<router-outlet></router-outlet>\r\n\r\n<style>\r\n  .logo-xcero {\r\n    width: 6em !important;\r\n  }\r\n</style>\r\n"
+module.exports = "<sm-menu title=\"XCero\" logoClass=\"logo-xcero\" class=\"ui inverted\" logo=\"assets/xcero_oficial.png\">\r\n\r\n  <sm-menu class=\"menu right secondary\">\r\n    <a class=\"item yellow\" sm-item routerLink=\"drivers\" routerLinkActive=\"active\">Conductores</a>\r\n    <a class=\"item yellow\" routerLink=\"tariff\" routerLinkActive=\"active\" sm-item>Tarifas</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"bases\" routerLinkActive=\"active\">Bases</a>\r\n    <a class=\"item\" (click)=\"logOut()\">\r\n      <i class=\"icon power off\"></i>\r\n    </a>\r\n  </sm-menu>\r\n</sm-menu>\r\n\r\n<router-outlet></router-outlet>\r\n\r\n<style>\r\n  .logo-xcero {\r\n    width: 6em !important;\r\n  }\r\n</style>\r\n"
 
 /***/ }),
 
@@ -456,6 +456,8 @@ module.exports = "<sm-menu title=\"XCero\" logoClass=\"logo-xcero\" class=\"ui i
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DashboardComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_authentication_service__ = __webpack_require__("./src/app/_services/authentication.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -466,15 +468,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+
 var DashboardComponent = /** @class */ (function () {
-    function DashboardComponent() {
+    function DashboardComponent(authenticationService, router) {
+        this.authenticationService = authenticationService;
+        this.router = router;
     }
+    DashboardComponent.prototype.logOut = function () {
+        this.authenticationService.logOut();
+        this.router.navigate(['/login']);
+    };
     DashboardComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             template: __webpack_require__("./src/app/DashboradComponent/dashboard.component.html"),
             styles: [__webpack_require__("./src/app/DashboradComponent/dashboard.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_authentication_service__["a" /* AuthenticationService */],
+            __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]])
     ], DashboardComponent);
     return DashboardComponent;
 }());
