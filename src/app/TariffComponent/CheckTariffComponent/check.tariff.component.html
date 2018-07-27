@@ -1,0 +1,21 @@
+<sm-select  placeholder="Seleccionar colonia o lugar"
+class="fluid search"
+(onChange)="selectSites($event)"
+[control]="site1">
+  <option *ngFor="let site of sites" [value]="site._id">{{site.name}}</option>
+</sm-select> <br>
+
+<sm-select  placeholder="Seleccionar colonia o lugar"
+class="fluid search"
+(onChange)="selectSites($event)"
+[control]="site2">
+  <option *ngFor="let site of sites" [value]="site._id">{{site.name}}</option>
+</sm-select>
+
+<div class="ui active centered inline loader" style="margin-top: 20px;" *ngIf="loading"></div>
+
+<h2 *ngIf="tariff && !loading">
+  {{tariff.cost | currency:'MXN':'symbol-narrow'}}
+</h2>
+
+<h3 *ngIf="!tariff && site1.value && site2.value && !loading">No hay una tarifa registrada para estas colonias</h3>

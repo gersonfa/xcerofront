@@ -28,23 +28,13 @@
 
       </div>
 
-      <!-- <sm-select [(model)]="group_selected" (onChange)="selectGroup($event)" placeholder="Buscar grupo o lugar" class="fluid search">
-        <option *ngFor="let gp of groups_places" [value]="gp._id">{{gp.name}}</option>
-      </sm-select>
-
-      <br>
-
-      <sm-select [(model)]="second_group_selected" placeholder="Buscar grupo o lugar" class="fluid search">
-        <option *ngFor="let gp of groups_places_available" [value]="gp._id">{{gp.name}}</option>
-      </sm-select>
-
-      <br> -->
-
       <button class="ui button yellow" style="margin-top: 10px;" [disabled]="!group_selected || !second_group_selected || !cost"
         (click)="saveTariff()">
         Guardar
       </button>
 
+      <h4 class="ui dividing header">Verificar tarifa</h4>
+      <check-tariff></check-tariff>
 
     </div>
 

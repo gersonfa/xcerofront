@@ -34,4 +34,9 @@ export class TariffService {
     return this.http.put(`${API_URL}/api/tariff/update/all`, quantity)
       .map(r => r.json());
   }
+
+  tariff_check(params): Observable<any> {
+    return this.http.get(`${API_URL}/api/tariff/check`, {params: params })
+      .map(r => r.json());
+  }
 }

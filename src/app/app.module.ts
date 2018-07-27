@@ -33,6 +33,7 @@ import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify'
 import { DriverComponent } from './DriversComponent/DriverComponent/driver.component';
 import { ServicesComponent } from './DriversComponent/DriverComponent/ServicesComponent/services.component';
 import { MessagesComponent } from './DriversComponent/DriverComponent/MessagesComponent/messages.component';
+import { CheckTariffComponent } from './TariffComponent/CheckTariffComponent/check.tariff.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -80,7 +81,8 @@ const routes: Routes = [
     PlacesComponent,
     GroupsComponent,
     ServicesComponent,
-    MessagesComponent
+    MessagesComponent,
+    CheckTariffComponent
   ],
   imports: [
     BrowserModule,
