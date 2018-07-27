@@ -21,6 +21,18 @@
           <div class="description">
               <bar-rating *ngIf="driver" [(rate)]="driver.rating" [max]="5" [readOnly]="true"></bar-rating>
           </div>
+
+          <sm-checkbox *ngIf="enable" label="Usuario activo" [control]="enable" (change)="changeEnable()" type="toggle"></sm-checkbox>
+
+          <!-- <div class="field">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" tabindex="0" name="enable" class="hidden" [checked]="driver?.enable" (change)="changeEnable()">
+              <label>Usuario activo</label>
+            </div>
+          </div> -->
+
+          <button class="ui negative fluid button" style="margin-top: 50px;" (click)="modal.show()">Eliminar</button>
+
         </div>
       </div>
     </div>
@@ -42,3 +54,13 @@
     </div>
   </div>
 </div>
+
+<sm-modal class="basic" #modal>
+  <modal-content>
+      <h2>¿Estás seguro de querer borrar la unidad permanentemente?</h2>
+  </modal-content>
+  <modal-actions>
+    <button class="ui button" style="margin-right: 10px;" (click)="modal.hide()">Cancelar</button>
+    <button class="ui button red" (click)="deleteDriver(modal)">Eliminar</button>
+  </modal-actions>
+</sm-modal>

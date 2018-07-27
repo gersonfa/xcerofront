@@ -600,7 +600,7 @@ var ServicesComponent = /** @class */ (function () {
 /***/ "./src/app/DriversComponent/DriverComponent/driver.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"ui padded grid\">\r\n  <div class=\"row\">\r\n    <div class=\"sixteen wide column\" style=\"margin-bottom: 20px;\">\r\n        <div class=\"ui large breadcrumb\">\r\n            <a class=\"section\" routerLink=\"/dashboard/drivers\">Conductores</a>\r\n            <i class=\"right chevron icon divider\"></i>\r\n            <div class=\"active section\">{{driver?.full_name}}</div>\r\n          </div>\r\n    </div>\r\n\r\n    <div class=\"three wide column\">\r\n      <div class=\"ui card\">\r\n        <div class=\"image\">\r\n          <img src=\"{{driver?.image}}\">\r\n        </div>\r\n        <div class=\"content\">\r\n          <a class=\"header\">{{driver?.full_name}}</a>\r\n          <div class=\"meta\">\r\n            <span class=\"date\">{{driver?.email}}</span>\r\n          </div>\r\n          <div class=\"description\">\r\n              <bar-rating *ngIf=\"driver\" [(rate)]=\"driver.rating\" [max]=\"5\" [readOnly]=\"true\"></bar-rating>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n    <div class=\"thirteen wide column\">\r\n      <div class=\"ui tabular menu\">\r\n        <a routerLink=\"services\" routerLinkActive=\"active\" class=\" item\">\r\n          Servicios\r\n        </a>\r\n        <a routerLink=\"inbox\" routerLinkActive=\"active\" class=\"item\">\r\n          Mensajes\r\n        </a>\r\n        <a class=\"item\">\r\n          Comentarios\r\n        </a>\r\n      </div>\r\n\r\n      <router-outlet></router-outlet>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"ui padded grid\">\r\n  <div class=\"row\">\r\n    <div class=\"sixteen wide column\" style=\"margin-bottom: 20px;\">\r\n        <div class=\"ui large breadcrumb\">\r\n            <a class=\"section\" routerLink=\"/dashboard/drivers\">Conductores</a>\r\n            <i class=\"right chevron icon divider\"></i>\r\n            <div class=\"active section\">{{driver?.full_name}}</div>\r\n          </div>\r\n    </div>\r\n\r\n    <div class=\"three wide column\">\r\n      <div class=\"ui card\">\r\n        <div class=\"image\">\r\n          <img src=\"{{driver?.image}}\">\r\n        </div>\r\n        <div class=\"content\">\r\n          <a class=\"header\">{{driver?.full_name}}</a>\r\n          <div class=\"meta\">\r\n            <span class=\"date\">{{driver?.email}}</span>\r\n          </div>\r\n          <div class=\"description\">\r\n              <bar-rating *ngIf=\"driver\" [(rate)]=\"driver.rating\" [max]=\"5\" [readOnly]=\"true\"></bar-rating>\r\n          </div>\r\n\r\n          <sm-checkbox *ngIf=\"enable\" label=\"Usuario activo\" [control]=\"enable\" (change)=\"changeEnable()\" type=\"toggle\"></sm-checkbox>\r\n\r\n          <!-- <div class=\"field\">\r\n            <div class=\"ui toggle checkbox\">\r\n              <input type=\"checkbox\" tabindex=\"0\" name=\"enable\" class=\"hidden\" [checked]=\"driver?.enable\" (change)=\"changeEnable()\">\r\n              <label>Usuario activo</label>\r\n            </div>\r\n          </div> -->\r\n\r\n          <button class=\"ui negative fluid button\" style=\"margin-top: 50px;\" (click)=\"modal.show()\">Eliminar</button>\r\n\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n    <div class=\"thirteen wide column\">\r\n      <div class=\"ui tabular menu\">\r\n        <a routerLink=\"services\" routerLinkActive=\"active\" class=\" item\">\r\n          Servicios\r\n        </a>\r\n        <a routerLink=\"inbox\" routerLinkActive=\"active\" class=\"item\">\r\n          Mensajes\r\n        </a>\r\n        <a class=\"item\">\r\n          Comentarios\r\n        </a>\r\n      </div>\r\n\r\n      <router-outlet></router-outlet>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n<sm-modal class=\"basic\" #modal>\r\n  <modal-content>\r\n      <h2>¿Estás seguro de querer borrar la unidad permanentemente?</h2>\r\n  </modal-content>\r\n  <modal-actions>\r\n    <button class=\"ui button\" style=\"margin-right: 10px;\" (click)=\"modal.hide()\">Cancelar</button>\r\n    <button class=\"ui button red\" (click)=\"deleteDriver(modal)\">Eliminar</button>\r\n  </modal-actions>\r\n</sm-modal>\r\n"
 
 /***/ }),
 
@@ -610,8 +610,9 @@ module.exports = "<div class=\"ui padded grid\">\r\n  <div class=\"row\">\r\n   
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DriverComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_drivers_service__ = __webpack_require__("./src/app/_services/drivers.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -624,22 +625,42 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var DriverComponent = /** @class */ (function () {
-    function DriverComponent(route, driverService) {
+    function DriverComponent(route, driverService, router) {
         this.route = route;
         this.driverService = driverService;
+        this.router = router;
     }
     DriverComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.route.params.subscribe(function (params) { return _this.driver_id = params['id']; });
-        this.driverService.driver_details(this.driver_id).subscribe(function (driver) { return _this.driver = driver; });
+        this.driverService.driver_details(this.driver_id).subscribe(function (driver) {
+            _this.driver = driver;
+            _this.enable = new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["FormControl"](_this.driver.enable);
+        });
+    };
+    DriverComponent.prototype.changeEnable = function () {
+        var _this = this;
+        this.driverService.driver_update(this.driver_id, { enable: !this.driver.enable }).subscribe(function (driver) {
+            _this.driver.enable = driver.enable;
+            _this.enable.setValue(driver.enable);
+        });
+    };
+    DriverComponent.prototype.deleteDriver = function (modal) {
+        var _this = this;
+        this.driverService.driver_delete(this.driver._id).subscribe(function (driver) {
+            _this.router.navigate(['/dashboard/drivers']);
+            modal.hide();
+        });
     };
     DriverComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             template: __webpack_require__("./src/app/DriversComponent/DriverComponent/driver.component.html")
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__node_modules_angular_router__["a" /* ActivatedRoute */],
-            __WEBPACK_IMPORTED_MODULE_2__services_drivers_service__["a" /* DriversService */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */],
+            __WEBPACK_IMPORTED_MODULE_2__services_drivers_service__["a" /* DriversService */],
+            __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]])
     ], DriverComponent);
     return DriverComponent;
 }());
@@ -664,6 +685,7 @@ module.exports = "<div class=\"ui container grid\" style=\"padding-top: 2em;\">\
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_authentication_service__ = __webpack_require__("./src/app/_services/authentication.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng_snotify__ = __webpack_require__("./node_modules/ng-snotify/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -677,11 +699,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var DriverFormComponent = /** @class */ (function () {
-    function DriverFormComponent(authenticationService, fb, snotifyService) {
+    function DriverFormComponent(authenticationService, fb, snotifyService, router) {
         this.authenticationService = authenticationService;
         this.fb = fb;
         this.snotifyService = snotifyService;
+        this.router = router;
         this.imageURL = "http://via.placeholder.com/250x300";
     }
     DriverFormComponent.prototype.ngOnInit = function () {
@@ -691,25 +715,22 @@ var DriverFormComponent = /** @class */ (function () {
         this.full_name = this.fb.control("", __WEBPACK_IMPORTED_MODULE_2__angular_forms__["Validators"].required);
         this.unit_number = this.fb.control('', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["Validators"].required);
         this.role = this.fb.control('Driver', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["Validators"].required);
-        this.image = this.fb.control(this.imageURL, __WEBPACK_IMPORTED_MODULE_2__angular_forms__["Validators"].required);
+        //this.image = this.fb.control(this.imageURL, Validators.required);
         this.driverForm = this.fb.group({
             account: this.account,
             password: this.password,
             email: this.email,
             full_name: this.full_name,
             role: this.role,
-            image: this.image,
+            image: this.imageURL,
             unit_number: this.unit_number
         });
     };
     DriverFormComponent.prototype.create_driver = function () {
         var _this = this;
         this.authenticationService.user_create(this.driverForm.value).subscribe(function (driver) {
-            _this.driverForm.reset();
-            console.log(_this.driverForm.value);
-            _this.role.setValue('Driver');
-            _this.image.setValue("http://via.placeholder.com/250x300");
             _this.snotifyService.success("Unidad " + driver.user.unit_number + " creado correctamente");
+            _this.router.navigate(['/dashboard/drivers']);
         });
     };
     DriverFormComponent.prototype.readURL = function (input) {
@@ -718,6 +739,7 @@ var DriverFormComponent = /** @class */ (function () {
             var reader = new FileReader();
             reader.onload = function (e) {
                 _this.imageURL = e.target.result;
+                _this.driverForm.value.image = e.target.result;
             };
             reader.readAsDataURL(input.files[0]);
         }
@@ -728,7 +750,8 @@ var DriverFormComponent = /** @class */ (function () {
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_authentication_service__["a" /* AuthenticationService */],
             __WEBPACK_IMPORTED_MODULE_2__angular_forms__["FormBuilder"],
-            __WEBPACK_IMPORTED_MODULE_3_ng_snotify__["b" /* SnotifyService */]])
+            __WEBPACK_IMPORTED_MODULE_3_ng_snotify__["b" /* SnotifyService */],
+            __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */]])
     ], DriverFormComponent);
     return DriverFormComponent;
 }());
@@ -1177,8 +1200,8 @@ var TariffComponent = /** @class */ (function () {
             _this.tariffs.push(tariff_created);
             _this.tariffs = _this.tariffs.sort(_this.sortTariffs);
             _this.cost = null;
-            _this.group_selected = "";
-            _this.second_group_selected = "";
+            _this.selectGroup();
+            _this.second_group_selected = '';
         });
     };
     TariffComponent.prototype.deleteTariff = function (tariffId) {
@@ -1285,7 +1308,7 @@ var AuthGuard = /** @class */ (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return API_URL; });
-//export const API_URL = 'http://45.33.55.120';
+//export const API_URL = 'http://localhost:3019';
 var API_URL = 'http://45.56.121.162';
 
 
@@ -1496,6 +1519,14 @@ var DriversService = /** @class */ (function () {
     };
     DriversService.prototype.driver_inbox_list = function (driver_id) {
         return this.http.get(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/driver/" + driver_id + "/inbox")
+            .map(function (r) { return r.json(); });
+    };
+    DriversService.prototype.driver_update = function (driver_id, driver) {
+        return this.http.put(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/user/" + driver_id + "/driver_update", driver)
+            .map(function (r) { return r.json(); });
+    };
+    DriversService.prototype.driver_delete = function (driver_id) {
+        return this.http.delete(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/driver/" + driver_id + "/delete")
             .map(function (r) { return r.json(); });
     };
     DriversService = __decorate([

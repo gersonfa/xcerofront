@@ -131,8 +131,8 @@ export class TariffComponent implements OnInit {
         this.tariffs.push(tariff_created);
         this.tariffs = this.tariffs.sort(this.sortTariffs);
         this.cost = null;
-        this.group_selected = "";
-        this.second_group_selected = "";
+        this.selectGroup()
+        this.second_group_selected = '';
       });
   }
 

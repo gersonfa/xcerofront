@@ -39,4 +39,14 @@ export class DriversService {
     return this.http.get(`${API_URL}/api/driver/${driver_id}/inbox`)
       .map(r => r.json())
   }
+
+  driver_update(driver_id: string, driver): Observable<any> {
+    return this.http.put(`${API_URL}/api/user/${driver_id}/driver_update`, driver)
+      .map(r => r.json())
+  }
+
+  driver_delete(driver_id: string): Observable<any> {
+    return this.http.delete(`${API_URL}/api/driver/${driver_id}/delete`)
+      .map(r => r.json())
+  }
 }
