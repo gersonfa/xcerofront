@@ -1164,7 +1164,7 @@ var CheckTariffComponent = /** @class */ (function () {
                 check = {
                     colony_one: site1.group ? site1._id : site2._id,
                     colony_two: site1.group && site2.group ? site2._id : '',
-                    place_two: site1.base ? site1._id : site2._id
+                    place_one: site1.base ? site1._id : site2._id
                 };
             }
             else {
