@@ -52,8 +52,10 @@
 
       <div class="ui section divider" style="clear: both;" *ngIf="tariffs.length > 0"></div>
 
-      <div class="ui middle aligned divided list">
-        <div class="item" *ngFor="let tariff of tariffs">
+      <div class="ui active centered inline loader huge" style="margin-top: 250px; margin-bottom: 250px;" *ngIf="loading_tariffs"></div>
+
+      <div class="ui middle aligned divided list" *ngIf="(tariffs.length > 0) && !loading_tariffs">
+        <div class="item" *ngFor="let tariff of tariffs | paginate:{ id:'server', itemsPerPage: 15, currentPage: current, totalItems: count }">
           <div class="right floated content">
             <span>{{tariff.cost | currency:'MXN':'symbol-narrow'}} &nbsp; &nbsp;</span>
             <sm-button class="" icon="pencil" (click)="edit.show(); selected_tariff = tariff;"></sm-button>
@@ -70,17 +72,16 @@
         </div>
       </div>
 
-     <!--  <pagination-controls  id="some_id"
-                      (pageChange)="pageChanged($event)"
-                      maxSize="pages"
-                      directionLinks="false"
-                      autoHide="true"
+     <pagination-controls  id="server"
+        (pageChange)="pageChanged($event)"
+        autoHide="true"
+        directionLinks="false"
                       previousLabel="Anterior"
                       nextLabel="Siguiente"
                       screenReaderPaginationLabel="Pagination"
                       screenReaderPageLabel="page"
                       screenReaderCurrentLabel="You're on page">
-</pagination-controls> -->
+</pagination-controls>
 
     </div>
   </div>

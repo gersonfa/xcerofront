@@ -28,7 +28,8 @@ export class TariffComponent implements OnInit {
 
   public pages: any = [];
   public current: number;
-  public number_helper: number;
+  public count: number;
+  public loading_tariffs: boolean = false;
 
   constructor(
     private groupService: GroupService,
@@ -36,17 +37,18 @@ export class TariffComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.loading_tariffs = true;
+
     this.groupService.group_place_list().subscribe(groups_places => {
       this.groups_places = groups_places.sort(this.sort);
     });
 
     this.tariffService.tariff_list().subscribe(response => {
-      this.tariffs = response.sort(this.sortTariffs);
-      /*
+      this.tariffs = response.tariffs.sort(this.sortTariffs);
       this.pages = response.pages;
-      console.log(this.pages)
       this.current = response.current;
-      this.number_helper = this.current > 5 ? this.current - 4 : 1; */
+      this.count = response.count;
+      this.loading_tariffs = false;
     });
   }
 
@@ -101,7 +103,15 @@ export class TariffComponent implements OnInit {
     });
   }
 
-  pageChanged() {}
+  pageChanged(page) {
+    this.loading_tariffs = true;
+    this.tariffService.tariff_list(page).subscribe(response => {
+      this.tariffs = response.tariffs.sort(this.sortTariffs);
+      this.pages = response.pages;
+      this.current = response.current;
+      this.loading_tariffs = false;
+    });
+  }
 
   saveTariff() {
     console.log(this.group_selected);
