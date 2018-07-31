@@ -7,6 +7,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BarRatingModule } from "ngx-bar-rating";
+import {NgxPaginationModule} from 'ngx-pagination';
 
 import { Routes, RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
@@ -86,6 +87,7 @@ const routes: Routes = [
   ],
   imports: [
     BrowserModule,
+    NgxPaginationModule,
     FormsModule,
     HttpModule,
     ReactiveFormsModule,

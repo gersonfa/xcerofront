@@ -26,6 +26,10 @@ export class TariffComponent implements OnInit {
 
   public tariffs: Tariff[] = [];
 
+  public pages: any = [];
+  public current: number;
+  public number_helper: number;
+
   constructor(
     private groupService: GroupService,
     private tariffService: TariffService
@@ -36,8 +40,13 @@ export class TariffComponent implements OnInit {
       this.groups_places = groups_places.sort(this.sort);
     });
 
-    this.tariffService.tariff_list().subscribe(tariffs => {
-      this.tariffs = tariffs.sort(this.sortTariffs);
+    this.tariffService.tariff_list().subscribe(response => {
+      this.tariffs = response.sort(this.sortTariffs);
+      /*
+      this.pages = response.pages;
+      console.log(this.pages)
+      this.current = response.current;
+      this.number_helper = this.current > 5 ? this.current - 4 : 1; */
     });
   }
 
@@ -66,7 +75,7 @@ export class TariffComponent implements OnInit {
     }
   }
 
-  selectGroup() {
+  selectGroup(last_gp?) {
     if (this.group_selected === "") {
       return;
     }
@@ -80,9 +89,19 @@ export class TariffComponent implements OnInit {
     this.loading_available = true;
     this.groupService.group_list_available(params).subscribe(groups_places => {
       this.groups_places_available = groups_places.sort(this.sort);
+      if (last_gp) {
+        const last_item = this.groups_places_available.find(gp_last => gp_last.base === last_gp.base);
+        if (last_item) {
+          this.second_group_selected = last_item._id;
+        } else {
+          this.second_group_selected = '';
+        }
+      }
       this.loading_available = false;
     });
   }
+
+  pageChanged() {}
 
   saveTariff() {
     console.log(this.group_selected);
@@ -131,8 +150,7 @@ export class TariffComponent implements OnInit {
         this.tariffs.push(tariff_created);
         this.tariffs = this.tariffs.sort(this.sortTariffs);
         this.cost = null;
-        this.selectGroup()
-        this.second_group_selected = '';
+        this.selectGroup(gp2);
       });
   }
 

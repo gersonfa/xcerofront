@@ -1198,7 +1198,7 @@ var CheckTariffComponent = /** @class */ (function () {
 /***/ "./src/app/TariffComponent/tariff.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"ui internally celled padded grid\" style=\"height: 94vh;;\">\r\n  <div class=\"row\">\r\n    <div class=\"four wide column\">\r\n\r\n      <div class=\"ui form\">\r\n\r\n        <h4 class=\"ui dividing header\">Nueva tarifa</h4>\r\n\r\n        <div class=\"field\">\r\n          <select [(ngModel)]=\"group_selected\" (change)=\"selectGroup()\">\r\n            <option value=\"\">Selecciona un grupo o lugar de origen</option>\r\n            <option *ngFor=\"let gp of groups_places\" [value]=\"gp._id\">{{gp.base + ' - ' + gp.name}}</option>\r\n          </select>\r\n        </div>\r\n\r\n        <div class=\"ui active centered inline loader\" style=\"margin-top: 20px;\" *ngIf=\"loading_available\"></div>\r\n\r\n        <div class=\"field\" *ngIf=\"group_selected && groups_places_available.length > 0 && !loading_available\">\r\n          <select [(ngModel)]=\"second_group_selected\">\r\n            <option value=\"\">Selecciona un grupo o lugar de destino</option>\r\n            <option *ngFor=\"let gp of groups_places_available\" [value]=\"gp._id\">{{gp.base + ' - ' + gp.name}}</option>\r\n          </select>\r\n        </div>\r\n\r\n        <div class=\" field\" *ngIf=\"second_group_selected && !loading_available\">\r\n          <input type=\"number\" placeholder=\"Costo\" [(ngModel)]=\"cost\">\r\n        </div>\r\n\r\n      </div>\r\n\r\n      <button class=\"ui button yellow\" style=\"margin-top: 10px;\" [disabled]=\"!group_selected || !second_group_selected || !cost\"\r\n        (click)=\"saveTariff()\">\r\n        Guardar\r\n      </button>\r\n\r\n      <h4 class=\"ui dividing header\">Verificar tarifa</h4>\r\n      <check-tariff></check-tariff>\r\n\r\n    </div>\r\n\r\n    <div class=\"twelve wide column\">\r\n      <!-- <div class=\"ui buttons\" style=\"float: right;\" *ngIf=\"tariffs.length > 0\">\r\n        <button class=\"ui yellow button\" (click)=\"updatemodal.show(); select_quantity = true;\">Actualizar por cantidad</button>\r\n        <div class=\"or\" data-text=\"ó\"></div>\r\n        <button class=\"ui yellow button\" (click)=\"updatemodal.show(); select_percentage = true;\">Actualizar por porcentaje</button>\r\n      </div> -->\r\n\r\n      <sm-dropdown title=\"Editar globalmente\" class=\"pointing floating labeled icon button yellow\">\r\n          <sm-item (click)=\"updatemodal.show(); select_quantity = true;\">Actualizar por cantidad</sm-item>\r\n          <sm-item (click)=\"updatemodal.show(); select_percentage = true;\">Actualizar por porcentaje</sm-item>\r\n      </sm-dropdown>\r\n\r\n      <div class=\"ui section divider\" style=\"clear: both;\" *ngIf=\"tariffs.length > 0\"></div>\r\n\r\n      <div class=\"ui middle aligned divided list\">\r\n        <div class=\"item\" *ngFor=\"let tariff of tariffs\">\r\n          <div class=\"right floated content\">\r\n            <span>{{tariff.cost | currency:'MXN':'symbol-narrow'}} &nbsp; &nbsp;</span>\r\n            <sm-button class=\"\" icon=\"pencil\" (click)=\"edit.show(); selected_tariff = tariff;\"></sm-button>\r\n            <sm-button class=\"negative\" icon=\"trash\" (click)=\"deleteTariff(tariff._id)\"></sm-button>\r\n          </div>\r\n          <div class=\"content\">\r\n            <p>\r\n              {{ tariff.origin_group ? tariff.origin_group?.base.name + ' - ' + tariff.origin_group?.name  : tariff.origin_place?.base.name + ' - ' + tariff.origin_place?.name }}\r\n              <b style=\"font-size: 1.2em;\"><--></b>\r\n                {{tariff.destiny_group ? tariff.destiny_group?.base.name + ' - ' + tariff.destiny_group?.name  : tariff.destiny_place?.base.name + ' - ' + tariff.destiny_place?.name\r\n                }}\r\n            </p>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n\r\n  <sm-modal class=\"\" #edit>\r\n    <modal-content>\r\n      <div *ngIf=\"selected_tariff\">\r\n        <h3>\r\n          {{selected_tariff.origin_group ? selected_tariff.origin_group?.name + ' - ' + selected_tariff.origin_group?.base.name : selected_tariff.origin_place?.name\r\n          + ' - ' + selected_tariff.origin_place?.base.name}}\r\n          <==>\r\n            {{selected_tariff.destiny_group ? selected_tariff.destiny_group?.name + ' - ' + selected_tariff.destiny_group?.base.name\r\n            : selected_tariff.destiny_place?.name + ' - ' + selected_tariff.destiny_place?.base.name}}\r\n        </h3>\r\n\r\n        <div class=\"ui form\">\r\n          <div class=\"fluid field\">\r\n            <input type=\"number\" placeholder=\"Costo\" [(ngModel)]=\"selected_tariff.cost\">\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </modal-content>\r\n    <modal-actions>\r\n      <div class=\"ui buttons\">\r\n        <div class=\"ui button negative\" (click)=\"edit.hide()\">Cancelar</div>\r\n        <div class=\"ui button primary\" (click)=\"editTariff(edit)\" style=\"margin-left: 10px;\">Guardar cambios</div>\r\n      </div>\r\n    </modal-actions>\r\n  </sm-modal>\r\n\r\n  <sm-modal class=\"\" #updatemodal>\r\n    <modal-content>\r\n      <div>\r\n        <h3 *ngIf=\"select_quantity\">\r\n          Actualizar por cantidad\r\n        </h3>\r\n\r\n        <h3 *ngIf=\"select_percentage\">\r\n          Actualizar por porcentaje\r\n        </h3>\r\n\r\n        <div class=\"ui form\">\r\n          <div class=\"fluid field\">\r\n            <input type=\"number\" placeholder=\"Cantidad a sumar\" *ngIf=\"select_quantity\" [(ngModel)]=\"update_type.quantity\">\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"ui form\">\r\n          <div class=\"fluid field\">\r\n            <input type=\"number\" placeholder=\"Porcentaje a sumar\" *ngIf=\"select_percentage\" [(ngModel)]=\"update_type.percentage\">\r\n          </div>\r\n        </div>\r\n\r\n      </div>\r\n    </modal-content>\r\n    <modal-actions>\r\n      <div class=\"ui buttons\">\r\n        <div class=\"ui button negative\" (click)=\"updatemodal.hide(); select_quantity = false; select_percentage = false;\">Cancelar</div>\r\n        <div class=\"ui button primary\" [ngClass]=\"{'loading': loading_all, 'disabled': loading_all}\" (click)=\"updateAll(updatemodal)\" style=\"margin-left: 10px;\">Guardar cambios</div>\r\n      </div>\r\n    </modal-actions>\r\n  </sm-modal>\r\n\r\n</div>\r\n\r\n<style>\r\n  .ui.active.dimmer.modals.transition {\r\n    display: flex !important;\r\n    display: -ms-flexbox !important;\r\n  }\r\n</style>\r\n"
+module.exports = "<div class=\"ui internally celled padded grid\" style=\"height: 94vh;;\">\r\n  <div class=\"row\">\r\n    <div class=\"four wide column\">\r\n\r\n      <div class=\"ui form\">\r\n\r\n        <h4 class=\"ui dividing header\">Nueva tarifa</h4>\r\n\r\n        <div class=\"field\">\r\n          <select [(ngModel)]=\"group_selected\" (change)=\"selectGroup()\">\r\n            <option value=\"\">Selecciona un grupo o lugar de origen</option>\r\n            <option *ngFor=\"let gp of groups_places\" [value]=\"gp._id\">{{gp.base + ' - ' + gp.name}}</option>\r\n          </select>\r\n        </div>\r\n\r\n        <div class=\"ui active centered inline loader\" style=\"margin-top: 20px;\" *ngIf=\"loading_available\"></div>\r\n\r\n        <div class=\"field\" *ngIf=\"group_selected && groups_places_available.length > 0 && !loading_available\">\r\n          <select [(ngModel)]=\"second_group_selected\">\r\n            <option value=\"\">Selecciona un grupo o lugar de destino</option>\r\n            <option *ngFor=\"let gp of groups_places_available\" [value]=\"gp._id\">{{gp.base + ' - ' + gp.name}}</option>\r\n          </select>\r\n        </div>\r\n\r\n        <div class=\" field\" *ngIf=\"second_group_selected && !loading_available\">\r\n          <input type=\"number\" placeholder=\"Costo\" [(ngModel)]=\"cost\">\r\n        </div>\r\n\r\n      </div>\r\n\r\n      <button class=\"ui button yellow\" style=\"margin-top: 10px;\" [disabled]=\"!group_selected || !second_group_selected || !cost\"\r\n        (click)=\"saveTariff()\">\r\n        Guardar\r\n      </button>\r\n\r\n      <h4 class=\"ui dividing header\">Verificar tarifa</h4>\r\n      <check-tariff></check-tariff>\r\n\r\n    </div>\r\n\r\n    <div class=\"twelve wide column\">\r\n      <!-- <div class=\"ui buttons\" style=\"float: right;\" *ngIf=\"tariffs.length > 0\">\r\n        <button class=\"ui yellow button\" (click)=\"updatemodal.show(); select_quantity = true;\">Actualizar por cantidad</button>\r\n        <div class=\"or\" data-text=\"ó\"></div>\r\n        <button class=\"ui yellow button\" (click)=\"updatemodal.show(); select_percentage = true;\">Actualizar por porcentaje</button>\r\n      </div> -->\r\n\r\n      <sm-dropdown title=\"Editar globalmente\" class=\"pointing floating labeled icon button yellow\">\r\n          <sm-item (click)=\"updatemodal.show(); select_quantity = true;\">Actualizar por cantidad</sm-item>\r\n          <sm-item (click)=\"updatemodal.show(); select_percentage = true;\">Actualizar por porcentaje</sm-item>\r\n      </sm-dropdown>\r\n\r\n      <div class=\"ui section divider\" style=\"clear: both;\" *ngIf=\"tariffs.length > 0\"></div>\r\n\r\n      <div class=\"ui middle aligned divided list\">\r\n        <div class=\"item\" *ngFor=\"let tariff of tariffs\">\r\n          <div class=\"right floated content\">\r\n            <span>{{tariff.cost | currency:'MXN':'symbol-narrow'}} &nbsp; &nbsp;</span>\r\n            <sm-button class=\"\" icon=\"pencil\" (click)=\"edit.show(); selected_tariff = tariff;\"></sm-button>\r\n            <sm-button class=\"negative\" icon=\"trash\" (click)=\"deleteTariff(tariff._id)\"></sm-button>\r\n          </div>\r\n          <div class=\"content\">\r\n            <p>\r\n              {{ tariff.origin_group ? tariff.origin_group?.base.name + ' - ' + tariff.origin_group?.name  : tariff.origin_place?.base.name + ' - ' + tariff.origin_place?.name }}\r\n              <b style=\"font-size: 1.2em;\"><--></b>\r\n                {{tariff.destiny_group ? tariff.destiny_group?.base.name + ' - ' + tariff.destiny_group?.name  : tariff.destiny_place?.base.name + ' - ' + tariff.destiny_place?.name\r\n                }}\r\n            </p>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n     <!--  <pagination-controls  id=\"some_id\"\r\n                      (pageChange)=\"pageChanged($event)\"\r\n                      maxSize=\"pages\"\r\n                      directionLinks=\"false\"\r\n                      autoHide=\"true\"\r\n                      previousLabel=\"Anterior\"\r\n                      nextLabel=\"Siguiente\"\r\n                      screenReaderPaginationLabel=\"Pagination\"\r\n                      screenReaderPageLabel=\"page\"\r\n                      screenReaderCurrentLabel=\"You're on page\">\r\n</pagination-controls> -->\r\n\r\n    </div>\r\n  </div>\r\n\r\n  <sm-modal class=\"\" #edit>\r\n    <modal-content>\r\n      <div *ngIf=\"selected_tariff\">\r\n        <h3>\r\n          {{selected_tariff.origin_group ? selected_tariff.origin_group?.name + ' - ' + selected_tariff.origin_group?.base.name : selected_tariff.origin_place?.name\r\n          + ' - ' + selected_tariff.origin_place?.base.name}}\r\n          <==>\r\n            {{selected_tariff.destiny_group ? selected_tariff.destiny_group?.name + ' - ' + selected_tariff.destiny_group?.base.name\r\n            : selected_tariff.destiny_place?.name + ' - ' + selected_tariff.destiny_place?.base.name}}\r\n        </h3>\r\n\r\n        <div class=\"ui form\">\r\n          <div class=\"fluid field\">\r\n            <input type=\"number\" placeholder=\"Costo\" [(ngModel)]=\"selected_tariff.cost\">\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </modal-content>\r\n    <modal-actions>\r\n      <div class=\"ui buttons\">\r\n        <div class=\"ui button negative\" (click)=\"edit.hide()\">Cancelar</div>\r\n        <div class=\"ui button primary\" (click)=\"editTariff(edit)\" style=\"margin-left: 10px;\">Guardar cambios</div>\r\n      </div>\r\n    </modal-actions>\r\n  </sm-modal>\r\n\r\n  <sm-modal class=\"\" #updatemodal>\r\n    <modal-content>\r\n      <div>\r\n        <h3 *ngIf=\"select_quantity\">\r\n          Actualizar por cantidad\r\n        </h3>\r\n\r\n        <h3 *ngIf=\"select_percentage\">\r\n          Actualizar por porcentaje\r\n        </h3>\r\n\r\n        <div class=\"ui form\">\r\n          <div class=\"fluid field\">\r\n            <input type=\"number\" placeholder=\"Cantidad a sumar\" *ngIf=\"select_quantity\" [(ngModel)]=\"update_type.quantity\">\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"ui form\">\r\n          <div class=\"fluid field\">\r\n            <input type=\"number\" placeholder=\"Porcentaje a sumar\" *ngIf=\"select_percentage\" [(ngModel)]=\"update_type.percentage\">\r\n          </div>\r\n        </div>\r\n\r\n      </div>\r\n    </modal-content>\r\n    <modal-actions>\r\n      <div class=\"ui buttons\">\r\n        <div class=\"ui button negative\" (click)=\"updatemodal.hide(); select_quantity = false; select_percentage = false;\">Cancelar</div>\r\n        <div class=\"ui button primary\" [ngClass]=\"{'loading': loading_all, 'disabled': loading_all}\" (click)=\"updateAll(updatemodal)\" style=\"margin-left: 10px;\">Guardar cambios</div>\r\n      </div>\r\n    </modal-actions>\r\n  </sm-modal>\r\n\r\n</div>\r\n\r\n<style>\r\n  .ui.active.dimmer.modals.transition {\r\n    display: flex !important;\r\n    display: -ms-flexbox !important;\r\n  }\r\n</style>\r\n"
 
 /***/ }),
 
@@ -1234,14 +1234,20 @@ var TariffComponent = /** @class */ (function () {
         this.select_quantity = false;
         this.update_type = {};
         this.tariffs = [];
+        this.pages = [];
     }
     TariffComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.groupService.group_place_list().subscribe(function (groups_places) {
             _this.groups_places = groups_places.sort(_this.sort);
         });
-        this.tariffService.tariff_list().subscribe(function (tariffs) {
-            _this.tariffs = tariffs.sort(_this.sortTariffs);
+        this.tariffService.tariff_list().subscribe(function (response) {
+            _this.tariffs = response.sort(_this.sortTariffs);
+            /*
+            this.pages = response.pages;
+            console.log(this.pages)
+            this.current = response.current;
+            this.number_helper = this.current > 5 ? this.current - 4 : 1; */
         });
     };
     TariffComponent.prototype.sortTariffs = function (a, b) {
@@ -1265,7 +1271,7 @@ var TariffComponent = /** @class */ (function () {
             return 0;
         }
     };
-    TariffComponent.prototype.selectGroup = function () {
+    TariffComponent.prototype.selectGroup = function (last_gp) {
         var _this = this;
         if (this.group_selected === "") {
             return;
@@ -1281,9 +1287,19 @@ var TariffComponent = /** @class */ (function () {
         this.loading_available = true;
         this.groupService.group_list_available(params).subscribe(function (groups_places) {
             _this.groups_places_available = groups_places.sort(_this.sort);
+            if (last_gp) {
+                var last_item = _this.groups_places_available.find(function (gp_last) { return gp_last.base === last_gp.base; });
+                if (last_item) {
+                    _this.second_group_selected = last_item._id;
+                }
+                else {
+                    _this.second_group_selected = '';
+                }
+            }
             _this.loading_available = false;
         });
     };
+    TariffComponent.prototype.pageChanged = function () { };
     TariffComponent.prototype.saveTariff = function () {
         var _this = this;
         console.log(this.group_selected);
@@ -1329,8 +1345,7 @@ var TariffComponent = /** @class */ (function () {
             _this.tariffs.push(tariff_created);
             _this.tariffs = _this.tariffs.sort(_this.sortTariffs);
             _this.cost = null;
-            _this.selectGroup();
-            _this.second_group_selected = '';
+            _this.selectGroup(gp2);
         });
     };
     TariffComponent.prototype.deleteTariff = function (tariffId) {
@@ -1854,8 +1869,9 @@ var TariffService = /** @class */ (function () {
         return this.http.post(__WEBPACK_IMPORTED_MODULE_2__API_URL__["a" /* API_URL */] + "/api/tariff", tariff)
             .map(function (r) { return r.json(); });
     };
-    TariffService.prototype.tariff_list = function () {
-        return this.http.get(__WEBPACK_IMPORTED_MODULE_2__API_URL__["a" /* API_URL */] + "/api/tariff")
+    TariffService.prototype.tariff_list = function (page) {
+        if (page === void 0) { page = 1; }
+        return this.http.get(__WEBPACK_IMPORTED_MODULE_2__API_URL__["a" /* API_URL */] + "/api/tariff", { params: { page: page } })
             .map(function (r) { return r.json(); });
     };
     TariffService.prototype.tariff_delete = function (tariffId) {
@@ -1946,38 +1962,40 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_ngx_bar_rating__ = __webpack_require__("./node_modules/ngx-bar-rating/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__app_component__ = __webpack_require__("./src/app/app.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__LoginComponent_login_component__ = __webpack_require__("./src/app/LoginComponent/login.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__services_authentication_service__ = __webpack_require__("./src/app/_services/authentication.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__guards_authentication_guard__ = __webpack_require__("./src/app/_guards/authentication.guard.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__DashboradComponent_dashboard_component__ = __webpack_require__("./src/app/DashboradComponent/dashboard.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__BasesComponent_bases_component__ = __webpack_require__("./src/app/BasesComponent/bases.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__BasesComponent_BaseCreateComponent_base_create_component__ = __webpack_require__("./src/app/BasesComponent/BaseCreateComponent/base.create.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__services_bases_service__ = __webpack_require__("./src/app/_services/bases.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__BasesComponent_BaseComponent_base_component__ = __webpack_require__("./src/app/BasesComponent/BaseComponent/base.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__services_group_service__ = __webpack_require__("./src/app/_services/group.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__services_colony_service__ = __webpack_require__("./src/app/_services/colony.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__TariffComponent_tariff_component__ = __webpack_require__("./src/app/TariffComponent/tariff.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__services_tariff_service__ = __webpack_require__("./src/app/_services/tariff.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__DriversComponent_drivers_component__ = __webpack_require__("./src/app/DriversComponent/drivers.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__DriversComponent_DriverFormComponent_driver_form_component__ = __webpack_require__("./src/app/DriversComponent/DriverFormComponent/driver.form.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__services_drivers_service__ = __webpack_require__("./src/app/_services/drivers.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__services_places_service__ = __webpack_require__("./src/app/_services/places.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__PlacesComponent_places_component__ = __webpack_require__("./src/app/PlacesComponent/places.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__services_site_service__ = __webpack_require__("./src/app/_services/site.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__BasesComponent_BaseComponent_GroupsComponent_groups_component__ = __webpack_require__("./src/app/BasesComponent/BaseComponent/GroupsComponent/groups.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29_ng_snotify__ = __webpack_require__("./node_modules/ng-snotify/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__DriversComponent_DriverComponent_driver_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/driver.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__DriversComponent_DriverComponent_ServicesComponent_services_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/ServicesComponent/services.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__DriversComponent_DriverComponent_MessagesComponent_messages_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/MessagesComponent/messages.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__TariffComponent_CheckTariffComponent_check_tariff_component__ = __webpack_require__("./src/app/TariffComponent/CheckTariffComponent/check.tariff.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_ngx_pagination__ = __webpack_require__("./node_modules/ngx-pagination/dist/ngx-pagination.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__app_component__ = __webpack_require__("./src/app/app.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__LoginComponent_login_component__ = __webpack_require__("./src/app/LoginComponent/login.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__services_authentication_service__ = __webpack_require__("./src/app/_services/authentication.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__guards_authentication_guard__ = __webpack_require__("./src/app/_guards/authentication.guard.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__DashboradComponent_dashboard_component__ = __webpack_require__("./src/app/DashboradComponent/dashboard.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__BasesComponent_bases_component__ = __webpack_require__("./src/app/BasesComponent/bases.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__BasesComponent_BaseCreateComponent_base_create_component__ = __webpack_require__("./src/app/BasesComponent/BaseCreateComponent/base.create.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__services_bases_service__ = __webpack_require__("./src/app/_services/bases.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__BasesComponent_BaseComponent_base_component__ = __webpack_require__("./src/app/BasesComponent/BaseComponent/base.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__services_group_service__ = __webpack_require__("./src/app/_services/group.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__services_colony_service__ = __webpack_require__("./src/app/_services/colony.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__TariffComponent_tariff_component__ = __webpack_require__("./src/app/TariffComponent/tariff.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__services_tariff_service__ = __webpack_require__("./src/app/_services/tariff.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__DriversComponent_drivers_component__ = __webpack_require__("./src/app/DriversComponent/drivers.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__DriversComponent_DriverFormComponent_driver_form_component__ = __webpack_require__("./src/app/DriversComponent/DriverFormComponent/driver.form.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__services_drivers_service__ = __webpack_require__("./src/app/_services/drivers.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__services_places_service__ = __webpack_require__("./src/app/_services/places.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__PlacesComponent_places_component__ = __webpack_require__("./src/app/PlacesComponent/places.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__services_site_service__ = __webpack_require__("./src/app/_services/site.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__BasesComponent_BaseComponent_GroupsComponent_groups_component__ = __webpack_require__("./src/app/BasesComponent/BaseComponent/GroupsComponent/groups.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30_ng_snotify__ = __webpack_require__("./node_modules/ng-snotify/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__DriversComponent_DriverComponent_driver_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/driver.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__DriversComponent_DriverComponent_ServicesComponent_services_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/ServicesComponent/services.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__DriversComponent_DriverComponent_MessagesComponent_messages_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/MessagesComponent/messages.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__TariffComponent_CheckTariffComponent_check_tariff_component__ = __webpack_require__("./src/app/TariffComponent/CheckTariffComponent/check.tariff.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -2020,26 +2038,26 @@ function authHttpServiceFactory(http, options) {
     }), http, options);
 }
 var routes = [
-    { path: 'login', component: __WEBPACK_IMPORTED_MODULE_10__LoginComponent_login_component__["a" /* LoginComponent */] },
+    { path: 'login', component: __WEBPACK_IMPORTED_MODULE_11__LoginComponent_login_component__["a" /* LoginComponent */] },
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-    { path: 'dashboard', component: __WEBPACK_IMPORTED_MODULE_13__DashboradComponent_dashboard_component__["a" /* DashboardComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_12__guards_authentication_guard__["a" /* AuthGuard */]], children: [
+    { path: 'dashboard', component: __WEBPACK_IMPORTED_MODULE_14__DashboradComponent_dashboard_component__["a" /* DashboardComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_authentication_guard__["a" /* AuthGuard */]], children: [
             { path: '', redirectTo: 'drivers', pathMatch: 'full' },
-            { path: 'bases', component: __WEBPACK_IMPORTED_MODULE_14__BasesComponent_bases_component__["a" /* BasesComponent */] },
-            { path: 'bases/new', component: __WEBPACK_IMPORTED_MODULE_15__BasesComponent_BaseCreateComponent_base_create_component__["a" /* BaseCreateComponent */] },
-            { path: 'base/:id', component: __WEBPACK_IMPORTED_MODULE_17__BasesComponent_BaseComponent_base_component__["a" /* BaseComponent */], children: [
+            { path: 'bases', component: __WEBPACK_IMPORTED_MODULE_15__BasesComponent_bases_component__["a" /* BasesComponent */] },
+            { path: 'bases/new', component: __WEBPACK_IMPORTED_MODULE_16__BasesComponent_BaseCreateComponent_base_create_component__["a" /* BaseCreateComponent */] },
+            { path: 'base/:id', component: __WEBPACK_IMPORTED_MODULE_18__BasesComponent_BaseComponent_base_component__["a" /* BaseComponent */], children: [
                     { path: '', redirectTo: 'groups', pathMatch: 'full' },
-                    { path: 'groups', component: __WEBPACK_IMPORTED_MODULE_28__BasesComponent_BaseComponent_GroupsComponent_groups_component__["a" /* GroupsComponent */] },
-                    { path: 'places', component: __WEBPACK_IMPORTED_MODULE_26__PlacesComponent_places_component__["a" /* PlacesComponent */] }
+                    { path: 'groups', component: __WEBPACK_IMPORTED_MODULE_29__BasesComponent_BaseComponent_GroupsComponent_groups_component__["a" /* GroupsComponent */] },
+                    { path: 'places', component: __WEBPACK_IMPORTED_MODULE_27__PlacesComponent_places_component__["a" /* PlacesComponent */] }
                 ] },
-            { path: 'tariff', component: __WEBPACK_IMPORTED_MODULE_20__TariffComponent_tariff_component__["a" /* TariffComponent */] },
-            { path: 'drivers', component: __WEBPACK_IMPORTED_MODULE_22__DriversComponent_drivers_component__["a" /* DriversComponent */] },
-            { path: 'drivers/create', component: __WEBPACK_IMPORTED_MODULE_23__DriversComponent_DriverFormComponent_driver_form_component__["a" /* DriverFormComponent */] },
-            { path: 'driver/:id', component: __WEBPACK_IMPORTED_MODULE_30__DriversComponent_DriverComponent_driver_component__["a" /* DriverComponent */], children: [
+            { path: 'tariff', component: __WEBPACK_IMPORTED_MODULE_21__TariffComponent_tariff_component__["a" /* TariffComponent */] },
+            { path: 'drivers', component: __WEBPACK_IMPORTED_MODULE_23__DriversComponent_drivers_component__["a" /* DriversComponent */] },
+            { path: 'drivers/create', component: __WEBPACK_IMPORTED_MODULE_24__DriversComponent_DriverFormComponent_driver_form_component__["a" /* DriverFormComponent */] },
+            { path: 'driver/:id', component: __WEBPACK_IMPORTED_MODULE_31__DriversComponent_DriverComponent_driver_component__["a" /* DriverComponent */], children: [
                     { path: '', redirectTo: 'services', pathMatch: 'full' },
-                    { path: 'services', component: __WEBPACK_IMPORTED_MODULE_31__DriversComponent_DriverComponent_ServicesComponent_services_component__["a" /* ServicesComponent */] },
-                    { path: 'inbox', component: __WEBPACK_IMPORTED_MODULE_32__DriversComponent_DriverComponent_MessagesComponent_messages_component__["a" /* MessagesComponent */] }
+                    { path: 'services', component: __WEBPACK_IMPORTED_MODULE_32__DriversComponent_DriverComponent_ServicesComponent_services_component__["a" /* ServicesComponent */] },
+                    { path: 'inbox', component: __WEBPACK_IMPORTED_MODULE_33__DriversComponent_DriverComponent_MessagesComponent_messages_component__["a" /* MessagesComponent */] }
                 ] },
-            { path: 'places', component: __WEBPACK_IMPORTED_MODULE_26__PlacesComponent_places_component__["a" /* PlacesComponent */] }
+            { path: 'places', component: __WEBPACK_IMPORTED_MODULE_27__PlacesComponent_places_component__["a" /* PlacesComponent */] }
         ] }
 ];
 var AppModule = /** @class */ (function () {
@@ -2048,31 +2066,32 @@ var AppModule = /** @class */ (function () {
     AppModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_5__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_9__app_component__["a" /* AppComponent */],
-                __WEBPACK_IMPORTED_MODULE_10__LoginComponent_login_component__["a" /* LoginComponent */],
-                __WEBPACK_IMPORTED_MODULE_13__DashboradComponent_dashboard_component__["a" /* DashboardComponent */],
-                __WEBPACK_IMPORTED_MODULE_14__BasesComponent_bases_component__["a" /* BasesComponent */],
-                __WEBPACK_IMPORTED_MODULE_15__BasesComponent_BaseCreateComponent_base_create_component__["a" /* BaseCreateComponent */],
-                __WEBPACK_IMPORTED_MODULE_17__BasesComponent_BaseComponent_base_component__["a" /* BaseComponent */],
-                __WEBPACK_IMPORTED_MODULE_20__TariffComponent_tariff_component__["a" /* TariffComponent */],
-                __WEBPACK_IMPORTED_MODULE_22__DriversComponent_drivers_component__["a" /* DriversComponent */],
-                __WEBPACK_IMPORTED_MODULE_23__DriversComponent_DriverFormComponent_driver_form_component__["a" /* DriverFormComponent */],
-                __WEBPACK_IMPORTED_MODULE_30__DriversComponent_DriverComponent_driver_component__["a" /* DriverComponent */],
-                __WEBPACK_IMPORTED_MODULE_26__PlacesComponent_places_component__["a" /* PlacesComponent */],
-                __WEBPACK_IMPORTED_MODULE_28__BasesComponent_BaseComponent_GroupsComponent_groups_component__["a" /* GroupsComponent */],
-                __WEBPACK_IMPORTED_MODULE_31__DriversComponent_DriverComponent_ServicesComponent_services_component__["a" /* ServicesComponent */],
-                __WEBPACK_IMPORTED_MODULE_32__DriversComponent_DriverComponent_MessagesComponent_messages_component__["a" /* MessagesComponent */],
-                __WEBPACK_IMPORTED_MODULE_33__TariffComponent_CheckTariffComponent_check_tariff_component__["a" /* CheckTariffComponent */]
+                __WEBPACK_IMPORTED_MODULE_10__app_component__["a" /* AppComponent */],
+                __WEBPACK_IMPORTED_MODULE_11__LoginComponent_login_component__["a" /* LoginComponent */],
+                __WEBPACK_IMPORTED_MODULE_14__DashboradComponent_dashboard_component__["a" /* DashboardComponent */],
+                __WEBPACK_IMPORTED_MODULE_15__BasesComponent_bases_component__["a" /* BasesComponent */],
+                __WEBPACK_IMPORTED_MODULE_16__BasesComponent_BaseCreateComponent_base_create_component__["a" /* BaseCreateComponent */],
+                __WEBPACK_IMPORTED_MODULE_18__BasesComponent_BaseComponent_base_component__["a" /* BaseComponent */],
+                __WEBPACK_IMPORTED_MODULE_21__TariffComponent_tariff_component__["a" /* TariffComponent */],
+                __WEBPACK_IMPORTED_MODULE_23__DriversComponent_drivers_component__["a" /* DriversComponent */],
+                __WEBPACK_IMPORTED_MODULE_24__DriversComponent_DriverFormComponent_driver_form_component__["a" /* DriverFormComponent */],
+                __WEBPACK_IMPORTED_MODULE_31__DriversComponent_DriverComponent_driver_component__["a" /* DriverComponent */],
+                __WEBPACK_IMPORTED_MODULE_27__PlacesComponent_places_component__["a" /* PlacesComponent */],
+                __WEBPACK_IMPORTED_MODULE_29__BasesComponent_BaseComponent_GroupsComponent_groups_component__["a" /* GroupsComponent */],
+                __WEBPACK_IMPORTED_MODULE_32__DriversComponent_DriverComponent_ServicesComponent_services_component__["a" /* ServicesComponent */],
+                __WEBPACK_IMPORTED_MODULE_33__DriversComponent_DriverComponent_MessagesComponent_messages_component__["a" /* MessagesComponent */],
+                __WEBPACK_IMPORTED_MODULE_34__TariffComponent_CheckTariffComponent_check_tariff_component__["a" /* CheckTariffComponent */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
+                __WEBPACK_IMPORTED_MODULE_8_ngx_pagination__["a" /* NgxPaginationModule */],
                 __WEBPACK_IMPORTED_MODULE_6__angular_forms__["FormsModule"],
                 __WEBPACK_IMPORTED_MODULE_2__angular_http__["HttpModule"],
                 __WEBPACK_IMPORTED_MODULE_6__angular_forms__["ReactiveFormsModule"],
                 __WEBPACK_IMPORTED_MODULE_3_ng_semantic__["NgSemanticModule"],
-                __WEBPACK_IMPORTED_MODULE_29_ng_snotify__["a" /* SnotifyModule */],
+                __WEBPACK_IMPORTED_MODULE_30_ng_snotify__["a" /* SnotifyModule */],
                 __WEBPACK_IMPORTED_MODULE_7_ngx_bar_rating__["a" /* BarRatingModule */],
-                __WEBPACK_IMPORTED_MODULE_8__angular_router__["c" /* RouterModule */].forRoot(routes, { useHash: true }),
+                __WEBPACK_IMPORTED_MODULE_9__angular_router__["c" /* RouterModule */].forRoot(routes, { useHash: true }),
                 __WEBPACK_IMPORTED_MODULE_4__agm_core__["a" /* AgmCoreModule */].forRoot({
                     apiKey: 'AIzaSyAogodmHuA-P4Ais69knDP1HBlLOWCrCdg',
                     libraries: ['places']
@@ -2084,19 +2103,19 @@ var AppModule = /** @class */ (function () {
                     useFactory: authHttpServiceFactory,
                     deps: [__WEBPACK_IMPORTED_MODULE_2__angular_http__["Http"], __WEBPACK_IMPORTED_MODULE_2__angular_http__["RequestOptions"]]
                 },
-                __WEBPACK_IMPORTED_MODULE_11__services_authentication_service__["a" /* AuthenticationService */],
-                __WEBPACK_IMPORTED_MODULE_12__guards_authentication_guard__["a" /* AuthGuard */],
-                __WEBPACK_IMPORTED_MODULE_16__services_bases_service__["a" /* BaseService */],
-                __WEBPACK_IMPORTED_MODULE_18__services_group_service__["a" /* GroupService */],
-                __WEBPACK_IMPORTED_MODULE_19__services_colony_service__["a" /* ColonyService */],
-                __WEBPACK_IMPORTED_MODULE_21__services_tariff_service__["a" /* TariffService */],
-                __WEBPACK_IMPORTED_MODULE_24__services_drivers_service__["a" /* DriversService */],
-                __WEBPACK_IMPORTED_MODULE_25__services_places_service__["a" /* PlacesService */],
-                __WEBPACK_IMPORTED_MODULE_27__services_site_service__["a" /* SiteService */],
-                { provide: 'SnotifyToastConfig', useValue: __WEBPACK_IMPORTED_MODULE_29_ng_snotify__["c" /* ToastDefaults */] },
-                __WEBPACK_IMPORTED_MODULE_29_ng_snotify__["b" /* SnotifyService */]
+                __WEBPACK_IMPORTED_MODULE_12__services_authentication_service__["a" /* AuthenticationService */],
+                __WEBPACK_IMPORTED_MODULE_13__guards_authentication_guard__["a" /* AuthGuard */],
+                __WEBPACK_IMPORTED_MODULE_17__services_bases_service__["a" /* BaseService */],
+                __WEBPACK_IMPORTED_MODULE_19__services_group_service__["a" /* GroupService */],
+                __WEBPACK_IMPORTED_MODULE_20__services_colony_service__["a" /* ColonyService */],
+                __WEBPACK_IMPORTED_MODULE_22__services_tariff_service__["a" /* TariffService */],
+                __WEBPACK_IMPORTED_MODULE_25__services_drivers_service__["a" /* DriversService */],
+                __WEBPACK_IMPORTED_MODULE_26__services_places_service__["a" /* PlacesService */],
+                __WEBPACK_IMPORTED_MODULE_28__services_site_service__["a" /* SiteService */],
+                { provide: 'SnotifyToastConfig', useValue: __WEBPACK_IMPORTED_MODULE_30_ng_snotify__["c" /* ToastDefaults */] },
+                __WEBPACK_IMPORTED_MODULE_30_ng_snotify__["b" /* SnotifyService */]
             ],
-            bootstrap: [__WEBPACK_IMPORTED_MODULE_9__app_component__["a" /* AppComponent */]]
+            bootstrap: [__WEBPACK_IMPORTED_MODULE_10__app_component__["a" /* AppComponent */]]
         })
     ], AppModule);
     return AppModule;
