@@ -31,6 +31,8 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   public colonies: any[] = [];
 
+  public selected_group: any;
+
   constructor(
     private groupService: GroupService,
     private colonyService: ColonyService,
@@ -126,6 +128,19 @@ export class GroupsComponent implements OnInit, OnDestroy {
         this.new_group_name = ''
       }
     )
+  }
+
+  delete_group() {
+    this.groupService.group_delete(this.base_id, this.group_selected._id).subscribe(
+      group => {
+        this.groups = this.groups.filter(g => g._id != group._id);
+        if (this.groups.length > 0) {
+          this.selecte_group(this.groups[0]);
+        } else {
+          this.colonies = []
+        }
+      }
+    );
   }
 
   selecte_group(group) {

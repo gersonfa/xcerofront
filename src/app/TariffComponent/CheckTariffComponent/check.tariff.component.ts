@@ -71,4 +71,14 @@ export class CheckTariffComponent implements OnInit {
       )
     }
   }
+
+  deleted() {
+    this.tariff = null;
+    this.site1  = new FormControl();
+    this.site2  = new FormControl();
+  }
+
+  edited(tariff) {
+    this.tariff = tariff;
+  }
 }

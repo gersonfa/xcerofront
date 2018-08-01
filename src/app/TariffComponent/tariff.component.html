@@ -33,7 +33,10 @@
         Guardar
       </button>
 
-      <h4 class="ui dividing header">Verificar tarifa</h4>
+      <h4 class="ui dividing header">Buscar tarifa</h4>
+      <search-tariff [groups_places]="groups_places"></search-tariff>
+
+      <h4 class="ui dividing header">Verificar tarifa por colonia</h4>
       <check-tariff></check-tariff>
 
     </div>
@@ -45,10 +48,23 @@
         <button class="ui yellow button" (click)="updatemodal.show(); select_percentage = true;">Actualizar por porcentaje</button>
       </div> -->
 
-      <sm-dropdown title="Editar globalmente" class="pointing floating labeled icon button yellow">
+      <!-- <sm-dropdown title="Opciones" class="pointing floating labeled icon button yellow">
           <sm-item (click)="updatemodal.show(); select_quantity = true;">Actualizar por cantidad</sm-item>
           <sm-item (click)="updatemodal.show(); select_percentage = true;">Actualizar por porcentaje</sm-item>
-      </sm-dropdown>
+          <sm-item (click)="reload()">Volver a cargar tarifas</sm-item>
+      </sm-dropdown> -->
+
+      <button class="ui button yellow" (click)="updatemodal.show(); select_quantity = true;">
+        Actualizar por cantidad
+      </button>
+
+      <button class="ui button yellow" (click)="updatemodal.show(); select_percentage = true;">
+        Actualizar por porcentaje
+      </button>
+
+      <button class="ui button yellow" (click)="reload()">
+        Volver a cargar tarifas
+      </button>
 
       <div class="ui section divider" style="clear: both;" *ngIf="tariffs.length > 0"></div>
 

@@ -2,8 +2,9 @@
   <div class="three wide column" style="border-right: 1px solid black;">
     <sm-button class="fluid yellow" icon="plus" (click)="createGroupModel.show({inverted: false})">Crear nuevo grupo</sm-button>
     <br>
-    <sm-list class="divided animated">
+    <sm-list class="divided">
       <sm-item *ngFor="let group of groups" [ngClass]="{'item-selected': group.name === group_selected?.name}" (click)="selecte_group(group)">
+        <i style="color: red; cursor: pointer;" (click)="group_selected = group; confirmDeleteGroup.show();">x</i>
         {{group.name}}
       </sm-item>
     </sm-list>
@@ -58,6 +59,19 @@
     <div class="ui buttons">
       <button class="ui negative button" (click)="createGroupModel.hide()">Cancelar</button>
       <button class="ui button primary" [disabled]="!new_group_name" (click)="create_group(); createGroupModel.hide();" style="margin-left: 10px;">Guardar grupo</button>
+    </div>
+  </modal-actions>
+</sm-modal>
+
+<sm-modal class="basic" title="Eliminar grupo" #confirmDeleteGroup>
+  <modal-content>
+    <p>Se eliminaran las colonias y tarifas relacionadas a este grupo.</p>
+  </modal-content>
+
+  <modal-actions>
+    <div class="ui buttons">
+      <button class="ui button" (click)="confirmDeleteGroup.hide()">Cancelar</button>
+      <button class="ui button negative" (click)="delete_group(); confirmDeleteGroup.hide();" style="margin-left: 10px;">Eliminar grupo</button>
     </div>
   </modal-actions>
 </sm-modal>

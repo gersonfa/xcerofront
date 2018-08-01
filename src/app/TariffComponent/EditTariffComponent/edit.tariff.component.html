@@ -1,0 +1,28 @@
+<sm-button class="" icon="pencil" (click)="edit.show(); new_cost = tariff.cost;"></sm-button>
+<sm-button class="negative" icon="trash" (click)="deleteTariff()"></sm-button>
+
+<sm-modal class="" #edit>
+  <modal-content>
+    <div *ngIf="tariff">
+      <h3>
+        {{tariff.origin_group ? tariff.origin_group?.name + ' - ' + tariff.origin_group?.base.name : tariff.origin_place?.name
+        + ' - ' + tariff.origin_place?.base.name}}
+        <==>
+          {{tariff.destiny_group ? tariff.destiny_group?.name + ' - ' + tariff.destiny_group?.base.name
+          : tariff.destiny_place?.name + ' - ' + tariff.destiny_place?.base.name}}
+      </h3>
+
+      <div class="ui form">
+        <div class="fluid field">
+          <input type="number" placeholder="Costo" [(ngModel)]="new_cost">
+        </div>
+      </div>
+    </div>
+  </modal-content>
+  <modal-actions>
+    <div class="ui buttons">
+      <div class="ui button negative" (click)="edit.hide()">Cancelar</div>
+      <div class="ui button primary" (click)="editTariff(edit)" style="margin-left: 10px;">Guardar cambios</div>
+    </div>
+  </modal-actions>
+</sm-modal>

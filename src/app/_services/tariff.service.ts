@@ -39,4 +39,14 @@ export class TariffService {
     return this.http.get(`${API_URL}/api/tariff/check`, {params: params })
       .map(r => r.json());
   }
+
+  tariff_check_groups(group1_id: string, group2_id: string) {
+    return this.http.get(`${API_URL}/api/tariff/groups/${group1_id}/${group2_id}`)
+      .map(r => r.json());
+  }
+
+  tariff_details(tariffId: string): Observable<any> {
+    return this.http.get(`${API_URL}/api/tariff/${tariffId}`)
+      .map(r => r.json());
+  }
 }

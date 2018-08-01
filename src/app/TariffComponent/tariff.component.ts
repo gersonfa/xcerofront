@@ -197,6 +197,17 @@ export class TariffComponent implements OnInit {
       });
   }
 
+  reload() {
+    this.loading_tariffs = true;
+    this.tariffService.tariff_list().subscribe(response => {
+      this.tariffs = response.tariffs.sort(this.sortTariffs);
+      this.pages = response.pages;
+      this.current = response.current;
+      this.count = response.count;
+      this.loading_tariffs = false;
+    });
+  }
+
   sort(a, b) {
     if (a.base < b.base) { return -1; }
     if (a.base > b.base) { return 1; }

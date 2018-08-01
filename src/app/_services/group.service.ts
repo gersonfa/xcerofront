@@ -37,4 +37,9 @@ export class GroupService {
       .map(r => r.json());
   }
 
+  group_delete(baseId: string, groupId: string): Observable<any> {
+    return this.http.delete(`${API_URL}/api/base/${baseId}/group/${groupId}`)
+      .map( r => r.json());
+  }
+
 }

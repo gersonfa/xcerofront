@@ -20,7 +20,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /***/ "./src/app/BasesComponent/BaseComponent/GroupsComponent/groups.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"ui padded grid\" style=\"height: 80vh;\">\r\n  <div class=\"three wide column\" style=\"border-right: 1px solid black;\">\r\n    <sm-button class=\"fluid yellow\" icon=\"plus\" (click)=\"createGroupModel.show({inverted: false})\">Crear nuevo grupo</sm-button>\r\n    <br>\r\n    <sm-list class=\"divided animated\">\r\n      <sm-item *ngFor=\"let group of groups\" [ngClass]=\"{'item-selected': group.name === group_selected?.name}\" (click)=\"selecte_group(group)\">\r\n        {{group.name}}\r\n      </sm-item>\r\n    </sm-list>\r\n\r\n    <h5 *ngIf=\"groups.length == 0\">\r\n      Aún no hay grupos registrados.\r\n    </h5>\r\n  </div>\r\n\r\n  <div class=\"two wide column\" style=\"border-right: 1px solid black;\">\r\n    <sm-list class=\"divided\">\r\n      <sm-item *ngFor=\"let colony of colonies\">\r\n        <i style=\"color: red; cursor: pointer;\" (click)=\"delete_colony(colony)\">x</i>\r\n        {{colony.label}}\r\n      </sm-item>\r\n    </sm-list>\r\n\r\n    <h5 *ngIf=\"colonies.length == 0 && group_selected\">\r\n      Aún no hay colonias registradas en este grupo.\r\n    </h5>\r\n\r\n    <h5 *ngIf=\"colonies.length == 0 && !group_selected\">\r\n      Selecciona un grupo\r\n    </h5>\r\n  </div>\r\n\r\n  <div class=\"eleven wide column\">\r\n    <h3 *ngIf=\"group_selected\">{{group_selected.name}}</h3>\r\n    <agm-map [latitude]=\"latitude\" [longitude]=\"longitude\" [scrollwheel]=\"false\" [zoom]=\"zoom\">\r\n      <agm-marker *ngFor=\"let colony of colonies\" [label]=\"colony.label\" [latitude]=\"colony.latitude\" [longitude]=\"colony.longitude\"></agm-marker>\r\n    </agm-map>\r\n    <br>\r\n    <form [formGroup]=\"colonyForm\">\r\n      <div class=\"ui input fluid\" [ngClass]=\"{'disabled': !group_selected}\">\r\n        <input type=\"text\" #search formControlName=\"name\">\r\n      </div>\r\n    </form>\r\n\r\n  </div>\r\n</div>\r\n\r\n\r\n\r\n<sm-modal title=\"Nuevo grupo\" #createGroupModel>\r\n  <modal-content>\r\n    <div class=\"ui fluid input\">\r\n      <input type=\"text\" [(ngModel)]=\"new_group_name\" placeholder=\"Ingresa nombre de grupo\">\r\n    </div>\r\n  </modal-content>\r\n\r\n  <modal-actions>\r\n    <div class=\"ui buttons\">\r\n      <button class=\"ui negative button\" (click)=\"createGroupModel.hide()\">Cancelar</button>\r\n      <button class=\"ui button primary\" [disabled]=\"!new_group_name\" (click)=\"create_group(); createGroupModel.hide();\" style=\"margin-left: 10px;\">Guardar grupo</button>\r\n    </div>\r\n  </modal-actions>\r\n</sm-modal>\r\n\r\n<style>\r\n  .item-selected {\r\n    background-color: #FFF8E1;\r\n  }\r\n</style>\r\n"
+module.exports = "<div class=\"ui padded grid\" style=\"height: 80vh;\">\r\n  <div class=\"three wide column\" style=\"border-right: 1px solid black;\">\r\n    <sm-button class=\"fluid yellow\" icon=\"plus\" (click)=\"createGroupModel.show({inverted: false})\">Crear nuevo grupo</sm-button>\r\n    <br>\r\n    <sm-list class=\"divided\">\r\n      <sm-item *ngFor=\"let group of groups\" [ngClass]=\"{'item-selected': group.name === group_selected?.name}\" (click)=\"selecte_group(group)\">\r\n        <i style=\"color: red; cursor: pointer;\" (click)=\"group_selected = group; confirmDeleteGroup.show();\">x</i>\r\n        {{group.name}}\r\n      </sm-item>\r\n    </sm-list>\r\n\r\n    <h5 *ngIf=\"groups.length == 0\">\r\n      Aún no hay grupos registrados.\r\n    </h5>\r\n  </div>\r\n\r\n  <div class=\"two wide column\" style=\"border-right: 1px solid black;\">\r\n    <sm-list class=\"divided\">\r\n      <sm-item *ngFor=\"let colony of colonies\">\r\n        <i style=\"color: red; cursor: pointer;\" (click)=\"delete_colony(colony)\">x</i>\r\n        {{colony.label}}\r\n      </sm-item>\r\n    </sm-list>\r\n\r\n    <h5 *ngIf=\"colonies.length == 0 && group_selected\">\r\n      Aún no hay colonias registradas en este grupo.\r\n    </h5>\r\n\r\n    <h5 *ngIf=\"colonies.length == 0 && !group_selected\">\r\n      Selecciona un grupo\r\n    </h5>\r\n  </div>\r\n\r\n  <div class=\"eleven wide column\">\r\n    <h3 *ngIf=\"group_selected\">{{group_selected.name}}</h3>\r\n    <agm-map [latitude]=\"latitude\" [longitude]=\"longitude\" [scrollwheel]=\"false\" [zoom]=\"zoom\">\r\n      <agm-marker *ngFor=\"let colony of colonies\" [label]=\"colony.label\" [latitude]=\"colony.latitude\" [longitude]=\"colony.longitude\"></agm-marker>\r\n    </agm-map>\r\n    <br>\r\n    <form [formGroup]=\"colonyForm\">\r\n      <div class=\"ui input fluid\" [ngClass]=\"{'disabled': !group_selected}\">\r\n        <input type=\"text\" #search formControlName=\"name\">\r\n      </div>\r\n    </form>\r\n\r\n  </div>\r\n</div>\r\n\r\n\r\n\r\n<sm-modal title=\"Nuevo grupo\" #createGroupModel>\r\n  <modal-content>\r\n    <div class=\"ui fluid input\">\r\n      <input type=\"text\" [(ngModel)]=\"new_group_name\" placeholder=\"Ingresa nombre de grupo\">\r\n    </div>\r\n  </modal-content>\r\n\r\n  <modal-actions>\r\n    <div class=\"ui buttons\">\r\n      <button class=\"ui negative button\" (click)=\"createGroupModel.hide()\">Cancelar</button>\r\n      <button class=\"ui button primary\" [disabled]=\"!new_group_name\" (click)=\"create_group(); createGroupModel.hide();\" style=\"margin-left: 10px;\">Guardar grupo</button>\r\n    </div>\r\n  </modal-actions>\r\n</sm-modal>\r\n\r\n<sm-modal class=\"basic\" title=\"Eliminar grupo\" #confirmDeleteGroup>\r\n  <modal-content>\r\n    <p>Se eliminaran las colonias y tarifas relacionadas a este grupo.</p>\r\n  </modal-content>\r\n\r\n  <modal-actions>\r\n    <div class=\"ui buttons\">\r\n      <button class=\"ui button\" (click)=\"confirmDeleteGroup.hide()\">Cancelar</button>\r\n      <button class=\"ui button negative\" (click)=\"delete_group(); confirmDeleteGroup.hide();\" style=\"margin-left: 10px;\">Eliminar grupo</button>\r\n    </div>\r\n  </modal-actions>\r\n</sm-modal>\r\n\r\n<style>\r\n  .item-selected {\r\n    background-color: #FFF8E1;\r\n  }\r\n</style>\r\n"
 
 /***/ }),
 
@@ -131,6 +131,18 @@ var GroupsComponent = /** @class */ (function () {
             _this.new_group_name = '';
         });
     };
+    GroupsComponent.prototype.delete_group = function () {
+        var _this = this;
+        this.groupService.group_delete(this.base_id, this.group_selected._id).subscribe(function (group) {
+            _this.groups = _this.groups.filter(function (g) { return g._id != group._id; });
+            if (_this.groups.length > 0) {
+                _this.selecte_group(_this.groups[0]);
+            }
+            else {
+                _this.colonies = [];
+            }
+        });
+    };
     GroupsComponent.prototype.selecte_group = function (group) {
         var _this = this;
         this.group_selected = group;
@@ -177,7 +189,7 @@ var GroupsComponent = /** @class */ (function () {
 /***/ "./src/app/BasesComponent/BaseComponent/base.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"ui padded grid\">\r\n  <div class=\"sixteen wide column\">\r\n    <div class=\"ui large breadcrumb\">\r\n      <a class=\"section\" routerLink=\"/dashboard/bases\">Bases</a>\r\n      <i class=\"right chevron icon divider\"></i>\r\n      <div class=\"active section\">{{base?.name}}</div>\r\n    </div>\r\n    <button class=\"ui red button\" style=\"float: right;\" (click)=\"modal.show()\">Eliminar base</button>\r\n    <div class=\"ui top attached tabular menu\" style=\"margin-top: 2em;\">\r\n      <a class=\"item\" routerLink=\"groups\" routerLinkActive=\"active\">\r\n        Grupos\r\n      </a>\r\n      <a class=\"item\" routerLink=\"places\" routerLinkActive=\"active\">\r\n        Lugares\r\n      </a>\r\n    </div>\r\n    <div class=\"ui bottom attached segment\">\r\n\r\n      <router-outlet></router-outlet>\r\n    </div>\r\n\r\n  </div>\r\n</div>\r\n\r\n<sm-modal class=\"basic\" #modal>\r\n  <modal-content>\r\n      <h2>¿Estás seguro de querer borrar la base?</h2>\r\n      <p>IMPORTANTE: Se eliminaran los grupos, colonias, lugares y tarifas relacionadas a esta base.</p>\r\n  </modal-content>\r\n  <modal-actions>\r\n    <button class=\"ui button\" style=\"margin-right: 10px;\" (click)=\"modal.hide()\">Cancelar</button>\r\n    <button class=\"ui button red\" (click)=\"baseDelete(modal)\">Eliminar</button>\r\n  </modal-actions>\r\n</sm-modal>\r\n"
+module.exports = "<div class=\"ui padded grid\">\r\n  <div class=\"sixteen wide column\">\r\n    <div class=\"ui large breadcrumb\">\r\n      <a class=\"section\" routerLink=\"/dashboard/bases\">Bases</a>\r\n      <i class=\"right chevron icon divider\"></i>\r\n      <div class=\"active section\">{{base?.name}}</div>\r\n    </div>\r\n    <!-- <button class=\"ui red button\" style=\"float: right;\" (click)=\"modal.show()\">Eliminar base</button> -->\r\n    <div class=\"ui top attached tabular menu\" style=\"margin-top: 2em;\">\r\n      <a class=\"item\" routerLink=\"groups\" routerLinkActive=\"active\">\r\n        Grupos\r\n      </a>\r\n      <a class=\"item\" routerLink=\"places\" routerLinkActive=\"active\">\r\n        Lugares\r\n      </a>\r\n    </div>\r\n    <div class=\"ui bottom attached segment\">\r\n\r\n      <router-outlet></router-outlet>\r\n    </div>\r\n\r\n  </div>\r\n</div>\r\n\r\n<sm-modal class=\"basic\" #modal>\r\n  <modal-content>\r\n      <h2>¿Estás seguro de querer borrar la base?</h2>\r\n      <p>IMPORTANTE: Se eliminaran los grupos, colonias, lugares y tarifas relacionadas a esta base.</p>\r\n  </modal-content>\r\n  <modal-actions>\r\n    <button class=\"ui button\" style=\"margin-right: 10px;\" (click)=\"modal.hide()\">Cancelar</button>\r\n    <button class=\"ui button red\" (click)=\"baseDelete(modal)\">Eliminar</button>\r\n  </modal-actions>\r\n</sm-modal>\r\n"
 
 /***/ }),
 
@@ -1104,7 +1116,7 @@ var PlacesComponent = /** @class */ (function () {
 /***/ "./src/app/TariffComponent/CheckTariffComponent/check.tariff.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<sm-select  placeholder=\"Seleccionar colonia o lugar\"\r\nclass=\"fluid search\"\r\n(onChange)=\"selectSites($event)\"\r\n[control]=\"site1\">\r\n  <option *ngFor=\"let site of sites\" [value]=\"site._id\">{{site.name}}</option>\r\n</sm-select> <br>\r\n\r\n<sm-select  placeholder=\"Seleccionar colonia o lugar\"\r\nclass=\"fluid search\"\r\n(onChange)=\"selectSites($event)\"\r\n[control]=\"site2\">\r\n  <option *ngFor=\"let site of sites\" [value]=\"site._id\">{{site.name}}</option>\r\n</sm-select>\r\n\r\n<div class=\"ui active centered inline loader\" style=\"margin-top: 20px;\" *ngIf=\"loading\"></div>\r\n\r\n<h2 *ngIf=\"tariff && !loading\">\r\n  {{tariff.cost | currency:'MXN':'symbol-narrow'}}\r\n</h2>\r\n\r\n<h3 *ngIf=\"!tariff && site1.value && site2.value && !loading\">No hay una tarifa registrada para estas colonias</h3>\r\n"
+module.exports = "<sm-select  placeholder=\"Seleccionar colonia o lugar\"\r\nclass=\"fluid search\"\r\n(onChange)=\"selectSites($event)\"\r\n[control]=\"site1\">\r\n  <option *ngFor=\"let site of sites\" [value]=\"site._id\">{{site.name}}</option>\r\n</sm-select> <br>\r\n\r\n<sm-select  placeholder=\"Seleccionar colonia o lugar\"\r\nclass=\"fluid search\"\r\n(onChange)=\"selectSites($event)\"\r\n[control]=\"site2\">\r\n  <option *ngFor=\"let site of sites\" [value]=\"site._id\">{{site.name}}</option>\r\n</sm-select>\r\n\r\n<div class=\"ui active centered inline loader\" style=\"margin-top: 20px;\" *ngIf=\"loading\"></div>\r\n\r\n<h3 *ngIf=\"tariff && !loading\">\r\n  {{tariff.cost | currency:'MXN':'symbol-narrow'}}\r\n  <edit-tariff [tariff_id]=\"tariff._id\" (delete)=\"deleted()\" (update)=\"edited($event)\"></edit-tariff>\r\n\r\n</h3>\r\n\r\n<h3 *ngIf=\"!tariff && site1.value && site2.value && !loading\">No hay una tarifa registrada para estas colonias</h3>\r\n"
 
 /***/ }),
 
@@ -1179,6 +1191,14 @@ var CheckTariffComponent = /** @class */ (function () {
             });
         }
     };
+    CheckTariffComponent.prototype.deleted = function () {
+        this.tariff = null;
+        this.site1 = new __WEBPACK_IMPORTED_MODULE_4__angular_forms__["FormControl"]();
+        this.site2 = new __WEBPACK_IMPORTED_MODULE_4__angular_forms__["FormControl"]();
+    };
+    CheckTariffComponent.prototype.edited = function (tariff) {
+        this.tariff = tariff;
+    };
     CheckTariffComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             template: __webpack_require__("./src/app/TariffComponent/CheckTariffComponent/check.tariff.component.html"),
@@ -1195,10 +1215,154 @@ var CheckTariffComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/TariffComponent/EditTariffComponent/edit.tariff.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<sm-button class=\"\" icon=\"pencil\" (click)=\"edit.show(); new_cost = tariff.cost;\"></sm-button>\r\n<sm-button class=\"negative\" icon=\"trash\" (click)=\"deleteTariff()\"></sm-button>\r\n\r\n<sm-modal class=\"\" #edit>\r\n  <modal-content>\r\n    <div *ngIf=\"tariff\">\r\n      <h3>\r\n        {{tariff.origin_group ? tariff.origin_group?.name + ' - ' + tariff.origin_group?.base.name : tariff.origin_place?.name\r\n        + ' - ' + tariff.origin_place?.base.name}}\r\n        <==>\r\n          {{tariff.destiny_group ? tariff.destiny_group?.name + ' - ' + tariff.destiny_group?.base.name\r\n          : tariff.destiny_place?.name + ' - ' + tariff.destiny_place?.base.name}}\r\n      </h3>\r\n\r\n      <div class=\"ui form\">\r\n        <div class=\"fluid field\">\r\n          <input type=\"number\" placeholder=\"Costo\" [(ngModel)]=\"new_cost\">\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </modal-content>\r\n  <modal-actions>\r\n    <div class=\"ui buttons\">\r\n      <div class=\"ui button negative\" (click)=\"edit.hide()\">Cancelar</div>\r\n      <div class=\"ui button primary\" (click)=\"editTariff(edit)\" style=\"margin-left: 10px;\">Guardar cambios</div>\r\n    </div>\r\n  </modal-actions>\r\n</sm-modal>\r\n"
+
+/***/ }),
+
+/***/ "./src/app/TariffComponent/EditTariffComponent/edit.tariff.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EditTariffComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_tariff_service__ = __webpack_require__("./src/app/_services/tariff.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var EditTariffComponent = /** @class */ (function () {
+    function EditTariffComponent(tariffService) {
+        this.tariffService = tariffService;
+        this.update = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.delete = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+    }
+    EditTariffComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.tariffService.tariff_details(this.tariff_id).subscribe(function (tariff) { return _this.tariff = tariff; });
+    };
+    EditTariffComponent.prototype.deleteTariff = function () {
+        var _this = this;
+        this.tariffService.tariff_delete(this.tariff._id).subscribe(function (tariff) {
+            _this.delete.emit(tariff._id);
+        });
+    };
+    EditTariffComponent.prototype.editTariff = function (modal) {
+        var _this = this;
+        var tariff = Object.assign({}, this.tariff);
+        tariff.cost = this.new_cost;
+        this.tariffService.tariff_update(tariff).subscribe(function (tariff_update) {
+            _this.update.emit(tariff_update);
+            modal.hide();
+        });
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Object)
+    ], EditTariffComponent.prototype, "tariff_id", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"])
+    ], EditTariffComponent.prototype, "update", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"])
+    ], EditTariffComponent.prototype, "delete", void 0);
+    EditTariffComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            template: __webpack_require__("./src/app/TariffComponent/EditTariffComponent/edit.tariff.component.html"),
+            selector: 'edit-tariff'
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_tariff_service__["a" /* TariffService */]])
+    ], EditTariffComponent);
+    return EditTariffComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/TariffComponent/SearchTariff/search.tariff.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SearchTariffComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_tariff_service__ = __webpack_require__("./src/app/_services/tariff.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var SearchTariffComponent = /** @class */ (function () {
+    function SearchTariffComponent(tariffService) {
+        this.tariffService = tariffService;
+        this.groups_places = [];
+        this.group_selected = '';
+        this.group_selected2 = '';
+        this.loading = false;
+    }
+    SearchTariffComponent.prototype.selectGroup = function () {
+        var _this = this;
+        if (this.group_selected && this.group_selected2) {
+            this.loading = true;
+            this.tariffService.tariff_check_groups(this.group_selected, this.group_selected2).subscribe(function (tariff) {
+                _this.tariff = tariff;
+                _this.loading = false;
+            });
+        }
+    };
+    SearchTariffComponent.prototype.deleted = function () {
+        this.tariff = null;
+        this.group_selected = this.group_selected2 = '';
+    };
+    SearchTariffComponent.prototype.edited = function (tariff) {
+        this.tariff = tariff;
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Array)
+    ], SearchTariffComponent.prototype, "groups_places", void 0);
+    SearchTariffComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            template: __webpack_require__("./src/app/TariffComponent/SearchTariff/search.teriff.component.html"),
+            selector: 'search-tariff'
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_tariff_service__["a" /* TariffService */]])
+    ], SearchTariffComponent);
+    return SearchTariffComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/TariffComponent/SearchTariff/search.teriff.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"ui form\">\r\n  <div class=\"field\">\r\n    <select [(ngModel)]=\"group_selected\" (change)=\"selectGroup()\">\r\n      <option value=\"\">Selecciona un grupo o lugar de origen</option>\r\n      <option *ngFor=\"let gp of groups_places\" [value]=\"gp._id\">{{gp.base + ' - ' + gp.name}}</option>\r\n    </select>\r\n  </div>\r\n\r\n  <div class=\"field\">\r\n    <select [(ngModel)]=\"group_selected2\" (change)=\"selectGroup()\">\r\n      <option value=\"\">Selecciona un grupo o lugar de origen</option>\r\n      <option *ngFor=\"let gp of groups_places\" [value]=\"gp._id\">{{gp.base + ' - ' + gp.name}}</option>\r\n    </select>\r\n  </div>\r\n</div>\r\n\r\n<div class=\"ui active centered inline loader\" style=\"margin-top: 20px;\" *ngIf=\"loading\"></div>\r\n\r\n<div *ngIf=\"tariff && !loading\" style=\"margin-top: 12px;\">\r\n  <span>{{tariff.cost | currency:'MXN':'symbol-narrow'}} &nbsp; &nbsp;</span>\r\n  <edit-tariff [tariff_id]=\"tariff._id\" (delete)=\"deleted()\" (update)=\"edited($event)\"></edit-tariff>\r\n</div>\r\n\r\n<h3 *ngIf=\"!tariff && group_selected && group_selected2 && !loading\">No hay una tarifa registrada para estas colonias</h3>\r\n"
+
+/***/ }),
+
 /***/ "./src/app/TariffComponent/tariff.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"ui internally celled padded grid\" style=\"height: 94vh;;\">\r\n  <div class=\"row\">\r\n    <div class=\"four wide column\">\r\n\r\n      <div class=\"ui form\">\r\n\r\n        <h4 class=\"ui dividing header\">Nueva tarifa</h4>\r\n\r\n        <div class=\"field\">\r\n          <select [(ngModel)]=\"group_selected\" (change)=\"selectGroup()\">\r\n            <option value=\"\">Selecciona un grupo o lugar de origen</option>\r\n            <option *ngFor=\"let gp of groups_places\" [value]=\"gp._id\">{{gp.base + ' - ' + gp.name}}</option>\r\n          </select>\r\n        </div>\r\n\r\n        <div class=\"ui active centered inline loader\" style=\"margin-top: 20px;\" *ngIf=\"loading_available\"></div>\r\n\r\n        <div class=\"field\" *ngIf=\"group_selected && groups_places_available.length > 0 && !loading_available\">\r\n          <select [(ngModel)]=\"second_group_selected\">\r\n            <option value=\"\">Selecciona un grupo o lugar de destino</option>\r\n            <option *ngFor=\"let gp of groups_places_available\" [value]=\"gp._id\">{{gp.base + ' - ' + gp.name}}</option>\r\n          </select>\r\n        </div>\r\n\r\n        <div class=\" field\" *ngIf=\"second_group_selected && !loading_available\">\r\n          <input type=\"number\" placeholder=\"Costo\" [(ngModel)]=\"cost\">\r\n        </div>\r\n\r\n      </div>\r\n\r\n      <button class=\"ui button yellow\" style=\"margin-top: 10px;\" [disabled]=\"!group_selected || !second_group_selected || !cost\"\r\n        (click)=\"saveTariff()\">\r\n        Guardar\r\n      </button>\r\n\r\n      <h4 class=\"ui dividing header\">Verificar tarifa</h4>\r\n      <check-tariff></check-tariff>\r\n\r\n    </div>\r\n\r\n    <div class=\"twelve wide column\">\r\n      <!-- <div class=\"ui buttons\" style=\"float: right;\" *ngIf=\"tariffs.length > 0\">\r\n        <button class=\"ui yellow button\" (click)=\"updatemodal.show(); select_quantity = true;\">Actualizar por cantidad</button>\r\n        <div class=\"or\" data-text=\"ó\"></div>\r\n        <button class=\"ui yellow button\" (click)=\"updatemodal.show(); select_percentage = true;\">Actualizar por porcentaje</button>\r\n      </div> -->\r\n\r\n      <sm-dropdown title=\"Editar globalmente\" class=\"pointing floating labeled icon button yellow\">\r\n          <sm-item (click)=\"updatemodal.show(); select_quantity = true;\">Actualizar por cantidad</sm-item>\r\n          <sm-item (click)=\"updatemodal.show(); select_percentage = true;\">Actualizar por porcentaje</sm-item>\r\n      </sm-dropdown>\r\n\r\n      <div class=\"ui section divider\" style=\"clear: both;\" *ngIf=\"tariffs.length > 0\"></div>\r\n\r\n      <div class=\"ui active centered inline loader huge\" style=\"margin-top: 250px; margin-bottom: 250px;\" *ngIf=\"loading_tariffs\"></div>\r\n\r\n      <div class=\"ui middle aligned divided list\" *ngIf=\"(tariffs.length > 0) && !loading_tariffs\">\r\n        <div class=\"item\" *ngFor=\"let tariff of tariffs | paginate:{ id:'server', itemsPerPage: 15, currentPage: current, totalItems: count }\">\r\n          <div class=\"right floated content\">\r\n            <span>{{tariff.cost | currency:'MXN':'symbol-narrow'}} &nbsp; &nbsp;</span>\r\n            <sm-button class=\"\" icon=\"pencil\" (click)=\"edit.show(); selected_tariff = tariff;\"></sm-button>\r\n            <sm-button class=\"negative\" icon=\"trash\" (click)=\"deleteTariff(tariff._id)\"></sm-button>\r\n          </div>\r\n          <div class=\"content\">\r\n            <p>\r\n              {{ tariff.origin_group ? tariff.origin_group?.base.name + ' - ' + tariff.origin_group?.name  : tariff.origin_place?.base.name + ' - ' + tariff.origin_place?.name }}\r\n              <b style=\"font-size: 1.2em;\"><--></b>\r\n                {{tariff.destiny_group ? tariff.destiny_group?.base.name + ' - ' + tariff.destiny_group?.name  : tariff.destiny_place?.base.name + ' - ' + tariff.destiny_place?.name\r\n                }}\r\n            </p>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n     <pagination-controls  id=\"server\"\r\n        (pageChange)=\"pageChanged($event)\"\r\n        autoHide=\"true\"\r\n        directionLinks=\"false\"\r\n                      previousLabel=\"Anterior\"\r\n                      nextLabel=\"Siguiente\"\r\n                      screenReaderPaginationLabel=\"Pagination\"\r\n                      screenReaderPageLabel=\"page\"\r\n                      screenReaderCurrentLabel=\"You're on page\">\r\n</pagination-controls>\r\n\r\n    </div>\r\n  </div>\r\n\r\n  <sm-modal class=\"\" #edit>\r\n    <modal-content>\r\n      <div *ngIf=\"selected_tariff\">\r\n        <h3>\r\n          {{selected_tariff.origin_group ? selected_tariff.origin_group?.name + ' - ' + selected_tariff.origin_group?.base.name : selected_tariff.origin_place?.name\r\n          + ' - ' + selected_tariff.origin_place?.base.name}}\r\n          <==>\r\n            {{selected_tariff.destiny_group ? selected_tariff.destiny_group?.name + ' - ' + selected_tariff.destiny_group?.base.name\r\n            : selected_tariff.destiny_place?.name + ' - ' + selected_tariff.destiny_place?.base.name}}\r\n        </h3>\r\n\r\n        <div class=\"ui form\">\r\n          <div class=\"fluid field\">\r\n            <input type=\"number\" placeholder=\"Costo\" [(ngModel)]=\"selected_tariff.cost\">\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </modal-content>\r\n    <modal-actions>\r\n      <div class=\"ui buttons\">\r\n        <div class=\"ui button negative\" (click)=\"edit.hide()\">Cancelar</div>\r\n        <div class=\"ui button primary\" (click)=\"editTariff(edit)\" style=\"margin-left: 10px;\">Guardar cambios</div>\r\n      </div>\r\n    </modal-actions>\r\n  </sm-modal>\r\n\r\n  <sm-modal class=\"\" #updatemodal>\r\n    <modal-content>\r\n      <div>\r\n        <h3 *ngIf=\"select_quantity\">\r\n          Actualizar por cantidad\r\n        </h3>\r\n\r\n        <h3 *ngIf=\"select_percentage\">\r\n          Actualizar por porcentaje\r\n        </h3>\r\n\r\n        <div class=\"ui form\">\r\n          <div class=\"fluid field\">\r\n            <input type=\"number\" placeholder=\"Cantidad a sumar\" *ngIf=\"select_quantity\" [(ngModel)]=\"update_type.quantity\">\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"ui form\">\r\n          <div class=\"fluid field\">\r\n            <input type=\"number\" placeholder=\"Porcentaje a sumar\" *ngIf=\"select_percentage\" [(ngModel)]=\"update_type.percentage\">\r\n          </div>\r\n        </div>\r\n\r\n      </div>\r\n    </modal-content>\r\n    <modal-actions>\r\n      <div class=\"ui buttons\">\r\n        <div class=\"ui button negative\" (click)=\"updatemodal.hide(); select_quantity = false; select_percentage = false;\">Cancelar</div>\r\n        <div class=\"ui button primary\" [ngClass]=\"{'loading': loading_all, 'disabled': loading_all}\" (click)=\"updateAll(updatemodal)\" style=\"margin-left: 10px;\">Guardar cambios</div>\r\n      </div>\r\n    </modal-actions>\r\n  </sm-modal>\r\n\r\n</div>\r\n\r\n<style>\r\n  .ui.active.dimmer.modals.transition {\r\n    display: flex !important;\r\n    display: -ms-flexbox !important;\r\n  }\r\n</style>\r\n"
+module.exports = "<div class=\"ui internally celled padded grid\" style=\"height: 94vh;;\">\r\n  <div class=\"row\">\r\n    <div class=\"four wide column\">\r\n\r\n      <div class=\"ui form\">\r\n\r\n        <h4 class=\"ui dividing header\">Nueva tarifa</h4>\r\n\r\n        <div class=\"field\">\r\n          <select [(ngModel)]=\"group_selected\" (change)=\"selectGroup()\">\r\n            <option value=\"\">Selecciona un grupo o lugar de origen</option>\r\n            <option *ngFor=\"let gp of groups_places\" [value]=\"gp._id\">{{gp.base + ' - ' + gp.name}}</option>\r\n          </select>\r\n        </div>\r\n\r\n        <div class=\"ui active centered inline loader\" style=\"margin-top: 20px;\" *ngIf=\"loading_available\"></div>\r\n\r\n        <div class=\"field\" *ngIf=\"group_selected && groups_places_available.length > 0 && !loading_available\">\r\n          <select [(ngModel)]=\"second_group_selected\">\r\n            <option value=\"\">Selecciona un grupo o lugar de destino</option>\r\n            <option *ngFor=\"let gp of groups_places_available\" [value]=\"gp._id\">{{gp.base + ' - ' + gp.name}}</option>\r\n          </select>\r\n        </div>\r\n\r\n        <div class=\" field\" *ngIf=\"second_group_selected && !loading_available\">\r\n          <input type=\"number\" placeholder=\"Costo\" [(ngModel)]=\"cost\">\r\n        </div>\r\n\r\n      </div>\r\n\r\n      <button class=\"ui button yellow\" style=\"margin-top: 10px;\" [disabled]=\"!group_selected || !second_group_selected || !cost\"\r\n        (click)=\"saveTariff()\">\r\n        Guardar\r\n      </button>\r\n\r\n      <h4 class=\"ui dividing header\">Buscar tarifa</h4>\r\n      <search-tariff [groups_places]=\"groups_places\"></search-tariff>\r\n\r\n      <h4 class=\"ui dividing header\">Verificar tarifa por colonia</h4>\r\n      <check-tariff></check-tariff>\r\n\r\n    </div>\r\n\r\n    <div class=\"twelve wide column\">\r\n      <!-- <div class=\"ui buttons\" style=\"float: right;\" *ngIf=\"tariffs.length > 0\">\r\n        <button class=\"ui yellow button\" (click)=\"updatemodal.show(); select_quantity = true;\">Actualizar por cantidad</button>\r\n        <div class=\"or\" data-text=\"ó\"></div>\r\n        <button class=\"ui yellow button\" (click)=\"updatemodal.show(); select_percentage = true;\">Actualizar por porcentaje</button>\r\n      </div> -->\r\n\r\n      <!-- <sm-dropdown title=\"Opciones\" class=\"pointing floating labeled icon button yellow\">\r\n          <sm-item (click)=\"updatemodal.show(); select_quantity = true;\">Actualizar por cantidad</sm-item>\r\n          <sm-item (click)=\"updatemodal.show(); select_percentage = true;\">Actualizar por porcentaje</sm-item>\r\n          <sm-item (click)=\"reload()\">Volver a cargar tarifas</sm-item>\r\n      </sm-dropdown> -->\r\n\r\n      <button class=\"ui button yellow\" (click)=\"updatemodal.show(); select_quantity = true;\">\r\n        Actualizar por cantidad\r\n      </button>\r\n\r\n      <button class=\"ui button yellow\" (click)=\"updatemodal.show(); select_percentage = true;\">\r\n        Actualizar por porcentaje\r\n      </button>\r\n\r\n      <button class=\"ui button yellow\" (click)=\"reload()\">\r\n        Volver a cargar tarifas\r\n      </button>\r\n\r\n      <div class=\"ui section divider\" style=\"clear: both;\" *ngIf=\"tariffs.length > 0\"></div>\r\n\r\n      <div class=\"ui active centered inline loader huge\" style=\"margin-top: 250px; margin-bottom: 250px;\" *ngIf=\"loading_tariffs\"></div>\r\n\r\n      <div class=\"ui middle aligned divided list\" *ngIf=\"(tariffs.length > 0) && !loading_tariffs\">\r\n        <div class=\"item\" *ngFor=\"let tariff of tariffs | paginate:{ id:'server', itemsPerPage: 15, currentPage: current, totalItems: count }\">\r\n          <div class=\"right floated content\">\r\n            <span>{{tariff.cost | currency:'MXN':'symbol-narrow'}} &nbsp; &nbsp;</span>\r\n            <sm-button class=\"\" icon=\"pencil\" (click)=\"edit.show(); selected_tariff = tariff;\"></sm-button>\r\n            <sm-button class=\"negative\" icon=\"trash\" (click)=\"deleteTariff(tariff._id)\"></sm-button>\r\n          </div>\r\n          <div class=\"content\">\r\n            <p>\r\n              {{ tariff.origin_group ? tariff.origin_group?.base.name + ' - ' + tariff.origin_group?.name  : tariff.origin_place?.base.name + ' - ' + tariff.origin_place?.name }}\r\n              <b style=\"font-size: 1.2em;\"><--></b>\r\n                {{tariff.destiny_group ? tariff.destiny_group?.base.name + ' - ' + tariff.destiny_group?.name  : tariff.destiny_place?.base.name + ' - ' + tariff.destiny_place?.name\r\n                }}\r\n            </p>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n     <pagination-controls  id=\"server\"\r\n        (pageChange)=\"pageChanged($event)\"\r\n        autoHide=\"true\"\r\n        directionLinks=\"false\"\r\n                      previousLabel=\"Anterior\"\r\n                      nextLabel=\"Siguiente\"\r\n                      screenReaderPaginationLabel=\"Pagination\"\r\n                      screenReaderPageLabel=\"page\"\r\n                      screenReaderCurrentLabel=\"You're on page\">\r\n</pagination-controls>\r\n\r\n    </div>\r\n  </div>\r\n\r\n  <sm-modal class=\"\" #edit>\r\n    <modal-content>\r\n      <div *ngIf=\"selected_tariff\">\r\n        <h3>\r\n          {{selected_tariff.origin_group ? selected_tariff.origin_group?.name + ' - ' + selected_tariff.origin_group?.base.name : selected_tariff.origin_place?.name\r\n          + ' - ' + selected_tariff.origin_place?.base.name}}\r\n          <==>\r\n            {{selected_tariff.destiny_group ? selected_tariff.destiny_group?.name + ' - ' + selected_tariff.destiny_group?.base.name\r\n            : selected_tariff.destiny_place?.name + ' - ' + selected_tariff.destiny_place?.base.name}}\r\n        </h3>\r\n\r\n        <div class=\"ui form\">\r\n          <div class=\"fluid field\">\r\n            <input type=\"number\" placeholder=\"Costo\" [(ngModel)]=\"selected_tariff.cost\">\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </modal-content>\r\n    <modal-actions>\r\n      <div class=\"ui buttons\">\r\n        <div class=\"ui button negative\" (click)=\"edit.hide()\">Cancelar</div>\r\n        <div class=\"ui button primary\" (click)=\"editTariff(edit)\" style=\"margin-left: 10px;\">Guardar cambios</div>\r\n      </div>\r\n    </modal-actions>\r\n  </sm-modal>\r\n\r\n  <sm-modal class=\"\" #updatemodal>\r\n    <modal-content>\r\n      <div>\r\n        <h3 *ngIf=\"select_quantity\">\r\n          Actualizar por cantidad\r\n        </h3>\r\n\r\n        <h3 *ngIf=\"select_percentage\">\r\n          Actualizar por porcentaje\r\n        </h3>\r\n\r\n        <div class=\"ui form\">\r\n          <div class=\"fluid field\">\r\n            <input type=\"number\" placeholder=\"Cantidad a sumar\" *ngIf=\"select_quantity\" [(ngModel)]=\"update_type.quantity\">\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"ui form\">\r\n          <div class=\"fluid field\">\r\n            <input type=\"number\" placeholder=\"Porcentaje a sumar\" *ngIf=\"select_percentage\" [(ngModel)]=\"update_type.percentage\">\r\n          </div>\r\n        </div>\r\n\r\n      </div>\r\n    </modal-content>\r\n    <modal-actions>\r\n      <div class=\"ui buttons\">\r\n        <div class=\"ui button negative\" (click)=\"updatemodal.hide(); select_quantity = false; select_percentage = false;\">Cancelar</div>\r\n        <div class=\"ui button primary\" [ngClass]=\"{'loading': loading_all, 'disabled': loading_all}\" (click)=\"updateAll(updatemodal)\" style=\"margin-left: 10px;\">Guardar cambios</div>\r\n      </div>\r\n    </modal-actions>\r\n  </sm-modal>\r\n\r\n</div>\r\n\r\n<style>\r\n  .ui.active.dimmer.modals.transition {\r\n    display: flex !important;\r\n    display: -ms-flexbox !important;\r\n  }\r\n</style>\r\n"
 
 /***/ }),
 
@@ -1389,6 +1553,17 @@ var TariffComponent = /** @class */ (function () {
             _this.update_type = {};
             _this.loading_all = false;
             modal.hide();
+        });
+    };
+    TariffComponent.prototype.reload = function () {
+        var _this = this;
+        this.loading_tariffs = true;
+        this.tariffService.tariff_list().subscribe(function (response) {
+            _this.tariffs = response.tariffs.sort(_this.sortTariffs);
+            _this.pages = response.pages;
+            _this.current = response.current;
+            _this.count = response.count;
+            _this.loading_tariffs = false;
         });
     };
     TariffComponent.prototype.sort = function (a, b) {
@@ -1743,6 +1918,10 @@ var GroupService = /** @class */ (function () {
         return this.http.get(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/group/place")
             .map(function (r) { return r.json(); });
     };
+    GroupService.prototype.group_delete = function (baseId, groupId) {
+        return this.http.delete(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/base/" + baseId + "/group/" + groupId)
+            .map(function (r) { return r.json(); });
+    };
     GroupService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_angular2_jwt__["AuthHttp"]])
@@ -1900,6 +2079,14 @@ var TariffService = /** @class */ (function () {
         return this.http.get(__WEBPACK_IMPORTED_MODULE_2__API_URL__["a" /* API_URL */] + "/api/tariff/check", { params: params })
             .map(function (r) { return r.json(); });
     };
+    TariffService.prototype.tariff_check_groups = function (group1_id, group2_id) {
+        return this.http.get(__WEBPACK_IMPORTED_MODULE_2__API_URL__["a" /* API_URL */] + "/api/tariff/groups/" + group1_id + "/" + group2_id)
+            .map(function (r) { return r.json(); });
+    };
+    TariffService.prototype.tariff_details = function (tariffId) {
+        return this.http.get(__WEBPACK_IMPORTED_MODULE_2__API_URL__["a" /* API_URL */] + "/api/tariff/" + tariffId)
+            .map(function (r) { return r.json(); });
+    };
     TariffService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_angular2_jwt__["AuthHttp"]])
@@ -1999,12 +2186,16 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__DriversComponent_DriverComponent_ServicesComponent_services_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/ServicesComponent/services.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__DriversComponent_DriverComponent_MessagesComponent_messages_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/MessagesComponent/messages.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__TariffComponent_CheckTariffComponent_check_tariff_component__ = __webpack_require__("./src/app/TariffComponent/CheckTariffComponent/check.tariff.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__TariffComponent_SearchTariff_search_tariff_component__ = __webpack_require__("./src/app/TariffComponent/SearchTariff/search.tariff.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__TariffComponent_EditTariffComponent_edit_tariff_component__ = __webpack_require__("./src/app/TariffComponent/EditTariffComponent/edit.tariff.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
 
 
 
@@ -2090,7 +2281,9 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_29__BasesComponent_BaseComponent_GroupsComponent_groups_component__["a" /* GroupsComponent */],
                 __WEBPACK_IMPORTED_MODULE_32__DriversComponent_DriverComponent_ServicesComponent_services_component__["a" /* ServicesComponent */],
                 __WEBPACK_IMPORTED_MODULE_33__DriversComponent_DriverComponent_MessagesComponent_messages_component__["a" /* MessagesComponent */],
-                __WEBPACK_IMPORTED_MODULE_34__TariffComponent_CheckTariffComponent_check_tariff_component__["a" /* CheckTariffComponent */]
+                __WEBPACK_IMPORTED_MODULE_34__TariffComponent_CheckTariffComponent_check_tariff_component__["a" /* CheckTariffComponent */],
+                __WEBPACK_IMPORTED_MODULE_35__TariffComponent_SearchTariff_search_tariff_component__["a" /* SearchTariffComponent */],
+                __WEBPACK_IMPORTED_MODULE_36__TariffComponent_EditTariffComponent_edit_tariff_component__["a" /* EditTariffComponent */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
