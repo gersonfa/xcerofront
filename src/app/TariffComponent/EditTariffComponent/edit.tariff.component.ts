@@ -19,6 +19,7 @@ export class EditTariffComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    console.log(this.tariff)
     this.tariffService.tariff_details(this.tariff_id).subscribe(
       tariff => this.tariff = tariff
     )

@@ -14,10 +14,13 @@ class="fluid search"
 
 <div class="ui active centered inline loader" style="margin-top: 20px;" *ngIf="loading"></div>
 
-<h3 *ngIf="tariff && !loading">
-  {{tariff.cost | currency:'MXN':'symbol-narrow'}}
-  <edit-tariff [tariff_id]="tariff._id" (delete)="deleted()" (update)="edited($event)"></edit-tariff>
 
-</h3>
+<div class="ui message" *ngIf="tariff && !loading">
+  <i class="close icon"></i>
+  <div>
+    {{tariff.cost | currency:'MXN':'symbol-narrow'}}
+    <edit-tariff [tariff_id]="tariff._id" (delete)="deleted()" (update)="edited($event)"></edit-tariff>
+  </div>
+</div>
 
 <h3 *ngIf="!tariff && site1.value && site2.value && !loading">No hay una tarifa registrada para estas colonias</h3>

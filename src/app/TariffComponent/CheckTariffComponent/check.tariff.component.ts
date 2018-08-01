@@ -38,11 +38,10 @@ export class CheckTariffComponent implements OnInit {
       ) => ({ places, colonies })
     ).subscribe( data => {
       this.sites = [...data.places, ...data.colonies];
-      console.log(this.sites)
     })
   }
 
-  selectSites(site) {
+  selectSites() {
     if (this.site1.value && this.site2.value) {
       this.loading = true;
       let site1 = this.sites.find(s => this.site1.value == s._id)
