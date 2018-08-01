@@ -16,7 +16,7 @@ class="fluid search"
 
 
 <div class="ui message" *ngIf="tariff && !loading">
-  <i class="close icon"></i>
+  <i class="close icon" (click)="deleted()"></i>
   <div>
     {{tariff.cost | currency:'MXN':'symbol-narrow'}}
     <edit-tariff [tariff_id]="tariff._id" (delete)="deleted()" (update)="edited($event)"></edit-tariff>
