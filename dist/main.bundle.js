@@ -189,7 +189,7 @@ var GroupsComponent = /** @class */ (function () {
 /***/ "./src/app/BasesComponent/BaseComponent/base.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"ui padded grid\">\r\n  <div class=\"sixteen wide column\">\r\n    <div class=\"ui large breadcrumb\">\r\n      <a class=\"section\" routerLink=\"/dashboard/bases\">Bases</a>\r\n      <i class=\"right chevron icon divider\"></i>\r\n      <div class=\"active section\">{{base?.name}}</div>\r\n    </div>\r\n    <!-- <button class=\"ui red button\" style=\"float: right;\" (click)=\"modal.show()\">Eliminar base</button> -->\r\n    <div class=\"ui top attached tabular menu\" style=\"margin-top: 2em;\">\r\n      <a class=\"item\" routerLink=\"groups\" routerLinkActive=\"active\">\r\n        Grupos\r\n      </a>\r\n      <a class=\"item\" routerLink=\"places\" routerLinkActive=\"active\">\r\n        Lugares\r\n      </a>\r\n    </div>\r\n    <div class=\"ui bottom attached segment\">\r\n\r\n      <router-outlet></router-outlet>\r\n    </div>\r\n\r\n  </div>\r\n</div>\r\n\r\n<sm-modal class=\"basic\" #modal>\r\n  <modal-content>\r\n      <h2>¿Estás seguro de querer borrar la base?</h2>\r\n      <p>IMPORTANTE: Se eliminaran los grupos, colonias, lugares y tarifas relacionadas a esta base.</p>\r\n  </modal-content>\r\n  <modal-actions>\r\n    <button class=\"ui button\" style=\"margin-right: 10px;\" (click)=\"modal.hide()\">Cancelar</button>\r\n    <button class=\"ui button red\" (click)=\"baseDelete(modal)\">Eliminar</button>\r\n  </modal-actions>\r\n</sm-modal>\r\n"
+module.exports = "<div class=\"ui padded grid\">\r\n  <div class=\"sixteen wide column\">\r\n    <div class=\"ui large breadcrumb\">\r\n      <a class=\"section\" routerLink=\"/dashboard/bases\">Bases</a>\r\n      <i class=\"right chevron icon divider\"></i>\r\n      <div class=\"active section\">{{base?.name}}</div>\r\n    </div>\r\n    <button class=\"ui red button\" style=\"float: right;\" (click)=\"modal.show()\">Eliminar base</button>\r\n    <div class=\"ui top attached tabular menu\" style=\"margin-top: 2em;\">\r\n      <a class=\"item\" routerLink=\"groups\" routerLinkActive=\"active\">\r\n        Grupos\r\n      </a>\r\n      <a class=\"item\" routerLink=\"places\" routerLinkActive=\"active\">\r\n        Lugares\r\n      </a>\r\n    </div>\r\n    <div class=\"ui bottom attached segment\">\r\n\r\n      <router-outlet></router-outlet>\r\n    </div>\r\n\r\n  </div>\r\n</div>\r\n\r\n<sm-modal class=\"basic\" #modal>\r\n  <modal-content>\r\n      <h2>¿Estás seguro de querer borrar la base?</h2>\r\n      <p>IMPORTANTE: Se eliminaran los grupos, colonias, lugares y tarifas relacionadas a esta base.</p>\r\n  </modal-content>\r\n  <modal-actions>\r\n    <button class=\"ui button\" style=\"margin-right: 10px;\" (click)=\"modal.hide()\">Cancelar</button>\r\n    <button class=\"ui button red\" (click)=\"baseDelete(modal)\">Eliminar</button>\r\n  </modal-actions>\r\n</sm-modal>\r\n"
 
 /***/ }),
 
@@ -1476,7 +1476,6 @@ var TariffComponent = /** @class */ (function () {
     };
     TariffComponent.prototype.saveTariff = function () {
         var _this = this;
-        console.log(this.group_selected);
         var gp1 = this.groups_places.find(function (gp) { return gp._id === _this.group_selected; });
         var gp2 = this.groups_places_available.find(function (gp) { return gp._id === _this.second_group_selected; });
         var tariff = {};
@@ -1512,7 +1511,6 @@ var TariffComponent = /** @class */ (function () {
                 };
             }
         }
-        console.log(tariff);
         this.tariffService
             .tariff_create(tariff)
             .subscribe(function (tariff_created) {

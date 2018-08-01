@@ -114,7 +114,6 @@ export class TariffComponent implements OnInit {
   }
 
   saveTariff() {
-    console.log(this.group_selected);
 
     const gp1 = this.groups_places.find(gp => gp._id === this.group_selected);
     const gp2 = this.groups_places_available.find(
@@ -151,8 +150,6 @@ export class TariffComponent implements OnInit {
         };
       }
     }
-
-    console.log(tariff);
 
     this.tariffService
       .tariff_create(tariff as Tariff)
