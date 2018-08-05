@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { GroupService } from "../_services/group.service";
 import { TariffService } from "../_services/tariff.service";
 import { Tariff } from "../_models/tariff";
+import { BaseService } from "../_services/bases.service";
 
 @Component({
   templateUrl: "./tariff.component.html"
@@ -9,6 +10,7 @@ import { Tariff } from "../_models/tariff";
 export class TariffComponent implements OnInit {
   private groups_places: any[] = [];
   private group_selected: string = "";
+  public base_selected: string = '';
 
   private groups_places_available: any[] = [];
 
@@ -31,9 +33,12 @@ export class TariffComponent implements OnInit {
   public count: number;
   public loading_tariffs: boolean = false;
 
+  public bases: any[] = [];
+
   constructor(
     private groupService: GroupService,
-    private tariffService: TariffService
+    private tariffService: TariffService,
+    private baseService: BaseService
   ) {}
 
   ngOnInit() {
@@ -50,6 +55,10 @@ export class TariffComponent implements OnInit {
       this.count = response.count;
       this.loading_tariffs = false;
     });
+
+    this.baseService.base_list().subscribe(
+      bases => this.bases = bases.sort(this.sortBases)
+    )
   }
 
   sortTariffs(a, b) {
@@ -75,6 +84,14 @@ export class TariffComponent implements OnInit {
       }
       return 0;
     }
+  }
+
+  sortBases(a, b) {
+    if (a.name < b.name) { return -1; }
+    if (a.name > b.name) { return 1; }
+
+    return 0;
+
   }
 
   selectGroup(last_gp?) {
@@ -105,8 +122,11 @@ export class TariffComponent implements OnInit {
 
   pageChanged(page) {
     this.loading_tariffs = true;
-    this.tariffService.tariff_list(page).subscribe(response => {
+    this.tariffService.tariff_list(page, this.base_selected ? this.base_selected : '').subscribe(response => {
       this.tariffs = response.tariffs.sort(this.sortTariffs);
+      if (this.base_selected) {
+        this.tariffs = this.tariffs.map(t => this.orderBaseName(t));
+      }
       this.pages = response.pages;
       this.current = response.current;
       this.loading_tariffs = false;
@@ -211,5 +231,67 @@ export class TariffComponent implements OnInit {
 
     return 0;
 
+  }
+
+  selectBase(base_id) {
+    console.log(base_id)
+    this.loading_tariffs = true;
+    if (base_id === '') {
+      this.tariffService.tariff_list().subscribe(
+        response => {
+          this.tariffs = response.tariffs.sort(this.sortTariffs)
+          this.pages = response.pages;
+          this.current = response.current;
+          this.count = response.count;
+          this.loading_tariffs = false;
+        }
+      )
+    } else {
+      this.tariffService.tariff_list(1, base_id).subscribe(
+        response => {
+          this.tariffs = response.tariffs.sort(this.sortTariffs).map(t => this.orderBaseName(t));
+          this.pages = response.pages;
+          this.current = response.current;
+          this.count = response.count;
+          this.loading_tariffs = false;
+        }
+      )
+    }
+  }
+
+  orderBaseName(a) {
+
+    console.log(a)
+
+    if (a.origin_group && a.origin_group.base._id !== this.base_selected ) {
+      if (a.destiny_place) {
+        a.origin_place = a.destiny_place;
+        a.destiny_group = a.origin_group;
+
+        delete a.origin_group;
+        delete a.destiny_place;
+      } else {
+        let copy = a.origin_group;
+        a.origin_group = a.destiny_group;
+        a.destiny_group = copy;
+      }
+    }
+
+    if (a.origin_place && a.origin_place.base._id !== this.base_selected) {
+      if (a.destiny_group) {
+        let copy = a.destiny_group;
+        a.destiny_place = a.origin_place;
+        a.origin_group = copy;
+        delete a.destiny_group;
+        delete a.origin_place;
+      } else {
+        let copy = a.destiny_place;
+        a.destiny_place = a.origin_place;
+        a.origin_place = copy;
+      }
+
+    }
+
+    return a;
   }
 }

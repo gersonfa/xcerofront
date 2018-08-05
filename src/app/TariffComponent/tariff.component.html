@@ -66,6 +66,15 @@
         Volver a cargar tarifas
       </button>
 
+      <div class="ui form" style="float:right;">
+        <div class="field">
+          <select [(ngModel)]="base_selected" (change)="selectBase(base_selected)">
+            <option value="">Todas las bases</option>
+            <option *ngFor="let base of bases" [value]="base._id">{{base.name}}</option>
+          </select>
+        </div>
+      </div>
+
       <div class="ui section divider" style="clear: both;" *ngIf="tariffs.length > 0"></div>
 
       <div class="ui active centered inline loader huge" style="margin-top: 250px; margin-bottom: 250px;" *ngIf="loading_tariffs"></div>
