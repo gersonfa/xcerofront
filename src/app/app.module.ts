@@ -37,6 +37,8 @@ import { MessagesComponent } from './DriversComponent/DriverComponent/MessagesCo
 import { CheckTariffComponent } from './TariffComponent/CheckTariffComponent/check.tariff.component';
 import { SearchTariffComponent } from './TariffComponent/SearchTariff/search.tariff.component';
 import { EditTariffComponent } from './TariffComponent/EditTariffComponent/edit.tariff.component';
+import { CommentsComponent } from './DriversComponent/DriverComponent/CommentsComponent/comments.component';
+import { ReportsComponent } from './DriversComponent/DriverComponent/ReportsComponent/reports.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -63,7 +65,9 @@ const routes: Routes = [
     { path: 'driver/:id', component: DriverComponent, children: [
       {path: '', redirectTo: 'services', pathMatch: 'full'},
       {path: 'services', component: ServicesComponent},
-      { path: 'inbox', component: MessagesComponent}
+      { path: 'inbox', component: MessagesComponent},
+      { path: 'comments', component: CommentsComponent },
+      {path: 'reports', component: ReportsComponent}
     ]},
     { path: 'places', component: PlacesComponent }
   ]}
@@ -87,7 +91,9 @@ const routes: Routes = [
     MessagesComponent,
     CheckTariffComponent,
     SearchTariffComponent,
-    EditTariffComponent
+    EditTariffComponent,
+    CommentsComponent,
+    ReportsComponent
   ],
   imports: [
     BrowserModule,

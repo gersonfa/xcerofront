@@ -49,11 +49,11 @@ export class DriversComponent implements OnInit, OnDestroy {
             return {
               longitude: Number(d.coords[0]),
               latitude: Number(d.coords[1]),
-              label: d.unit_number.toString()
+              label: d.unit_number.toString(),
+              icon: d.emergency ? 'assets/car-emergency.png' : 'assets/car.png'
             };
           }
         });
-        console.log(this.driver_markers);
       }
     )
     this.sub = Observable.interval(10000)
@@ -65,7 +65,8 @@ export class DriversComponent implements OnInit, OnDestroy {
               return {
                 longitude: Number(d.coords[0]),
                 latitude: Number(d.coords[1]),
-                label: d.unit_number.toString()
+                label: d.unit_number.toString(),
+                icon: d.emergency ? 'assets/car-emergency.png' : 'assets/car.png'
               };
             }
           });

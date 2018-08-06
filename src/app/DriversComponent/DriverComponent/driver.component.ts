@@ -78,4 +78,10 @@ export class DriverComponent implements OnInit {
       }
     )
   }
+
+  disable_emergency() {
+    this.driverService.disable_emergency(this.driver_id).subscribe(
+      response => this.driver.emergency = response.emergency
+    )
+  }
 }

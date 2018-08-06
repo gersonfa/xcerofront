@@ -25,7 +25,7 @@
   </div>
   <div class="twelve wide column">
     <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom">
-      <agm-marker *ngFor="let marker of driver_markers" (markerClick)="selectDriver(marker)" [iconUrl]="'https://cdn2.iconfinder.com/data/icons/fatcow/32x32/car_taxi.png'"
+      <agm-marker *ngFor="let marker of driver_markers" (markerClick)="selectDriver(marker)" [iconUrl]="marker.icon"
         [label]="marker.label" [latitude]="marker.latitude" [longitude]="marker.longitude"></agm-marker>
     </agm-map>
   </div>

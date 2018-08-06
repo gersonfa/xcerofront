@@ -1,0 +1,24 @@
+<div class="ui padded grid">
+  <div class="row">
+    <div class="sixteen wide column">
+      <h3 *ngIf="reviews.length == 0">Este conductor aún no tiene comentarios.</h3>
+      <div class="ui comments">
+        <div class="comment" *ngFor="let review of reviews">
+          <div class="content">
+            <a class="author">{{review.author?.full_name}}</a>
+            <div class="metadata">
+              <div class="date">{{review.date | date:'dd/MM/yy'}}</div>
+              <div class="rating">
+                <i class="star icon"></i>
+                {{review.rating}}
+              </div>
+            </div>
+            <div class="text">
+              {{review.comment}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

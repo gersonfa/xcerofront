@@ -1,0 +1,20 @@
+<div class="ui padded grid">
+  <div class="row">
+    <div class="sixteen wide column">
+        <h3 *ngIf="reports.length == 0">Este conductor aún no tiene comentarios.</h3>
+        <div class="ui comments">
+            <div class="comment" *ngFor="let report of reports">
+              <div class="content">
+                <a class="author">{{report.user?.full_name}}</a>
+                <div class="metadata">
+                  <div class="date">{{report.date | date:'dd/MM/yy'}}</div>
+                </div>
+                <div class="text">
+                  <b>{{report.reason}}</b> <br> {{report.text}}
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+  </div>
+</div>

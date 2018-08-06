@@ -36,6 +36,7 @@
             </div>
           </div> -->
 
+          <button class="ui fluid button yellow" *ngIf="driver && driver.emergency" (click)="disable_emergency()"style="margin-top: 50px;">Desactivar emergencia</button>
           <button class="ui negative fluid button" style="margin-top: 50px;" (click)="modal.show()">Eliminar</button>
 
         </div>
@@ -50,9 +51,12 @@
         <a routerLink="inbox" routerLinkActive="active" class="item">
           Mensajes
         </a>
-        <a class="item">
+        <a routerLink="comments" class="item" routerLinkActive="active">
           Comentarios
         </a>
+        <a routerLink="reports" class="item" routerLinkActive="active">
+            Reportes
+          </a>
       </div>
 
       <router-outlet></router-outlet>

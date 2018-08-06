@@ -506,6 +506,58 @@ var DashboardComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/DriversComponent/DriverComponent/CommentsComponent/comments.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"ui padded grid\">\r\n  <div class=\"row\">\r\n    <div class=\"sixteen wide column\">\r\n      <h3 *ngIf=\"reviews.length == 0\">Este conductor aún no tiene comentarios.</h3>\r\n      <div class=\"ui comments\">\r\n        <div class=\"comment\" *ngFor=\"let review of reviews\">\r\n          <div class=\"content\">\r\n            <a class=\"author\">{{review.author?.full_name}}</a>\r\n            <div class=\"metadata\">\r\n              <div class=\"date\">{{review.date | date:'dd/MM/yy'}}</div>\r\n              <div class=\"rating\">\r\n                <i class=\"star icon\"></i>\r\n                {{review.rating}}\r\n              </div>\r\n            </div>\r\n            <div class=\"text\">\r\n              {{review.comment}}\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+
+/***/ }),
+
+/***/ "./src/app/DriversComponent/DriverComponent/CommentsComponent/comments.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CommentsComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_drivers_service__ = __webpack_require__("./src/app/_services/drivers.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var CommentsComponent = /** @class */ (function () {
+    function CommentsComponent(driverService, route) {
+        this.driverService = driverService;
+        this.route = route;
+        this.reviews = [];
+    }
+    CommentsComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.route.parent.params.subscribe(function (params) { return _this.driver_id = params['id']; });
+        this.driverService.driver_reviews(this.driver_id).subscribe(function (reviews) { return _this.reviews = reviews; });
+    };
+    CommentsComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            template: __webpack_require__("./src/app/DriversComponent/DriverComponent/CommentsComponent/comments.component.html")
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__services_drivers_service__["a" /* DriversService */],
+            __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */]])
+    ], CommentsComponent);
+    return CommentsComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/DriversComponent/DriverComponent/MessagesComponent/messages.component.html":
 /***/ (function(module, exports) {
 
@@ -568,6 +620,58 @@ var MessagesComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/DriversComponent/DriverComponent/ReportsComponent/reports.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"ui padded grid\">\r\n  <div class=\"row\">\r\n    <div class=\"sixteen wide column\">\r\n        <h3 *ngIf=\"reports.length == 0\">Este conductor aún no tiene comentarios.</h3>\r\n        <div class=\"ui comments\">\r\n            <div class=\"comment\" *ngFor=\"let report of reports\">\r\n              <div class=\"content\">\r\n                <a class=\"author\">{{report.user?.full_name}}</a>\r\n                <div class=\"metadata\">\r\n                  <div class=\"date\">{{report.date | date:'dd/MM/yy'}}</div>\r\n                </div>\r\n                <div class=\"text\">\r\n                  <b>{{report.reason}}</b> <br> {{report.text}}\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+
+/***/ }),
+
+/***/ "./src/app/DriversComponent/DriverComponent/ReportsComponent/reports.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReportsComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_drivers_service__ = __webpack_require__("./src/app/_services/drivers.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var ReportsComponent = /** @class */ (function () {
+    function ReportsComponent(driversService, route) {
+        this.driversService = driversService;
+        this.route = route;
+        this.reports = [];
+    }
+    ReportsComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.route.parent.params.subscribe(function (params) { return _this.driver_id = params['id']; });
+        this.driversService.driver_reports(this.driver_id).subscribe(function (reports) { return _this.reports = reports; });
+    };
+    ReportsComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            template: __webpack_require__("./src/app/DriversComponent/DriverComponent/ReportsComponent/reports.component.html")
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_drivers_service__["a" /* DriversService */],
+            __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* ActivatedRoute */]])
+    ], ReportsComponent);
+    return ReportsComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/DriversComponent/DriverComponent/ServicesComponent/services.component.html":
 /***/ (function(module, exports) {
 
@@ -623,7 +727,7 @@ var ServicesComponent = /** @class */ (function () {
 /***/ "./src/app/DriversComponent/DriverComponent/driver.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"ui padded grid\">\r\n  <div class=\"row\">\r\n    <div class=\"sixteen wide column\" style=\"margin-bottom: 20px;\">\r\n        <div class=\"ui large breadcrumb\">\r\n            <a class=\"section\" routerLink=\"/dashboard/drivers\">Conductores</a>\r\n            <i class=\"right chevron icon divider\"></i>\r\n            <div class=\"active section\">{{driver?.full_name}}</div>\r\n          </div>\r\n    </div>\r\n\r\n    <div class=\"three wide column\">\r\n      <div class=\"ui card\">\r\n        <div class=\"image\">\r\n          <img src=\"{{driver?.image}}\">\r\n        </div>\r\n        <div class=\"content\">\r\n          <div class=\"header\">{{driver?.full_name}}\r\n            <div class=\"ui icon button\" style=\"float: right;\" (click)=\"modaldriver.show({blurring: true})\">\r\n              <i class=\"icon edit\"></i>\r\n            </div>\r\n          </div>\r\n          <div class=\"meta\">\r\n            Unidad: {{driver?.unit_number}} <br>\r\n            <span class=\"date\">{{driver?.email}}</span>\r\n          </div>\r\n          <div class=\"description\">\r\n              <bar-rating *ngIf=\"driver\" [(rate)]=\"driver.rating\" [max]=\"5\" [readOnly]=\"true\"></bar-rating>\r\n          </div>\r\n\r\n          <sm-checkbox *ngIf=\"enable\" label=\"Usuario activo\" [control]=\"enable\" (change)=\"changeEnable()\" type=\"toggle\"></sm-checkbox>\r\n\r\n          <!-- <div class=\"field\">\r\n            <div class=\"ui toggle checkbox\">\r\n              <input type=\"checkbox\" tabindex=\"0\" name=\"enable\" class=\"hidden\" [checked]=\"driver?.enable\" (change)=\"changeEnable()\">\r\n              <label>Usuario activo</label>\r\n            </div>\r\n          </div> -->\r\n\r\n          <button class=\"ui negative fluid button\" style=\"margin-top: 50px;\" (click)=\"modal.show()\">Eliminar</button>\r\n\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n    <div class=\"thirteen wide column\">\r\n      <div class=\"ui tabular menu\">\r\n        <a routerLink=\"services\" routerLinkActive=\"active\" class=\" item\">\r\n          Servicios\r\n        </a>\r\n        <a routerLink=\"inbox\" routerLinkActive=\"active\" class=\"item\">\r\n          Mensajes\r\n        </a>\r\n        <a class=\"item\">\r\n          Comentarios\r\n        </a>\r\n      </div>\r\n\r\n      <router-outlet></router-outlet>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n<sm-modal class=\"basic\" #modal>\r\n  <modal-content>\r\n      <h2>¿Estás seguro de querer borrar la unidad permanentemente?</h2>\r\n  </modal-content>\r\n  <modal-actions>\r\n    <button class=\"ui button\" style=\"margin-right: 10px;\" (click)=\"modal.hide()\">Cancelar</button>\r\n    <button class=\"ui button red\" (click)=\"deleteDriver(modal)\">Eliminar</button>\r\n  </modal-actions>\r\n</sm-modal>\r\n\r\n<sm-modal title=\"Editar unidad\" class=\"\" #modaldriver>\r\n  <modal-content>\r\n    <div class=\"ui container grid\" style=\"padding-top: 2em;\">\r\n      <div class=\"ten wide column\">\r\n        <form class=\"ui form\" *ngIf=\"driver\">\r\n          <div class=\"field\">\r\n            <label>Nombre completo</label>\r\n            <input type=\"text\" name=\"first-name\" placeholder=\"Nombre completo\" [(ngModel)]=\"driver_updated.full_name\">\r\n          </div>\r\n          <div class=\"field\">\r\n            <label>Email</label>\r\n            <input type=\"email\" name=\"email\" placeholder=\"Email\" [(ngModel)]=\"driver_updated.email\">\r\n          </div>\r\n          <div class=\"field\">\r\n            <label>Número de unidad</label>\r\n            <input type=\"number\" name=\"unit_number\" placeholder=\"Número de unidad\" [(ngModel)]=\"driver_updated.unit_number\">\r\n          </div>\r\n          <div class=\"field\">\r\n            <label>Nombre de usuario</label>\r\n            <input type=\"text\" name=\"full_name\" placeholder=\"Usuario\" [(ngModel)]=\"driver_updated.account\">\r\n          </div>\r\n          <div class=\"field\">\r\n            <label>Contraseña</label>\r\n            <input type=\"password\" name=\"password\" placeholder=\"Contraseña\" [(ngModel)]=\"driver_updated.password\">\r\n          </div>\r\n        </form>\r\n      </div>\r\n      <div class=\"four wide column\" *ngIf=\"driver_updated\">\r\n          <div class=\"field\">\r\n            <img style=\"max-width: 100%; margin-top:10px; display: block; margin-left: auto; margin-right: auto;\" class=\"ui small circular image\" [src]=\"driver_updated.image\" alt=\"\">\r\n            <label id=\"uploader\">\r\n              Selecciona imagen\r\n              <input type=\"file\" name=\"myfile\" [(ngModel)]=\"val\" #image (change)=\"readURL(image, val)\" accept=\"image/*\" />\r\n            </label>\r\n          </div>\r\n        </div>\r\n    </div>\r\n  </modal-content>\r\n  <modal-actions>\r\n      <div class=\"ui buttons\">\r\n          <button class=\"ui button red\" style=\"margin-right: 10px;\" (click)=\"modaldriver.hide()\">Cancelar</button>\r\n          <div class=\"ui button primary\" (click)=\"updateDriver(modaldriver)\" [ngClass]=\"{'loading disabled': updating}\">Guardar</div>\r\n      </div>\r\n  </modal-actions>\r\n</sm-modal>\r\n\r\n\r\n\r\n"
+module.exports = "<div class=\"ui padded grid\">\r\n  <div class=\"row\">\r\n    <div class=\"sixteen wide column\" style=\"margin-bottom: 20px;\">\r\n        <div class=\"ui large breadcrumb\">\r\n            <a class=\"section\" routerLink=\"/dashboard/drivers\">Conductores</a>\r\n            <i class=\"right chevron icon divider\"></i>\r\n            <div class=\"active section\">{{driver?.full_name}}</div>\r\n          </div>\r\n    </div>\r\n\r\n    <div class=\"three wide column\">\r\n      <div class=\"ui card\">\r\n        <div class=\"image\">\r\n          <img src=\"{{driver?.image}}\">\r\n        </div>\r\n        <div class=\"content\">\r\n          <div class=\"header\">{{driver?.full_name}}\r\n            <div class=\"ui icon button\" style=\"float: right;\" (click)=\"modaldriver.show({blurring: true})\">\r\n              <i class=\"icon edit\"></i>\r\n            </div>\r\n          </div>\r\n          <div class=\"meta\">\r\n            Unidad: {{driver?.unit_number}} <br>\r\n            <span class=\"date\">{{driver?.email}}</span>\r\n          </div>\r\n          <div class=\"description\">\r\n              <bar-rating *ngIf=\"driver\" [(rate)]=\"driver.rating\" [max]=\"5\" [readOnly]=\"true\"></bar-rating>\r\n          </div>\r\n\r\n          <sm-checkbox *ngIf=\"enable\" label=\"Usuario activo\" [control]=\"enable\" (change)=\"changeEnable()\" type=\"toggle\"></sm-checkbox>\r\n\r\n          <!-- <div class=\"field\">\r\n            <div class=\"ui toggle checkbox\">\r\n              <input type=\"checkbox\" tabindex=\"0\" name=\"enable\" class=\"hidden\" [checked]=\"driver?.enable\" (change)=\"changeEnable()\">\r\n              <label>Usuario activo</label>\r\n            </div>\r\n          </div> -->\r\n\r\n          <button class=\"ui fluid button yellow\" *ngIf=\"driver && driver.emergency\" (click)=\"disable_emergency()\"style=\"margin-top: 50px;\">Desactivar emergencia</button>\r\n          <button class=\"ui negative fluid button\" style=\"margin-top: 50px;\" (click)=\"modal.show()\">Eliminar</button>\r\n\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n    <div class=\"thirteen wide column\">\r\n      <div class=\"ui tabular menu\">\r\n        <a routerLink=\"services\" routerLinkActive=\"active\" class=\" item\">\r\n          Servicios\r\n        </a>\r\n        <a routerLink=\"inbox\" routerLinkActive=\"active\" class=\"item\">\r\n          Mensajes\r\n        </a>\r\n        <a routerLink=\"comments\" class=\"item\" routerLinkActive=\"active\">\r\n          Comentarios\r\n        </a>\r\n        <a routerLink=\"reports\" class=\"item\" routerLinkActive=\"active\">\r\n            Reportes\r\n          </a>\r\n      </div>\r\n\r\n      <router-outlet></router-outlet>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n<sm-modal class=\"basic\" #modal>\r\n  <modal-content>\r\n      <h2>¿Estás seguro de querer borrar la unidad permanentemente?</h2>\r\n  </modal-content>\r\n  <modal-actions>\r\n    <button class=\"ui button\" style=\"margin-right: 10px;\" (click)=\"modal.hide()\">Cancelar</button>\r\n    <button class=\"ui button red\" (click)=\"deleteDriver(modal)\">Eliminar</button>\r\n  </modal-actions>\r\n</sm-modal>\r\n\r\n<sm-modal title=\"Editar unidad\" class=\"\" #modaldriver>\r\n  <modal-content>\r\n    <div class=\"ui container grid\" style=\"padding-top: 2em;\">\r\n      <div class=\"ten wide column\">\r\n        <form class=\"ui form\" *ngIf=\"driver\">\r\n          <div class=\"field\">\r\n            <label>Nombre completo</label>\r\n            <input type=\"text\" name=\"first-name\" placeholder=\"Nombre completo\" [(ngModel)]=\"driver_updated.full_name\">\r\n          </div>\r\n          <div class=\"field\">\r\n            <label>Email</label>\r\n            <input type=\"email\" name=\"email\" placeholder=\"Email\" [(ngModel)]=\"driver_updated.email\">\r\n          </div>\r\n          <div class=\"field\">\r\n            <label>Número de unidad</label>\r\n            <input type=\"number\" name=\"unit_number\" placeholder=\"Número de unidad\" [(ngModel)]=\"driver_updated.unit_number\">\r\n          </div>\r\n          <div class=\"field\">\r\n            <label>Nombre de usuario</label>\r\n            <input type=\"text\" name=\"full_name\" placeholder=\"Usuario\" [(ngModel)]=\"driver_updated.account\">\r\n          </div>\r\n          <div class=\"field\">\r\n            <label>Contraseña</label>\r\n            <input type=\"password\" name=\"password\" placeholder=\"Contraseña\" [(ngModel)]=\"driver_updated.password\">\r\n          </div>\r\n        </form>\r\n      </div>\r\n      <div class=\"four wide column\" *ngIf=\"driver_updated\">\r\n          <div class=\"field\">\r\n            <img style=\"max-width: 100%; margin-top:10px; display: block; margin-left: auto; margin-right: auto;\" class=\"ui small circular image\" [src]=\"driver_updated.image\" alt=\"\">\r\n            <label id=\"uploader\">\r\n              Selecciona imagen\r\n              <input type=\"file\" name=\"myfile\" [(ngModel)]=\"val\" #image (change)=\"readURL(image, val)\" accept=\"image/*\" />\r\n            </label>\r\n          </div>\r\n        </div>\r\n    </div>\r\n  </modal-content>\r\n  <modal-actions>\r\n      <div class=\"ui buttons\">\r\n          <button class=\"ui button red\" style=\"margin-right: 10px;\" (click)=\"modaldriver.hide()\">Cancelar</button>\r\n          <div class=\"ui button primary\" (click)=\"updateDriver(modaldriver)\" [ngClass]=\"{'loading disabled': updating}\">Guardar</div>\r\n      </div>\r\n  </modal-actions>\r\n</sm-modal>\r\n\r\n\r\n\r\n"
 
 /***/ }),
 
@@ -700,6 +804,10 @@ var DriverComponent = /** @class */ (function () {
             _this.driver_updated = Object.assign({}, _this.driver);
             _this.updating = false;
         });
+    };
+    DriverComponent.prototype.disable_emergency = function () {
+        var _this = this;
+        this.driverService.disable_emergency(this.driver_id).subscribe(function (response) { return _this.driver.emergency = response.emergency; });
     };
     DriverComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -810,7 +918,7 @@ var DriverFormComponent = /** @class */ (function () {
 /***/ "./src/app/DriversComponent/drivers.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"ui internally celled padded grid\" style=\"height: 92vh;;\">\r\n  <div class=\"four wide column\" style=\"max-height: 100%; overflow-y: scroll;\">\r\n    <sm-button class=\"yellow\" icon=\"plus\" routerLink=\"/dashboard/drivers/create\">Añadir nuevo conductor</sm-button>\r\n\r\n    <table class=\"ui very basic collapsing celled table\" style=\"margin-top: 2em;\">\r\n\r\n      <tbody>\r\n        <tr *ngFor=\"let driver of drivers\">\r\n          <td [ngClass]=\"{'selected-driver': driver_selected == driver._id}\">\r\n            <h4 class=\"ui image header\">\r\n              <!-- <img [src]=\"driver.image\" class=\"ui mini rounded image\" style=\"margin-left: auto; margin-right: auto;\"> -->\r\n              <div class=\"content\">\r\n                {{driver.full_name}} <span class=\"ui mini orange label\" *ngIf=\"driver.inService\">En servicio</span>\r\n                <div class=\"sub header\">Unidad: {{driver.unit_number}}</div>\r\n              </div>\r\n            </h4>\r\n          </td>\r\n          <td>\r\n              <sm-button class=\"\" icon=\"user\" routerLink=\"/dashboard/driver/{{driver._id}}\"></sm-button>\r\n              <sm-button class=\"\" icon=\"zoom in\" (click)=\"zoomDriver(driver)\"></sm-button>\r\n          </td>\r\n        </tr>\r\n      </tbody>\r\n    </table>\r\n  </div>\r\n  <div class=\"twelve wide column\">\r\n    <agm-map [latitude]=\"latitude\" [longitude]=\"longitude\" [scrollwheel]=\"false\" [zoom]=\"zoom\">\r\n      <agm-marker *ngFor=\"let marker of driver_markers\" (markerClick)=\"selectDriver(marker)\" [iconUrl]=\"'https://cdn2.iconfinder.com/data/icons/fatcow/32x32/car_taxi.png'\"\r\n        [label]=\"marker.label\" [latitude]=\"marker.latitude\" [longitude]=\"marker.longitude\"></agm-marker>\r\n    </agm-map>\r\n  </div>\r\n</div>\r\n\r\n<style>\r\n  agm-map {\r\n    height: 90vh;\r\n  }\r\n\r\n  .selected-driver {\r\n    border: 1px solid #FFC107 !important;\r\n    padding: 10px !important;\r\n  }\r\n</style>\r\n"
+module.exports = "<div class=\"ui internally celled padded grid\" style=\"height: 92vh;;\">\r\n  <div class=\"four wide column\" style=\"max-height: 100%; overflow-y: scroll;\">\r\n    <sm-button class=\"yellow\" icon=\"plus\" routerLink=\"/dashboard/drivers/create\">Añadir nuevo conductor</sm-button>\r\n\r\n    <table class=\"ui very basic collapsing celled table\" style=\"margin-top: 2em;\">\r\n\r\n      <tbody>\r\n        <tr *ngFor=\"let driver of drivers\">\r\n          <td [ngClass]=\"{'selected-driver': driver_selected == driver._id}\">\r\n            <h4 class=\"ui image header\">\r\n              <!-- <img [src]=\"driver.image\" class=\"ui mini rounded image\" style=\"margin-left: auto; margin-right: auto;\"> -->\r\n              <div class=\"content\">\r\n                {{driver.full_name}} <span class=\"ui mini orange label\" *ngIf=\"driver.inService\">En servicio</span>\r\n                <div class=\"sub header\">Unidad: {{driver.unit_number}}</div>\r\n              </div>\r\n            </h4>\r\n          </td>\r\n          <td>\r\n              <sm-button class=\"\" icon=\"user\" routerLink=\"/dashboard/driver/{{driver._id}}\"></sm-button>\r\n              <sm-button class=\"\" icon=\"zoom in\" (click)=\"zoomDriver(driver)\"></sm-button>\r\n          </td>\r\n        </tr>\r\n      </tbody>\r\n    </table>\r\n  </div>\r\n  <div class=\"twelve wide column\">\r\n    <agm-map [latitude]=\"latitude\" [longitude]=\"longitude\" [scrollwheel]=\"false\" [zoom]=\"zoom\">\r\n      <agm-marker *ngFor=\"let marker of driver_markers\" (markerClick)=\"selectDriver(marker)\" [iconUrl]=\"marker.icon\"\r\n        [label]=\"marker.label\" [latitude]=\"marker.latitude\" [longitude]=\"marker.longitude\"></agm-marker>\r\n    </agm-map>\r\n  </div>\r\n</div>\r\n\r\n<style>\r\n  agm-map {\r\n    height: 90vh;\r\n  }\r\n\r\n  .selected-driver {\r\n    border: 1px solid #FFC107 !important;\r\n    padding: 10px !important;\r\n  }\r\n</style>\r\n"
 
 /***/ }),
 
@@ -864,11 +972,11 @@ var DriversComponent = /** @class */ (function () {
                     return {
                         longitude: Number(d.coords[0]),
                         latitude: Number(d.coords[1]),
-                        label: d.unit_number.toString()
+                        label: d.unit_number.toString(),
+                        icon: d.emergency ? 'assets/car-emergency.png' : 'assets/car.png'
                     };
                 }
             });
-            console.log(_this.driver_markers);
         });
         this.sub = __WEBPACK_IMPORTED_MODULE_3_rxjs__["Observable"].interval(10000)
             .subscribe(function (val) {
@@ -878,7 +986,8 @@ var DriversComponent = /** @class */ (function () {
                         return {
                             longitude: Number(d.coords[0]),
                             latitude: Number(d.coords[1]),
-                            label: d.unit_number.toString()
+                            label: d.unit_number.toString(),
+                            icon: d.emergency ? 'assets/car-emergency.png' : 'assets/car.png'
                         };
                     }
                 });
@@ -1918,6 +2027,18 @@ var DriversService = /** @class */ (function () {
         return this.http.get(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/service/driver/" + driver_id)
             .map(function (r) { return r.json(); });
     };
+    DriversService.prototype.driver_reviews = function (driver_id) {
+        return this.http.get(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/user/" + driver_id + "/reviews")
+            .map(function (r) { return r.json(); });
+    };
+    DriversService.prototype.driver_reports = function (driver_id) {
+        return this.http.get(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/report/" + driver_id)
+            .map(function (r) { return r.json(); });
+    };
+    DriversService.prototype.disable_emergency = function (driver_id) {
+        return this.http.post(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/emergency_disable", {}, { params: { driver_id: driver_id } })
+            .map(function (r) { return r.json(); });
+    };
     DriversService.prototype.driver_inbox_create = function (driver_id, inbox) {
         return this.http.post(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/driver/" + driver_id + "/inbox", inbox)
             .map(function (r) { return r.json(); });
@@ -2260,12 +2381,16 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__TariffComponent_CheckTariffComponent_check_tariff_component__ = __webpack_require__("./src/app/TariffComponent/CheckTariffComponent/check.tariff.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__TariffComponent_SearchTariff_search_tariff_component__ = __webpack_require__("./src/app/TariffComponent/SearchTariff/search.tariff.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__TariffComponent_EditTariffComponent_edit_tariff_component__ = __webpack_require__("./src/app/TariffComponent/EditTariffComponent/edit.tariff.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__DriversComponent_DriverComponent_CommentsComponent_comments_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/CommentsComponent/comments.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__DriversComponent_DriverComponent_ReportsComponent_reports_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/ReportsComponent/reports.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
 
 
 
@@ -2328,7 +2453,9 @@ var routes = [
             { path: 'driver/:id', component: __WEBPACK_IMPORTED_MODULE_31__DriversComponent_DriverComponent_driver_component__["a" /* DriverComponent */], children: [
                     { path: '', redirectTo: 'services', pathMatch: 'full' },
                     { path: 'services', component: __WEBPACK_IMPORTED_MODULE_32__DriversComponent_DriverComponent_ServicesComponent_services_component__["a" /* ServicesComponent */] },
-                    { path: 'inbox', component: __WEBPACK_IMPORTED_MODULE_33__DriversComponent_DriverComponent_MessagesComponent_messages_component__["a" /* MessagesComponent */] }
+                    { path: 'inbox', component: __WEBPACK_IMPORTED_MODULE_33__DriversComponent_DriverComponent_MessagesComponent_messages_component__["a" /* MessagesComponent */] },
+                    { path: 'comments', component: __WEBPACK_IMPORTED_MODULE_37__DriversComponent_DriverComponent_CommentsComponent_comments_component__["a" /* CommentsComponent */] },
+                    { path: 'reports', component: __WEBPACK_IMPORTED_MODULE_38__DriversComponent_DriverComponent_ReportsComponent_reports_component__["a" /* ReportsComponent */] }
                 ] },
             { path: 'places', component: __WEBPACK_IMPORTED_MODULE_27__PlacesComponent_places_component__["a" /* PlacesComponent */] }
         ] }
@@ -2355,7 +2482,9 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_33__DriversComponent_DriverComponent_MessagesComponent_messages_component__["a" /* MessagesComponent */],
                 __WEBPACK_IMPORTED_MODULE_34__TariffComponent_CheckTariffComponent_check_tariff_component__["a" /* CheckTariffComponent */],
                 __WEBPACK_IMPORTED_MODULE_35__TariffComponent_SearchTariff_search_tariff_component__["a" /* SearchTariffComponent */],
-                __WEBPACK_IMPORTED_MODULE_36__TariffComponent_EditTariffComponent_edit_tariff_component__["a" /* EditTariffComponent */]
+                __WEBPACK_IMPORTED_MODULE_36__TariffComponent_EditTariffComponent_edit_tariff_component__["a" /* EditTariffComponent */],
+                __WEBPACK_IMPORTED_MODULE_37__DriversComponent_DriverComponent_CommentsComponent_comments_component__["a" /* CommentsComponent */],
+                __WEBPACK_IMPORTED_MODULE_38__DriversComponent_DriverComponent_ReportsComponent_reports_component__["a" /* ReportsComponent */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],

@@ -30,6 +30,21 @@ export class DriversService {
       .map(r => r.json())
   }
 
+  driver_reviews(driver_id: string): Observable<any> {
+    return this.http.get(`${API_URL}/api/user/${driver_id}/reviews`)
+      .map(r => r.json());
+  }
+
+  driver_reports(driver_id: string): Observable<any[]> {
+    return this.http.get(`${API_URL}/api/report/${driver_id}`)
+      .map(r => r.json());
+  }
+
+  disable_emergency(driver_id: string): Observable<any> {
+    return this.http.post(`${API_URL}/api/emergency_disable`, {}, {params: { driver_id }})
+      .map(r => r.json());
+  }
+
   driver_inbox_create(driver_id: string, inbox: any): Observable<any> {
     return this.http.post(`${API_URL}/api/driver/${driver_id}/inbox`, inbox)
       .map(r => r.json())
