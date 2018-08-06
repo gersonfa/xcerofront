@@ -1471,7 +1471,7 @@ module.exports = "<div class=\"ui form\">\r\n  <div class=\"field\">\r\n    <sel
 /***/ "./src/app/TariffComponent/tariff.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"ui internally celled padded grid\" style=\"height: 94vh;;\">\r\n  <div class=\"row\">\r\n    <div class=\"four wide column\">\r\n\r\n      <div class=\"ui form\">\r\n\r\n        <h4 class=\"ui dividing header\">Nueva tarifa</h4>\r\n\r\n        <div class=\"field\">\r\n          <select [(ngModel)]=\"group_selected\" (change)=\"selectGroup()\">\r\n            <option value=\"\">Selecciona un grupo o lugar de origen</option>\r\n            <option *ngFor=\"let gp of groups_places\" [value]=\"gp._id\">{{gp.base + ' - ' + gp.name}}</option>\r\n          </select>\r\n        </div>\r\n\r\n        <div class=\"ui active centered inline loader\" style=\"margin-top: 20px;\" *ngIf=\"loading_available\"></div>\r\n\r\n        <div class=\"field\" *ngIf=\"group_selected && groups_places_available.length > 0 && !loading_available\">\r\n          <select [(ngModel)]=\"second_group_selected\">\r\n            <option value=\"\">Selecciona un grupo o lugar de destino</option>\r\n            <option *ngFor=\"let gp of groups_places_available\" [value]=\"gp._id\">{{gp.base + ' - ' + gp.name}}</option>\r\n          </select>\r\n        </div>\r\n\r\n        <div class=\" field\" *ngIf=\"second_group_selected && !loading_available\">\r\n          <input type=\"number\" placeholder=\"Costo\" [(ngModel)]=\"cost\">\r\n        </div>\r\n\r\n      </div>\r\n\r\n      <button class=\"ui button yellow\" style=\"margin-top: 10px;\" [disabled]=\"!group_selected || !second_group_selected || !cost\"\r\n        (click)=\"saveTariff()\">\r\n        Guardar\r\n      </button>\r\n\r\n      <h4 class=\"ui dividing header\">Buscar tarifa</h4>\r\n      <search-tariff [groups_places]=\"groups_places\"></search-tariff>\r\n\r\n      <h4 class=\"ui dividing header\">Verificar tarifa por colonia</h4>\r\n      <check-tariff></check-tariff>\r\n\r\n    </div>\r\n\r\n    <div class=\"twelve wide column\">\r\n      <!-- <div class=\"ui buttons\" style=\"float: right;\" *ngIf=\"tariffs.length > 0\">\r\n        <button class=\"ui yellow button\" (click)=\"updatemodal.show(); select_quantity = true;\">Actualizar por cantidad</button>\r\n        <div class=\"or\" data-text=\"ó\"></div>\r\n        <button class=\"ui yellow button\" (click)=\"updatemodal.show(); select_percentage = true;\">Actualizar por porcentaje</button>\r\n      </div> -->\r\n\r\n      <!-- <sm-dropdown title=\"Opciones\" class=\"pointing floating labeled icon button yellow\">\r\n          <sm-item (click)=\"updatemodal.show(); select_quantity = true;\">Actualizar por cantidad</sm-item>\r\n          <sm-item (click)=\"updatemodal.show(); select_percentage = true;\">Actualizar por porcentaje</sm-item>\r\n          <sm-item (click)=\"reload()\">Volver a cargar tarifas</sm-item>\r\n      </sm-dropdown> -->\r\n\r\n      <button class=\"ui button yellow\" (click)=\"updatemodal.show(); select_quantity = true;\">\r\n        Actualizar por cantidad\r\n      </button>\r\n\r\n      <button class=\"ui button yellow\" (click)=\"updatemodal.show(); select_percentage = true;\">\r\n        Actualizar por porcentaje\r\n      </button>\r\n\r\n      <button class=\"ui button yellow\" (click)=\"reload()\">\r\n        Volver a cargar tarifas\r\n      </button>\r\n\r\n      <div class=\"ui form\" style=\"float:right;\">\r\n        <div class=\"field\">\r\n          <select [(ngModel)]=\"base_selected\" (change)=\"selectBase(base_selected)\">\r\n            <option value=\"\">Todas las bases</option>\r\n            <option *ngFor=\"let base of bases\" [value]=\"base._id\">{{base.name}}</option>\r\n          </select>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"ui section divider\" style=\"clear: both;\" *ngIf=\"tariffs.length > 0\"></div>\r\n\r\n      <div class=\"ui active centered inline loader huge\" style=\"margin-top: 250px; margin-bottom: 250px;\" *ngIf=\"loading_tariffs\"></div>\r\n\r\n      <div class=\"ui middle aligned divided list\" *ngIf=\"(tariffs.length > 0) && !loading_tariffs\">\r\n        <div class=\"item\" *ngFor=\"let tariff of tariffs | paginate:{ id:'server', itemsPerPage: 15, currentPage: current, totalItems: count }\">\r\n          <div class=\"right floated content\">\r\n            <span>{{tariff.cost | currency:'MXN':'symbol-narrow'}} &nbsp; &nbsp;</span>\r\n            <sm-button class=\"\" icon=\"pencil\" (click)=\"edit.show(); selected_tariff = tariff;\"></sm-button>\r\n            <sm-button class=\"negative\" icon=\"trash\" (click)=\"deleteTariff(tariff._id)\"></sm-button>\r\n          </div>\r\n          <div class=\"content\">\r\n            <p>\r\n              {{ tariff.origin_group ? tariff.origin_group?.base.name + ' - ' + tariff.origin_group?.name  : tariff.origin_place?.base.name + ' - ' + tariff.origin_place?.name }}\r\n              <b style=\"font-size: 1.2em;\"><--></b>\r\n                {{tariff.destiny_group ? tariff.destiny_group?.base.name + ' - ' + tariff.destiny_group?.name  : tariff.destiny_place?.base.name + ' - ' + tariff.destiny_place?.name\r\n                }}\r\n            </p>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n     <pagination-controls  id=\"server\"\r\n        (pageChange)=\"pageChanged($event)\"\r\n        autoHide=\"true\"\r\n        directionLinks=\"false\"\r\n                      previousLabel=\"Anterior\"\r\n                      nextLabel=\"Siguiente\"\r\n                      screenReaderPaginationLabel=\"Pagination\"\r\n                      screenReaderPageLabel=\"page\"\r\n                      screenReaderCurrentLabel=\"You're on page\">\r\n</pagination-controls>\r\n\r\n    </div>\r\n  </div>\r\n\r\n  <sm-modal class=\"\" #edit>\r\n    <modal-content>\r\n      <div *ngIf=\"selected_tariff\">\r\n        <h3>\r\n          {{selected_tariff.origin_group ? selected_tariff.origin_group?.name + ' - ' + selected_tariff.origin_group?.base.name : selected_tariff.origin_place?.name\r\n          + ' - ' + selected_tariff.origin_place?.base.name}}\r\n          <==>\r\n            {{selected_tariff.destiny_group ? selected_tariff.destiny_group?.name + ' - ' + selected_tariff.destiny_group?.base.name\r\n            : selected_tariff.destiny_place?.name + ' - ' + selected_tariff.destiny_place?.base.name}}\r\n        </h3>\r\n\r\n        <div class=\"ui form\">\r\n          <div class=\"fluid field\">\r\n            <input type=\"number\" placeholder=\"Costo\" [(ngModel)]=\"selected_tariff.cost\">\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </modal-content>\r\n    <modal-actions>\r\n      <div class=\"ui buttons\">\r\n        <div class=\"ui button negative\" (click)=\"edit.hide()\">Cancelar</div>\r\n        <div class=\"ui button primary\" (click)=\"editTariff(edit)\" style=\"margin-left: 10px;\">Guardar cambios</div>\r\n      </div>\r\n    </modal-actions>\r\n  </sm-modal>\r\n\r\n  <sm-modal class=\"\" #updatemodal>\r\n    <modal-content>\r\n      <div>\r\n        <h3 *ngIf=\"select_quantity\">\r\n          Actualizar por cantidad\r\n        </h3>\r\n\r\n        <h3 *ngIf=\"select_percentage\">\r\n          Actualizar por porcentaje\r\n        </h3>\r\n\r\n        <div class=\"ui form\">\r\n          <div class=\"fluid field\">\r\n            <input type=\"number\" placeholder=\"Cantidad a sumar\" *ngIf=\"select_quantity\" [(ngModel)]=\"update_type.quantity\">\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"ui form\">\r\n          <div class=\"fluid field\">\r\n            <input type=\"number\" placeholder=\"Porcentaje a sumar\" *ngIf=\"select_percentage\" [(ngModel)]=\"update_type.percentage\">\r\n          </div>\r\n        </div>\r\n\r\n      </div>\r\n    </modal-content>\r\n    <modal-actions>\r\n      <div class=\"ui buttons\">\r\n        <div class=\"ui button negative\" (click)=\"updatemodal.hide(); select_quantity = false; select_percentage = false;\">Cancelar</div>\r\n        <div class=\"ui button primary\" [ngClass]=\"{'loading': loading_all, 'disabled': loading_all}\" (click)=\"updateAll(updatemodal)\" style=\"margin-left: 10px;\">Guardar cambios</div>\r\n      </div>\r\n    </modal-actions>\r\n  </sm-modal>\r\n\r\n</div>\r\n\r\n<style>\r\n  .ui.active.dimmer.modals.transition {\r\n    display: flex !important;\r\n    display: -ms-flexbox !important;\r\n  }\r\n</style>\r\n"
+module.exports = "<div class=\"ui internally celled padded grid\" style=\"height: 94vh;;\">\r\n  <div class=\"row\">\r\n    <div class=\"four wide column\">\r\n\r\n      <div class=\"ui form\">\r\n\r\n        <h4 class=\"ui dividing header\">Nueva tarifa</h4>\r\n\r\n        <div class=\"field\">\r\n          <select [(ngModel)]=\"group_selected\" (change)=\"selectGroup()\">\r\n            <option value=\"\">Selecciona un grupo o lugar de origen</option>\r\n            <option *ngFor=\"let gp of groups_places\" [value]=\"gp._id\">{{gp.base + ' - ' + gp.name}}</option>\r\n          </select>\r\n        </div>\r\n\r\n        <div class=\"ui active centered inline loader\" style=\"margin-top: 20px;\" *ngIf=\"loading_available\"></div>\r\n\r\n        <div class=\"field\" *ngIf=\"group_selected && groups_places_available.length > 0 && !loading_available\">\r\n          <select [(ngModel)]=\"second_group_selected\">\r\n            <option value=\"\">Selecciona un grupo o lugar de destino</option>\r\n            <option *ngFor=\"let gp of groups_places_available\" [value]=\"gp._id\">{{gp.base + ' - ' + gp.name}}</option>\r\n          </select>\r\n        </div>\r\n\r\n        <div class=\" field\" *ngIf=\"second_group_selected && !loading_available\">\r\n          <input type=\"number\" placeholder=\"Costo\" [(ngModel)]=\"cost\">\r\n        </div>\r\n\r\n      </div>\r\n\r\n      <button class=\"ui button yellow\" style=\"margin-top: 10px;\" [disabled]=\"!group_selected || !second_group_selected || !cost\"\r\n        (click)=\"saveTariff()\">\r\n        Guardar\r\n      </button>\r\n\r\n      <h4 class=\"ui dividing header\">Buscar tarifa</h4>\r\n      <search-tariff [groups_places]=\"groups_places\"></search-tariff>\r\n\r\n      <h4 class=\"ui dividing header\">Verificar tarifa por colonia</h4>\r\n      <check-tariff></check-tariff>\r\n\r\n    </div>\r\n\r\n    <div class=\"twelve wide column\">\r\n      <!-- <div class=\"ui buttons\" style=\"float: right;\" *ngIf=\"tariffs.length > 0\">\r\n        <button class=\"ui yellow button\" (click)=\"updatemodal.show(); select_quantity = true;\">Actualizar por cantidad</button>\r\n        <div class=\"or\" data-text=\"ó\"></div>\r\n        <button class=\"ui yellow button\" (click)=\"updatemodal.show(); select_percentage = true;\">Actualizar por porcentaje</button>\r\n      </div> -->\r\n\r\n      <!-- <sm-dropdown title=\"Opciones\" class=\"pointing floating labeled icon button yellow\">\r\n          <sm-item (click)=\"updatemodal.show(); select_quantity = true;\">Actualizar por cantidad</sm-item>\r\n          <sm-item (click)=\"updatemodal.show(); select_percentage = true;\">Actualizar por porcentaje</sm-item>\r\n          <sm-item (click)=\"reload()\">Volver a cargar tarifas</sm-item>\r\n      </sm-dropdown> -->\r\n\r\n      <button class=\"ui button yellow\" (click)=\"updatemodal.show(); select_quantity = true;\">\r\n        Actualizar por cantidad\r\n      </button>\r\n\r\n      <button class=\"ui button yellow\" (click)=\"updatemodal.show(); select_percentage = true;\">\r\n        Actualizar por porcentaje\r\n      </button>\r\n\r\n      <button class=\"ui button yellow\" (click)=\"reload()\">\r\n        Volver a cargar tarifas\r\n      </button>\r\n\r\n      <div class=\"ui form\" style=\"float:right;\">\r\n        <div class=\"field\" style=\"display: inline-block\">\r\n          <select [(ngModel)]=\"base_selected\" (change)=\"selectBase(base_selected)\">\r\n            <option value=\"\">Todas las tarifas</option>\r\n            <option *ngFor=\"let base of bases\" [value]=\"base._id\">{{base.name}}</option>\r\n          </select>\r\n        </div>\r\n\r\n        <div class=\"ui active inline loader\" *ngIf=\"loading_groups\" style=\"margin-left: 20px;\"></div>\r\n\r\n        <div class=\"field\" style=\"display: inline-block\" *ngIf=\"base_selected && !loading_groups\">\r\n          <select [(ngModel)]=\"group_selected_report\" (change)=\"selectGroupByBase(group_selected_report)\">\r\n            <option value=\"\">Selecciona un grupo</option>\r\n            <option *ngFor=\"let group of groups\" [value]=\"group._id\">{{group.name}}</option>\r\n          </select>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"ui section divider\" style=\"clear: both;\" *ngIf=\"tariffs.length > 0\"></div>\r\n\r\n      <div class=\"ui active centered inline loader huge\" style=\"margin-top: 250px; margin-bottom: 250px;\" *ngIf=\"loading_tariffs\"></div>\r\n\r\n      <div class=\"ui middle aligned divided list\" *ngIf=\"(tariffs.length > 0) && !loading_tariffs\">\r\n        <div class=\"item\" *ngFor=\"let tariff of tariffs | paginate:{ id:'server', itemsPerPage: 15, currentPage: current, totalItems: count }\">\r\n          <div class=\"right floated content\">\r\n            <span>{{tariff.cost | currency:'MXN':'symbol-narrow'}} &nbsp; &nbsp;</span>\r\n            <sm-button class=\"\" icon=\"pencil\" (click)=\"edit.show(); selected_tariff = tariff;\"></sm-button>\r\n            <sm-button class=\"negative\" icon=\"trash\" (click)=\"deleteTariff(tariff._id)\"></sm-button>\r\n          </div>\r\n          <div class=\"content\">\r\n            <p>\r\n              {{ tariff.origin_group ? tariff.origin_group?.base.name + ' - ' + tariff.origin_group?.name  : tariff.origin_place?.base.name + ' - ' + tariff.origin_place?.name }}\r\n              <b style=\"font-size: 1.2em;\"><--></b>\r\n                {{tariff.destiny_group ? tariff.destiny_group?.base.name + ' - ' + tariff.destiny_group?.name  : tariff.destiny_place?.base.name + ' - ' + tariff.destiny_place?.name\r\n                }}\r\n            </p>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n     <pagination-controls  id=\"server\" *ngIf=\"!base_selected\"\r\n        (pageChange)=\"pageChanged($event)\"\r\n        autoHide=\"true\"\r\n        directionLinks=\"false\"\r\n                      previousLabel=\"Anterior\"\r\n                      nextLabel=\"Siguiente\"\r\n                      screenReaderPaginationLabel=\"Pagination\"\r\n                      screenReaderPageLabel=\"page\"\r\n                      screenReaderCurrentLabel=\"You're on page\">\r\n</pagination-controls>\r\n\r\n    </div>\r\n  </div>\r\n\r\n  <sm-modal class=\"\" #edit>\r\n    <modal-content>\r\n      <div *ngIf=\"selected_tariff\">\r\n        <h3>\r\n          {{selected_tariff.origin_group ? selected_tariff.origin_group?.name + ' - ' + selected_tariff.origin_group?.base.name : selected_tariff.origin_place?.name\r\n          + ' - ' + selected_tariff.origin_place?.base.name}}\r\n          <==>\r\n            {{selected_tariff.destiny_group ? selected_tariff.destiny_group?.name + ' - ' + selected_tariff.destiny_group?.base.name\r\n            : selected_tariff.destiny_place?.name + ' - ' + selected_tariff.destiny_place?.base.name}}\r\n        </h3>\r\n\r\n        <div class=\"ui form\">\r\n          <div class=\"fluid field\">\r\n            <input type=\"number\" placeholder=\"Costo\" [(ngModel)]=\"selected_tariff.cost\">\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </modal-content>\r\n    <modal-actions>\r\n      <div class=\"ui buttons\">\r\n        <div class=\"ui button negative\" (click)=\"edit.hide()\">Cancelar</div>\r\n        <div class=\"ui button primary\" (click)=\"editTariff(edit)\" style=\"margin-left: 10px;\">Guardar cambios</div>\r\n      </div>\r\n    </modal-actions>\r\n  </sm-modal>\r\n\r\n  <sm-modal class=\"\" #updatemodal>\r\n    <modal-content>\r\n      <div>\r\n        <h3 *ngIf=\"select_quantity\">\r\n          Actualizar por cantidad\r\n        </h3>\r\n\r\n        <h3 *ngIf=\"select_percentage\">\r\n          Actualizar por porcentaje\r\n        </h3>\r\n\r\n        <div class=\"ui form\">\r\n          <div class=\"fluid field\">\r\n            <input type=\"number\" placeholder=\"Cantidad a sumar\" *ngIf=\"select_quantity\" [(ngModel)]=\"update_type.quantity\">\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"ui form\">\r\n          <div class=\"fluid field\">\r\n            <input type=\"number\" placeholder=\"Porcentaje a sumar\" *ngIf=\"select_percentage\" [(ngModel)]=\"update_type.percentage\">\r\n          </div>\r\n        </div>\r\n\r\n      </div>\r\n    </modal-content>\r\n    <modal-actions>\r\n      <div class=\"ui buttons\">\r\n        <div class=\"ui button negative\" (click)=\"updatemodal.hide(); select_quantity = false; select_percentage = false;\">Cancelar</div>\r\n        <div class=\"ui button primary\" [ngClass]=\"{'loading': loading_all, 'disabled': loading_all}\" (click)=\"updateAll(updatemodal)\" style=\"margin-left: 10px;\">Guardar cambios</div>\r\n      </div>\r\n    </modal-actions>\r\n  </sm-modal>\r\n\r\n</div>\r\n\r\n<style>\r\n  .ui.active.dimmer.modals.transition {\r\n    display: flex !important;\r\n    display: -ms-flexbox !important;\r\n  }\r\n</style>\r\n"
 
 /***/ }),
 
@@ -1505,6 +1505,7 @@ var TariffComponent = /** @class */ (function () {
         this.groups_places = [];
         this.group_selected = "";
         this.base_selected = '';
+        this.group_selected_report = '';
         this.groups_places_available = [];
         this.second_group_selected = "";
         this.select_percentage = false;
@@ -1513,7 +1514,9 @@ var TariffComponent = /** @class */ (function () {
         this.tariffs = [];
         this.pages = [];
         this.loading_tariffs = false;
+        this.loading_groups = false;
         this.bases = [];
+        this.groups = [];
     }
     TariffComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -1550,6 +1553,8 @@ var TariffComponent = /** @class */ (function () {
             }
             return 0;
         }
+    };
+    TariffComponent.prototype.sortDestinyBaseAndGroup = function (a, b) {
     };
     TariffComponent.prototype.sortBases = function (a, b) {
         if (a.name < b.name) {
@@ -1667,17 +1672,16 @@ var TariffComponent = /** @class */ (function () {
     };
     TariffComponent.prototype.updateAll = function (modal) {
         var _this = this;
-        this.loading_all = true;
-        this.tariffService
-            .tariff_update_all(this.update_type)
-            .subscribe(function (tariffs) {
-            _this.tariffs = tariffs;
-            _this.tariffs = tariffs.sort(_this.sortTariffs);
-            _this.select_percentage = false;
-            _this.select_quantity = false;
-            _this.update_type = {};
-            _this.loading_all = false;
-            modal.hide();
+        this.loading_tariffs = true;
+        this.tariffService.tariff_list().subscribe(function (response) {
+            _this.tariffs = response.tariffs.sort(_this.sortTariffs);
+            _this.pages = response.pages;
+            _this.current = response.current;
+            _this.count = response.count;
+            _this.loading_tariffs = false;
+            if (modal) {
+                modal.hide();
+            }
         });
     };
     TariffComponent.prototype.reload = function () {
@@ -1703,56 +1707,101 @@ var TariffComponent = /** @class */ (function () {
     TariffComponent.prototype.selectBase = function (base_id) {
         var _this = this;
         console.log(base_id);
-        this.loading_tariffs = true;
+        /* this.loading_tariffs = true;
         if (base_id === '') {
-            this.tariffService.tariff_list().subscribe(function (response) {
-                _this.tariffs = response.tariffs.sort(_this.sortTariffs);
-                _this.pages = response.pages;
-                _this.current = response.current;
-                _this.count = response.count;
-                _this.loading_tariffs = false;
-            });
+          this.tariffService.tariff_list().subscribe(
+            response => {
+              this.tariffs = response.tariffs.sort(this.sortTariffs)
+              this.pages = response.pages;
+              this.current = response.current;
+              this.count = response.count;
+              this.loading_tariffs = false;
+            }
+          )
+        } else {
+          this.tariffService.tariff_list(1, base_id).subscribe(
+            response => {
+              this.tariffs = response.tariffs.sort(this.sortTariffs).map(t => this.orderBaseName(t));
+              this.pages = response.pages;
+              this.current = response.current;
+              this.count = response.count;
+              this.loading_tariffs = false;
+            }
+          )
+        } */
+        if (base_id === '') {
+            this.updateAll();
+            this.group_selected_report = '';
         }
         else {
-            this.tariffService.tariff_list(1, base_id).subscribe(function (response) {
-                _this.tariffs = response.tariffs.sort(_this.sortTariffs).map(function (t) { return _this.orderBaseName(t); });
-                _this.pages = response.pages;
-                _this.current = response.current;
-                _this.count = response.count;
-                _this.loading_tariffs = false;
+            this.loading_groups = true;
+            this.groupService.group_by_base(base_id).subscribe(function (groups) {
+                _this.groups = groups;
+                _this.loading_groups = false;
+                _this.group_selected_report = '';
             });
         }
     };
-    TariffComponent.prototype.orderBaseName = function (a) {
-        console.log(a);
-        if (a.origin_group && a.origin_group.base._id !== this.base_selected) {
-            if (a.destiny_place) {
-                a.origin_place = a.destiny_place;
-                a.destiny_group = a.origin_group;
-                delete a.origin_group;
-                delete a.destiny_place;
-            }
-            else {
-                var copy = a.origin_group;
-                a.origin_group = a.destiny_group;
-                a.destiny_group = copy;
-            }
+    TariffComponent.prototype.selectGroupByBase = function (group_id) {
+        var _this = this;
+        console.log(group_id);
+        if (group_id === '') {
+            return;
         }
-        if (a.origin_place && a.origin_place.base._id !== this.base_selected) {
-            if (a.destiny_group) {
-                var copy = a.destiny_group;
-                a.destiny_place = a.origin_place;
-                a.origin_group = copy;
-                delete a.destiny_group;
-                delete a.origin_place;
-            }
-            else {
-                var copy = a.destiny_place;
-                a.destiny_place = a.origin_place;
-                a.origin_place = copy;
-            }
+        this.loading_tariffs = true;
+        this.tariffService.tariff_list(1, this.base_selected, this.group_selected_report).subscribe(function (response) {
+            var collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+            _this.tariffs = response.tariffs
+                .sort(_this.sortTariffs)
+                .map(function (t) { return _this.orderBaseName(t); })
+                .sort(function (a, b) {
+                if (a.destiny_group && b.destiny_group) {
+                    var baseA = a.destiny_group.base.name;
+                    var groupA = a.destiny_group.name;
+                    var baseB = b.destiny_group.base.name;
+                    var groupB = b.destiny_group.name;
+                    if (baseA === baseB) {
+                        return collator.compare(groupA, groupB);
+                    }
+                    else {
+                        return collator.compare(baseA, baseB);
+                    }
+                }
+            });
+            /* .sort((a, b) => {
+              if (a.destiny_group && b.destiny_group) {
+                return collator.compare(a.destiny_group.name, b.destiny_group.name);
+              }
+            }) */
+            _this.loading_tariffs = false;
+        });
+    };
+    TariffComponent.prototype.orderBaseName = function (a) {
+        if (a.origin_group && a.origin_group._id !== this.group_selected_report) {
+            /* if (a.destiny_place) {
+              a.origin_place = a.destiny_place;
+              a.destiny_group = a.origin_group;
+      
+              delete a.origin_group;
+              delete a.destiny_place;
+            } else {
+      
+            } */
+            var copy = a.origin_group;
+            a.origin_group = a.destiny_group;
+            a.destiny_group = copy;
+        }
+        // if (a.origin_place && a.origin_place.base._id !== this.base_selected) {
+        if (a.origin_place) {
+            var copy = a.destiny_group;
+            a.destiny_place = a.origin_place;
+            a.origin_group = copy;
+            delete a.destiny_group;
+            delete a.origin_place;
         }
         return a;
+    };
+    TariffComponent.prototype.orderNumeric = function (tariffs) {
     };
     TariffComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -2251,9 +2300,9 @@ var TariffService = /** @class */ (function () {
         return this.http.post(__WEBPACK_IMPORTED_MODULE_2__API_URL__["a" /* API_URL */] + "/api/tariff", tariff)
             .map(function (r) { return r.json(); });
     };
-    TariffService.prototype.tariff_list = function (page, baseId) {
+    TariffService.prototype.tariff_list = function (page, baseId, groupId) {
         if (page === void 0) { page = 1; }
-        return this.http.get(__WEBPACK_IMPORTED_MODULE_2__API_URL__["a" /* API_URL */] + "/api/tariff", { params: { page: page, base_id: baseId } })
+        return this.http.get(__WEBPACK_IMPORTED_MODULE_2__API_URL__["a" /* API_URL */] + "/api/tariff", { params: { page: page, base_id: baseId, group_id: groupId } })
             .map(function (r) { return r.json(); });
     };
     TariffService.prototype.tariff_delete = function (tariffId) {

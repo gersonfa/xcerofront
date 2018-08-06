@@ -67,10 +67,19 @@
       </button>
 
       <div class="ui form" style="float:right;">
-        <div class="field">
+        <div class="field" style="display: inline-block">
           <select [(ngModel)]="base_selected" (change)="selectBase(base_selected)">
-            <option value="">Todas las bases</option>
+            <option value="">Todas las tarifas</option>
             <option *ngFor="let base of bases" [value]="base._id">{{base.name}}</option>
+          </select>
+        </div>
+
+        <div class="ui active inline loader" *ngIf="loading_groups" style="margin-left: 20px;"></div>
+
+        <div class="field" style="display: inline-block" *ngIf="base_selected && !loading_groups">
+          <select [(ngModel)]="group_selected_report" (change)="selectGroupByBase(group_selected_report)">
+            <option value="">Selecciona un grupo</option>
+            <option *ngFor="let group of groups" [value]="group._id">{{group.name}}</option>
           </select>
         </div>
       </div>
@@ -97,7 +106,7 @@
         </div>
       </div>
 
-     <pagination-controls  id="server"
+     <pagination-controls  id="server" *ngIf="!base_selected"
         (pageChange)="pageChanged($event)"
         autoHide="true"
         directionLinks="false"

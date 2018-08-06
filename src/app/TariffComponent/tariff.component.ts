@@ -11,6 +11,7 @@ export class TariffComponent implements OnInit {
   private groups_places: any[] = [];
   private group_selected: string = "";
   public base_selected: string = '';
+  public group_selected_report: string = '';
 
   private groups_places_available: any[] = [];
 
@@ -32,8 +33,10 @@ export class TariffComponent implements OnInit {
   public current: number;
   public count: number;
   public loading_tariffs: boolean = false;
+  public loading_groups: boolean = false;
 
   public bases: any[] = [];
+  public groups: any[] = [];
 
   constructor(
     private groupService: GroupService,
@@ -84,6 +87,10 @@ export class TariffComponent implements OnInit {
       }
       return 0;
     }
+  }
+
+  sortDestinyBaseAndGroup(a, b) {
+
   }
 
   sortBases(a, b) {
@@ -199,19 +206,18 @@ export class TariffComponent implements OnInit {
     });
   }
 
-  updateAll(modal) {
-    this.loading_all = true;
-    this.tariffService
-      .tariff_update_all(this.update_type)
-      .subscribe(tariffs => {
-        this.tariffs = tariffs;
-        this.tariffs = tariffs.sort(this.sortTariffs);
-        this.select_percentage = false;
-        this.select_quantity = false;
-        this.update_type = {};
-        this.loading_all = false;
+  updateAll(modal?) {
+    this.loading_tariffs = true;
+    this.tariffService.tariff_list().subscribe(response => {
+      this.tariffs = response.tariffs.sort(this.sortTariffs);
+      this.pages = response.pages;
+      this.current = response.current;
+      this.count = response.count;
+      this.loading_tariffs = false;
+      if (modal) {
         modal.hide();
-      });
+      }
+    });
   }
 
   reload() {
@@ -235,7 +241,7 @@ export class TariffComponent implements OnInit {
 
   selectBase(base_id) {
     console.log(base_id)
-    this.loading_tariffs = true;
+    /* this.loading_tariffs = true;
     if (base_id === '') {
       this.tariffService.tariff_list().subscribe(
         response => {
@@ -256,42 +262,89 @@ export class TariffComponent implements OnInit {
           this.loading_tariffs = false;
         }
       )
-    }
+    } */
+    if (base_id === '') {
+      this.updateAll();
+      this.group_selected_report = '';
+     } else {
+      this.loading_groups = true;
+      this.groupService.group_by_base(base_id).subscribe(
+        groups => {
+          this.groups = groups;
+          this.loading_groups = false;
+          this.group_selected_report = '';
+        }
+      )
+     }
+
+  }
+
+  selectGroupByBase(group_id) {
+    console.log(group_id)
+    if (group_id === '') { return; }
+    this.loading_tariffs = true;
+    this.tariffService.tariff_list(1, this.base_selected, this.group_selected_report).subscribe(
+      response => {
+        const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base'})
+        this.tariffs = response.tariffs
+        .sort(this.sortTariffs)
+        .map(t => this.orderBaseName(t))
+        .sort((a, b) => {
+          if (a.destiny_group && b.destiny_group) {
+
+            const baseA = a.destiny_group.base.name;
+            const groupA = a.destiny_group.name;
+
+            const baseB = b.destiny_group.base.name;
+            const groupB = b.destiny_group.name;
+
+            if (baseA === baseB) {
+              return collator.compare(groupA, groupB);
+            } else {
+              return collator.compare(baseA, baseB)
+            }
+          }
+        })
+        /* .sort((a, b) => {
+          if (a.destiny_group && b.destiny_group) {
+            return collator.compare(a.destiny_group.name, b.destiny_group.name);
+          }
+        }) */
+        this.loading_tariffs = false;
+      }
+    )
   }
 
   orderBaseName(a) {
 
-    console.log(a)
-
-    if (a.origin_group && a.origin_group.base._id !== this.base_selected ) {
-      if (a.destiny_place) {
+    if (a.origin_group && a.origin_group._id !== this.group_selected_report ) {
+      /* if (a.destiny_place) {
         a.origin_place = a.destiny_place;
         a.destiny_group = a.origin_group;
 
         delete a.origin_group;
         delete a.destiny_place;
       } else {
-        let copy = a.origin_group;
-        a.origin_group = a.destiny_group;
-        a.destiny_group = copy;
-      }
-    }
 
-    if (a.origin_place && a.origin_place.base._id !== this.base_selected) {
-      if (a.destiny_group) {
+      } */
+
+      let copy = a.origin_group;
+      a.origin_group = a.destiny_group;
+      a.destiny_group = copy;
+    }
+    // if (a.origin_place && a.origin_place.base._id !== this.base_selected) {
+    if (a.origin_place) {
         let copy = a.destiny_group;
         a.destiny_place = a.origin_place;
         a.origin_group = copy;
         delete a.destiny_group;
         delete a.origin_place;
-      } else {
-        let copy = a.destiny_place;
-        a.destiny_place = a.origin_place;
-        a.origin_place = copy;
-      }
-
     }
 
     return a;
+  }
+
+  orderNumeric(tariffs) {
+
   }
 }

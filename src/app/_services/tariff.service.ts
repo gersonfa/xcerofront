@@ -15,8 +15,8 @@ export class TariffService {
       .map(r => r.json());
   }
 
-  tariff_list(page: number = 1, baseId?: string): Observable<any> {
-    return this.http.get(`${API_URL}/api/tariff`, { params: {page: page, base_id: baseId}})
+  tariff_list(page: number = 1, baseId?: string, groupId?: string): Observable<any> {
+    return this.http.get(`${API_URL}/api/tariff`, { params: {page: page, base_id: baseId, group_id: groupId}})
       .map(r => r.json());
   }
 
