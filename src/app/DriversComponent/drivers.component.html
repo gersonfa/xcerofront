@@ -1,14 +1,33 @@
 <div class="ui internally celled padded grid" style="height: 92vh;;">
   <div class="four wide column" style="max-height: 100%; overflow-y: scroll;">
-    <sm-button class="yellow" icon="plus" routerLink="/dashboard/drivers/create">Añadir nuevo conductor</sm-button>
+    <sm-button class="yellow fluid" icon="plus" routerLink="/dashboard/drivers/create">Añadir nuevo conductor</sm-button>
 
-    <table class="ui very basic collapsing celled table" style="margin-top: 2em;">
+    <div class="ui middle aligned divided list">
+      <div class="item" *ngFor="let driver of drivers" title="{{driver.full_name}}" [ngClass]="{'in-service': driver.inService, 'selected-driver': driver_selected == driver._id}">
+        <div class="right floated content">
+          <sm-button class="" icon="zoom in" (click)="zoomDriver(driver)"></sm-button>
+        </div>
+        <img class="ui avatar image" [src]="driver.image">
+        <div class="content" style="text-overflow: ellipsis;
+        max-width: 70%;
+        overflow: hidden;
+        white-space: nowrap;">
+          <a routerLink="/dashboard/driver/{{driver._id}}">
+            {{
 
+              (driver.unit_number + ', ' + driver.full_name)
+            }}
+        </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- <table class="ui very basic collapsing celled table" style="margin-top: 2em;">
       <tbody>
         <tr *ngFor="let driver of drivers">
           <td [ngClass]="{'selected-driver': driver_selected == driver._id}">
             <h4 class="ui image header">
-              <!-- <img [src]="driver.image" class="ui mini rounded image" style="margin-left: auto; margin-right: auto;"> -->
+
               <div class="content">
                 {{driver.full_name}} <span class="ui mini orange label" *ngIf="driver.inService">En servicio</span>
                 <div class="sub header">Unidad: {{driver.unit_number}}</div>
@@ -21,9 +40,16 @@
           </td>
         </tr>
       </tbody>
-    </table>
+    </table> -->
   </div>
   <div class="twelve wide column">
+
+    <div style="background-color: #FFB74D; border-radius: 50%; height: 10px; width: 10px; display: inline-block;"></div>
+       Seleccionado
+    <div style="margin-left: 10px; background-color: #FFF8E1; border-radius: 50%; height: 10px; width: 10px; display: inline-block;"></div>
+       En servicio
+    <div style="margin-left: 10px; background-color: red; border-radius: 50%; height: 10px; width: 10px; display: inline-block;"></div>
+      Emergencia
     <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom">
       <agm-marker *ngFor="let marker of driver_markers" (markerClick)="selectDriver(marker)" [iconUrl]="marker.icon"
         [label]="marker.label" [latitude]="marker.latitude" [longitude]="marker.longitude"></agm-marker>
@@ -37,7 +63,10 @@
   }
 
   .selected-driver {
-    border: 1px solid #FFC107 !important;
-    padding: 10px !important;
+    background-color: #FFB74D !important;
+  }
+
+  .in-service {
+    background-color: #FFF8E1;
   }
 </style>

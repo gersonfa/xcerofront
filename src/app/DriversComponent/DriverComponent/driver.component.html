@@ -21,7 +21,8 @@
           </div>
           <div class="meta">
             Unidad: {{driver?.unit_number}} <br>
-            <span class="date">{{driver?.email}}</span>
+            Usuario: {{driver?.account}} <br>
+            {{driver?.email}}
           </div>
           <div class="description">
               <bar-rating *ngIf="driver" [(rate)]="driver.rating" [max]="5" [readOnly]="true"></bar-rating>
@@ -119,6 +120,10 @@
       </div>
   </modal-actions>
 </sm-modal>
+
+<style>
+
+</style>
 
 
 

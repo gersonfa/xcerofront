@@ -9,6 +9,8 @@ import { ActivatedRoute } from "@angular/router";
 export class ServicesComponent implements OnInit {
   driver_id: string;
   services: any[] = [];
+
+  time: string = 'day';
   constructor(
     private driversService: DriversService,
     private route: ActivatedRoute
@@ -19,8 +21,24 @@ export class ServicesComponent implements OnInit {
       params => this.driver_id = params['id']
     )
 
-    this.driversService.driver_services(this.driver_id).subscribe(
+    this.driversService.driver_services(this.driver_id, 'day').subscribe(
       services => this.services = services
     )
+  }
+
+  getServices() {
+    this.driversService.driver_services(this.driver_id, this.time).subscribe(
+      services => this.services = services
+    )
+  }
+
+  getTotal() {
+    let total = 0;
+    this.services.map(s => {
+      if (s.state == 'completed') {
+        total++;
+      }
+    });
+    return total;
   }
 }

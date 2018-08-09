@@ -1,13 +1,27 @@
 <div class="ui padded grid">
   <div class="row">
     <div class="sixteen wide column">
-        <table class="ui celled table">
+
+      <h4 *ngIf="services.length > 0" style="display: inline-block;">Servicios: {{getTotal()}}</h4>
+
+        <div class="ui form" style="display: inline-block; float: right; margin-bottom: 20px;">
+            <div class="field">
+              <select [(ngModel)]="time" (change)="getServices()">
+                <option value="day">Diario</option>
+                <option value="week">Semanal</option>
+              </select>
+            </div>
+          </div>
+
+        <h3 *ngIf="services.length == 0">Aún no tiene servicios en el tiempo seleccionado.</h3>
+        <table class="ui celled table" *ngIf="services.length > 0">
             <thead>
               <tr>
                 <th>Cliente</th>
                 <th>Origen</th>
                 <th>Destino</th>
                 <th>Estado</th>
+                <th>Fecha</th>
               </tr>
             </thead>
             <tbody>
@@ -26,6 +40,7 @@
                   service.state == 'on_the_way' ? 'En camino' :
                   service.state == 'in_progress' ? 'En proceso' : 'Cancelado'
                 }}</td>
+                <td>{{service.state == 'completed' ? (service.end_time | date: 'dd/MM/yy hh:mm') : ''}}</td>
               </tr>
             </tbody>
           </table>

@@ -25,8 +25,8 @@ export class DriversService {
       .map(r => r.json());
   }
 
-  driver_services(driver_id: string): Observable<any> {
-    return this.http.get(`${API_URL}/api/service/driver/${driver_id}`)
+  driver_services(driver_id: string, time?: string): Observable<any> {
+    return this.http.get(`${API_URL}/api/service/driver/${driver_id}`, { params: { time }})
       .map(r => r.json())
   }
 
