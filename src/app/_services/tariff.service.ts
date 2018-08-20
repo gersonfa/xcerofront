@@ -36,7 +36,7 @@ export class TariffService {
   }
 
   tariff_check(params): Observable<any> {
-    return this.http.get(`${API_URL}/api/tariff/check`, {params: params })
+    return this.http.get(`${API_URL}/api/tariff/check/admin`, {params: params })
       .map(r => r.json());
   }
 

@@ -39,6 +39,7 @@ import { SearchTariffComponent } from './TariffComponent/SearchTariff/search.tar
 import { EditTariffComponent } from './TariffComponent/EditTariffComponent/edit.tariff.component';
 import { CommentsComponent } from './DriversComponent/DriverComponent/CommentsComponent/comments.component';
 import { ReportsComponent } from './DriversComponent/DriverComponent/ReportsComponent/reports.component';
+import { NoticeComponent } from './NoticeComponent/notice.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -69,7 +70,7 @@ const routes: Routes = [
       { path: 'comments', component: CommentsComponent },
       {path: 'reports', component: ReportsComponent}
     ]},
-    { path: 'places', component: PlacesComponent }
+    { path: 'notices', component: NoticeComponent }
   ]}
 ];
 
@@ -93,7 +94,8 @@ const routes: Routes = [
     SearchTariffComponent,
     EditTariffComponent,
     CommentsComponent,
-    ReportsComponent
+    ReportsComponent,
+    NoticeComponent
   ],
   imports: [
     BrowserModule,

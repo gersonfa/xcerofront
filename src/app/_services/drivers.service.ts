@@ -64,4 +64,19 @@ export class DriversService {
     return this.http.delete(`${API_URL}/api/driver/${driver_id}/delete`)
       .map(r => r.json())
   }
+
+  notice_list(): Observable<any> {
+    return this.http.get(`${API_URL}/api/notice`)
+      .map(r => r.json());
+  }
+
+  notice_create(notice: any): Observable<any> {
+    return this.http.post(`${API_URL}/api/notice`, notice)
+      .map(r => r.json());
+  }
+
+  notice_delete(notice_id: string): Observable<any> {
+    return this.http.delete(`${API_URL}/api/notice/${notice_id}`)
+      .map(r => r.json());
+  }
 }

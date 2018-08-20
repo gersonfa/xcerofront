@@ -1,0 +1,20 @@
+<div class="ui container grid">
+  <div class="column"> <br><br>
+    <form  class="ui form">
+      <div class="field">
+        <textarea cols="3" rows="3" placeholder="Ingresa un nuevo mensaje" name="body" [(ngModel)]="body"></textarea>
+      </div>
+    </form> <br>
+    <button class="ui primary submit labeled icon button" [disabled]="!body" (click)="create()">
+      <i class="icon edit"></i> Enviar aviso
+    </button>
+
+    <div class="ui message" *ngFor="let notice of notices">
+      <i class="close icon" (click)="delete(notice._id)"></i>
+      <div class="header">
+        {{notice.date | date:'dd/MM/yy hh:mm aa'}}
+      </div>
+      <p>{{notice.body}}</p>
+    </div>
+  </div>
+</div>
