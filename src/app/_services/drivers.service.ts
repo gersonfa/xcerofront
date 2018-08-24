@@ -79,4 +79,9 @@ export class DriversService {
     return this.http.delete(`${API_URL}/api/notice/${notice_id}`)
       .map(r => r.json());
   }
+
+  reports_list(): Observable<any> {
+    return this.http.get(`${API_URL}/api/report`)
+      .map(r => r.json());
+  }
 }

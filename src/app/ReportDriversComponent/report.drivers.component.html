@@ -1,0 +1,26 @@
+<div class="ui container grid" style="padding-top: 5em;">
+  <div class="row">
+    <div class="ten wide column">
+        <h3 *ngIf="reports.length == 0">Aún no hay reportes.</h3>
+
+
+          <div class="ui visible message" *ngFor="let report of reports">
+            <div class="comment">
+              <div class="content">
+                <a class="author">
+                    <b>{{report.reason}}</b>
+                    <span style="float: right;">{{report.date | date:'dd/MM/yy'}}</span>
+                </a>
+                <div class="text">
+                    <b>{{report.driver?.full_name}}</b> <br>
+                    {{report.user?.full_name}} <br>
+                    {{report.text}}
+                  <p *ngIf="report.phone">Télefono: {{report.phone}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+    </div>
+  </div>
+</div>

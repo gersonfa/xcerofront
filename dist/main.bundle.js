@@ -458,7 +458,7 @@ module.exports = "/deep/ .logo-xcero {\r\n  width: 6em !important;\r\n}\r\n\r\n/
 /***/ "./src/app/DashboradComponent/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<sm-menu title=\"XCero\" logoClass=\"logo-xcero\" class=\"ui inverted\" logo=\"assets/xcero_oficial.png\">\r\n\r\n  <sm-menu class=\"menu right secondary\">\r\n    <a class=\"item yellow\" sm-item routerLink=\"drivers\" routerLinkActive=\"active\">Conductores</a>\r\n    <a class=\"item yellow\" routerLink=\"tariff\" routerLinkActive=\"active\" sm-item>Tarifas</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"bases\" routerLinkActive=\"active\">Bases</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"notices\" routerLinkActive=\"active\">Avisos</a>\r\n    <a class=\"item\" (click)=\"logOut()\">\r\n      <i class=\"icon power off\"></i>\r\n    </a>\r\n  </sm-menu>\r\n</sm-menu>\r\n\r\n<router-outlet></router-outlet>\r\n\r\n<style>\r\n  .logo-xcero {\r\n    width: 6em !important;\r\n  }\r\n</style>\r\n"
+module.exports = "<sm-menu title=\"XCero\" logoClass=\"logo-xcero\" class=\"ui inverted\" logo=\"assets/xcero_oficial.png\">\r\n\r\n  <sm-menu class=\"menu right secondary\">\r\n    <a class=\"item yellow\" sm-item routerLink=\"drivers\" routerLinkActive=\"active\">Conductores</a>\r\n    <a class=\"item yellow\" routerLink=\"tariff\" routerLinkActive=\"active\" sm-item>Tarifas</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"bases\" routerLinkActive=\"active\">Bases</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"notices\" routerLinkActive=\"active\">Avisos</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"reports\" routerLinkActive=\"active\">Reportes</a>\r\n    <a class=\"item\" (click)=\"logOut()\">\r\n      <i class=\"icon power off\"></i>\r\n    </a>\r\n  </sm-menu>\r\n</sm-menu>\r\n\r\n<router-outlet></router-outlet>\r\n\r\n<style>\r\n  .logo-xcero {\r\n    width: 6em !important;\r\n  }\r\n</style>\r\n"
 
 /***/ }),
 
@@ -1296,6 +1296,53 @@ var PlacesComponent = /** @class */ (function () {
 }());
 
 
+
+/***/ }),
+
+/***/ "./src/app/ReportDriversComponent/report.driver.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReportDriversComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_drivers_service__ = __webpack_require__("./src/app/_services/drivers.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var ReportDriversComponent = /** @class */ (function () {
+    function ReportDriversComponent(driversService) {
+        this.driversService = driversService;
+        this.reports = [];
+    }
+    ReportDriversComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.driversService.reports_list().subscribe(function (reports) { return _this.reports = reports; });
+    };
+    ReportDriversComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            template: __webpack_require__("./src/app/ReportDriversComponent/report.drivers.component.html")
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_drivers_service__["a" /* DriversService */]])
+    ], ReportDriversComponent);
+    return ReportDriversComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/ReportDriversComponent/report.drivers.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"ui container grid\" style=\"padding-top: 5em;\">\r\n  <div class=\"row\">\r\n    <div class=\"ten wide column\">\r\n        <h3 *ngIf=\"reports.length == 0\">Aún no hay reportes.</h3>\r\n\r\n\r\n          <div class=\"ui visible message\" *ngFor=\"let report of reports\">\r\n            <div class=\"comment\">\r\n              <div class=\"content\">\r\n                <a class=\"author\">\r\n                    <b>{{report.reason}}</b>\r\n                    <span style=\"float: right;\">{{report.date | date:'dd/MM/yy'}}</span>\r\n                </a>\r\n                <div class=\"text\">\r\n                    <b>{{report.driver?.full_name}}</b> <br>\r\n                    {{report.user?.full_name}} <br>\r\n                    {{report.text}}\r\n                  <p *ngIf=\"report.phone\">Télefono: {{report.phone}}</p>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -2193,6 +2240,10 @@ var DriversService = /** @class */ (function () {
         return this.http.delete(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/notice/" + notice_id)
             .map(function (r) { return r.json(); });
     };
+    DriversService.prototype.reports_list = function () {
+        return this.http.get(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/report")
+            .map(function (r) { return r.json(); });
+    };
     DriversService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_angular2_jwt__["AuthHttp"]])
@@ -2522,12 +2573,14 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__DriversComponent_DriverComponent_CommentsComponent_comments_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/CommentsComponent/comments.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__DriversComponent_DriverComponent_ReportsComponent_reports_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/ReportsComponent/reports.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__NoticeComponent_notice_component__ = __webpack_require__("./src/app/NoticeComponent/notice.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__ReportDriversComponent_report_driver_component__ = __webpack_require__("./src/app/ReportDriversComponent/report.driver.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -2597,7 +2650,8 @@ var routes = [
                     { path: 'comments', component: __WEBPACK_IMPORTED_MODULE_37__DriversComponent_DriverComponent_CommentsComponent_comments_component__["a" /* CommentsComponent */] },
                     { path: 'reports', component: __WEBPACK_IMPORTED_MODULE_38__DriversComponent_DriverComponent_ReportsComponent_reports_component__["a" /* ReportsComponent */] }
                 ] },
-            { path: 'notices', component: __WEBPACK_IMPORTED_MODULE_39__NoticeComponent_notice_component__["a" /* NoticeComponent */] }
+            { path: 'notices', component: __WEBPACK_IMPORTED_MODULE_39__NoticeComponent_notice_component__["a" /* NoticeComponent */] },
+            { path: 'reports', component: __WEBPACK_IMPORTED_MODULE_40__ReportDriversComponent_report_driver_component__["a" /* ReportDriversComponent */] }
         ] }
 ];
 var AppModule = /** @class */ (function () {
@@ -2625,7 +2679,8 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_36__TariffComponent_EditTariffComponent_edit_tariff_component__["a" /* EditTariffComponent */],
                 __WEBPACK_IMPORTED_MODULE_37__DriversComponent_DriverComponent_CommentsComponent_comments_component__["a" /* CommentsComponent */],
                 __WEBPACK_IMPORTED_MODULE_38__DriversComponent_DriverComponent_ReportsComponent_reports_component__["a" /* ReportsComponent */],
-                __WEBPACK_IMPORTED_MODULE_39__NoticeComponent_notice_component__["a" /* NoticeComponent */]
+                __WEBPACK_IMPORTED_MODULE_39__NoticeComponent_notice_component__["a" /* NoticeComponent */],
+                __WEBPACK_IMPORTED_MODULE_40__ReportDriversComponent_report_driver_component__["a" /* ReportDriversComponent */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
