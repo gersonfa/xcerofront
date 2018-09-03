@@ -1,5 +1,5 @@
 <div class="ui padded grid">
-  <div class="sixteen wide column">
+  <div class="thirteen wide column">
     <div class="ui large breadcrumb">
       <a class="section" routerLink="/dashboard/bases">Bases</a>
       <i class="right chevron icon divider"></i>
@@ -19,6 +19,22 @@
       <router-outlet></router-outlet>
     </div>
 
+  </div>
+
+  <div class="ui three wide column" style="border-left: 2px solid black;" *ngIf="base">
+    <h3>En formación</h3>
+
+    <p *ngIf="base?.stack.length == 0">No hay conductores en formación</p>
+
+    <div class="ui ordered relaxed divided list">
+      <div class="item" *ngFor="let unit of base.stack">
+        <div class="content">
+          <p class="header">{{unit.full_name}} {{unit.unit_number}}</p>
+        </div>
+      </div>
+    </div>
+
+    <button (click)="empty_base()" class="ui fluid yellow button" [disabled]="base.stack.length == 0">Vaciar base</button>
   </div>
 </div>
 

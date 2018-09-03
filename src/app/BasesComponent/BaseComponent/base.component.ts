@@ -36,4 +36,12 @@ export class BaseComponent implements OnInit {
     )
   }
 
+  empty_base() {
+    this.baseService.base_empty(this.base_id).subscribe(
+      base => {
+        this.base.stack = [];
+      }
+    )
+  }
+
 }

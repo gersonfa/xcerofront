@@ -41,4 +41,11 @@ export class ServicesComponent implements OnInit {
     });
     return total;
   }
+
+  getCost(service) {
+    let total = 0;
+    service.fees.map(f => total += f.price);
+    total += service.tariff ? service.tariff.cost : 0;
+    return total;
+  }
 }

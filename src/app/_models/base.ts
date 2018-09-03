@@ -3,4 +3,5 @@ export interface Base {
   name: string;
   address: string;
   coords: any[];
+  stack?: any[];
 }

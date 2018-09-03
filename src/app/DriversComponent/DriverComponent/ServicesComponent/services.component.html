@@ -22,6 +22,7 @@
                 <th>Destino</th>
                 <th>Estado</th>
                 <th>Fecha</th>
+                <th>Costo</th>
               </tr>
             </thead>
             <tbody>
@@ -40,7 +41,8 @@
                   service.state == 'on_the_way' ? 'En camino' :
                   service.state == 'in_progress' ? 'En proceso' : 'Cancelado'
                 }}</td>
-                <td>{{service.state == 'completed' ? (service.end_time | date: 'dd/MM/yy hh:mm') : ''}}</td>
+                <td>{{service.state == 'completed' ? (service.end_time | date: 'dd/MM/yy HH:mm') : ''}}</td>
+                <td>{{getCost(service) | currency:'MXN':'symbol-narrow'}}</td>
               </tr>
             </tbody>
           </table>

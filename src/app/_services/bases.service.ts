@@ -27,6 +27,11 @@ export class BaseService {
       .map(r => r.json())
   }
 
+  base_empty(baseId): Observable<any> {
+    return this.http.put(`${API_URL}/api/base/empty_stack/${baseId}`, {})
+      .map(r => r.json());
+  }
+
   base_delete(baseId: string): Observable<any> {
     return this.http.delete(`${API_URL}/api/base/${baseId}`)
       .map(r => r.json())

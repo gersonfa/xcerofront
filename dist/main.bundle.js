@@ -189,7 +189,7 @@ var GroupsComponent = /** @class */ (function () {
 /***/ "./src/app/BasesComponent/BaseComponent/base.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"ui padded grid\">\r\n  <div class=\"sixteen wide column\">\r\n    <div class=\"ui large breadcrumb\">\r\n      <a class=\"section\" routerLink=\"/dashboard/bases\">Bases</a>\r\n      <i class=\"right chevron icon divider\"></i>\r\n      <div class=\"active section\">{{base?.name}}</div>\r\n    </div>\r\n    <button class=\"ui red button\" style=\"float: right;\" (click)=\"modal.show()\">Eliminar base</button>\r\n    <div class=\"ui top attached tabular menu\" style=\"margin-top: 2em;\">\r\n      <a class=\"item\" routerLink=\"groups\" routerLinkActive=\"active\">\r\n        Grupos\r\n      </a>\r\n      <a class=\"item\" routerLink=\"places\" routerLinkActive=\"active\">\r\n        Lugares\r\n      </a>\r\n    </div>\r\n    <div class=\"ui bottom attached segment\">\r\n\r\n      <router-outlet></router-outlet>\r\n    </div>\r\n\r\n  </div>\r\n</div>\r\n\r\n<sm-modal class=\"basic\" #modal>\r\n  <modal-content>\r\n      <h2>¿Estás seguro de querer borrar la base?</h2>\r\n      <p>IMPORTANTE: Se eliminaran los grupos, colonias, lugares y tarifas relacionadas a esta base.</p>\r\n  </modal-content>\r\n  <modal-actions>\r\n    <button class=\"ui button\" style=\"margin-right: 10px;\" (click)=\"modal.hide()\">Cancelar</button>\r\n    <button class=\"ui button red\" (click)=\"baseDelete(modal)\">Eliminar</button>\r\n  </modal-actions>\r\n</sm-modal>\r\n"
+module.exports = "<div class=\"ui padded grid\">\r\n  <div class=\"thirteen wide column\">\r\n    <div class=\"ui large breadcrumb\">\r\n      <a class=\"section\" routerLink=\"/dashboard/bases\">Bases</a>\r\n      <i class=\"right chevron icon divider\"></i>\r\n      <div class=\"active section\">{{base?.name}}</div>\r\n    </div>\r\n    <button class=\"ui red button\" style=\"float: right;\" (click)=\"modal.show()\">Eliminar base</button>\r\n    <div class=\"ui top attached tabular menu\" style=\"margin-top: 2em;\">\r\n      <a class=\"item\" routerLink=\"groups\" routerLinkActive=\"active\">\r\n        Grupos\r\n      </a>\r\n      <a class=\"item\" routerLink=\"places\" routerLinkActive=\"active\">\r\n        Lugares\r\n      </a>\r\n    </div>\r\n    <div class=\"ui bottom attached segment\">\r\n\r\n      <router-outlet></router-outlet>\r\n    </div>\r\n\r\n  </div>\r\n\r\n  <div class=\"ui three wide column\" style=\"border-left: 2px solid black;\" *ngIf=\"base\">\r\n    <h3>En formación</h3>\r\n\r\n    <p *ngIf=\"base?.stack.length == 0\">No hay conductores en formación</p>\r\n\r\n    <div class=\"ui ordered relaxed divided list\">\r\n      <div class=\"item\" *ngFor=\"let unit of base.stack\">\r\n        <div class=\"content\">\r\n          <p class=\"header\">{{unit.full_name}} {{unit.unit_number}}</p>\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n    <button (click)=\"empty_base()\" class=\"ui fluid yellow button\" [disabled]=\"base.stack.length == 0\">Vaciar base</button>\r\n  </div>\r\n</div>\r\n\r\n<sm-modal class=\"basic\" #modal>\r\n  <modal-content>\r\n      <h2>¿Estás seguro de querer borrar la base?</h2>\r\n      <p>IMPORTANTE: Se eliminaran los grupos, colonias, lugares y tarifas relacionadas a esta base.</p>\r\n  </modal-content>\r\n  <modal-actions>\r\n    <button class=\"ui button\" style=\"margin-right: 10px;\" (click)=\"modal.hide()\">Cancelar</button>\r\n    <button class=\"ui button red\" (click)=\"baseDelete(modal)\">Eliminar</button>\r\n  </modal-actions>\r\n</sm-modal>\r\n"
 
 /***/ }),
 
@@ -229,6 +229,12 @@ var BaseComponent = /** @class */ (function () {
         this.baseService.base_delete(this.base_id).subscribe(function (base) {
             modal.hide();
             _this.router.navigate(['/dashboard/bases']);
+        });
+    };
+    BaseComponent.prototype.empty_base = function () {
+        var _this = this;
+        this.baseService.base_empty(this.base_id).subscribe(function (base) {
+            _this.base.stack = [];
         });
     };
     BaseComponent = __decorate([
@@ -675,7 +681,7 @@ var ReportsComponent = /** @class */ (function () {
 /***/ "./src/app/DriversComponent/DriverComponent/ServicesComponent/services.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"ui padded grid\">\r\n  <div class=\"row\">\r\n    <div class=\"sixteen wide column\">\r\n\r\n      <h4 *ngIf=\"services.length > 0\" style=\"display: inline-block;\">Servicios: {{getTotal()}}</h4>\r\n\r\n        <div class=\"ui form\" style=\"display: inline-block; float: right; margin-bottom: 20px;\">\r\n            <div class=\"field\">\r\n              <select [(ngModel)]=\"time\" (change)=\"getServices()\">\r\n                <option value=\"day\">Diario</option>\r\n                <option value=\"week\">Semanal</option>\r\n              </select>\r\n            </div>\r\n          </div>\r\n\r\n        <h3 *ngIf=\"services.length == 0\">Aún no tiene servicios en el tiempo seleccionado.</h3>\r\n        <table class=\"ui celled table\" *ngIf=\"services.length > 0\">\r\n            <thead>\r\n              <tr>\r\n                <th>Cliente</th>\r\n                <th>Origen</th>\r\n                <th>Destino</th>\r\n                <th>Estado</th>\r\n                <th>Fecha</th>\r\n              </tr>\r\n            </thead>\r\n            <tbody>\r\n              <tr *ngFor=\"let service of services\" [ngClass]=\"{'negative': service.state == 'canceled', 'positive': service.state == 'completed'}\">\r\n                <td>{{service.user?.full_name}}</td>\r\n                <td>{{\r\n                  service.origin_colony ? service.origin_colony?.name : service.origin_place?.name\r\n                  }}</td>\r\n                <td>\r\n                  {{\r\n                    service.destiny_colony ? service.destiny_colony?.name : service.destiny_place?.name\r\n                  }}\r\n                </td>\r\n                <td>{{service.state == 'completed' ? 'Completado' :\r\n                  service.state == 'pending' ? 'Pendiente' :\r\n                  service.state == 'on_the_way' ? 'En camino' :\r\n                  service.state == 'in_progress' ? 'En proceso' : 'Cancelado'\r\n                }}</td>\r\n                <td>{{service.state == 'completed' ? (service.end_time | date: 'dd/MM/yy hh:mm') : ''}}</td>\r\n              </tr>\r\n            </tbody>\r\n          </table>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"ui padded grid\">\r\n  <div class=\"row\">\r\n    <div class=\"sixteen wide column\">\r\n\r\n      <h4 *ngIf=\"services.length > 0\" style=\"display: inline-block;\">Servicios: {{getTotal()}}</h4>\r\n\r\n        <div class=\"ui form\" style=\"display: inline-block; float: right; margin-bottom: 20px;\">\r\n            <div class=\"field\">\r\n              <select [(ngModel)]=\"time\" (change)=\"getServices()\">\r\n                <option value=\"day\">Diario</option>\r\n                <option value=\"week\">Semanal</option>\r\n              </select>\r\n            </div>\r\n          </div>\r\n\r\n        <h3 *ngIf=\"services.length == 0\">Aún no tiene servicios en el tiempo seleccionado.</h3>\r\n        <table class=\"ui celled table\" *ngIf=\"services.length > 0\">\r\n            <thead>\r\n              <tr>\r\n                <th>Cliente</th>\r\n                <th>Origen</th>\r\n                <th>Destino</th>\r\n                <th>Estado</th>\r\n                <th>Fecha</th>\r\n                <th>Costo</th>\r\n              </tr>\r\n            </thead>\r\n            <tbody>\r\n              <tr *ngFor=\"let service of services\" [ngClass]=\"{'negative': service.state == 'canceled', 'positive': service.state == 'completed'}\">\r\n                <td>{{service.user?.full_name}}</td>\r\n                <td>{{\r\n                  service.origin_colony ? service.origin_colony?.name : service.origin_place?.name\r\n                  }}</td>\r\n                <td>\r\n                  {{\r\n                    service.destiny_colony ? service.destiny_colony?.name : service.destiny_place?.name\r\n                  }}\r\n                </td>\r\n                <td>{{service.state == 'completed' ? 'Completado' :\r\n                  service.state == 'pending' ? 'Pendiente' :\r\n                  service.state == 'on_the_way' ? 'En camino' :\r\n                  service.state == 'in_progress' ? 'En proceso' : 'Cancelado'\r\n                }}</td>\r\n                <td>{{service.state == 'completed' ? (service.end_time | date: 'dd/MM/yy HH:mm') : ''}}</td>\r\n                <td>{{getCost(service) | currency:'MXN':'symbol-narrow'}}</td>\r\n              </tr>\r\n            </tbody>\r\n          </table>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -722,6 +728,12 @@ var ServicesComponent = /** @class */ (function () {
                 total++;
             }
         });
+        return total;
+    };
+    ServicesComponent.prototype.getCost = function (service) {
+        var total = 0;
+        service.fees.map(function (f) { return total += f.price; });
+        total += service.tariff ? service.tariff.cost : 0;
         return total;
     };
     ServicesComponent = __decorate([
@@ -2082,6 +2094,10 @@ var BaseService = /** @class */ (function () {
     };
     BaseService.prototype.base_list = function () {
         return this.http.get(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/base")
+            .map(function (r) { return r.json(); });
+    };
+    BaseService.prototype.base_empty = function (baseId) {
+        return this.http.put(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/base/empty_stack/" + baseId, {})
             .map(function (r) { return r.json(); });
     };
     BaseService.prototype.base_delete = function (baseId) {
