@@ -117,7 +117,7 @@ export class BasesComponent implements OnInit {
 
   selectBase(base) {
     this.base_selected = this.bases.find(b => b.name == base.label)._id
-    console.log(base)
+    console.log(base);
   }
 
   sortBases(a, b) {
