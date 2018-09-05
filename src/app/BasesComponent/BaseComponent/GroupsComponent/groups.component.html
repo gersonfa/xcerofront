@@ -1,83 +1,65 @@
-<div class="ui padded grid" style="height: 80vh;">
-  <div class="three wide column" style="border-right: 1px solid black;">
-    <sm-button class="fluid yellow" icon="plus" (click)="createGroupModel.show({inverted: false})">Crear nuevo grupo</sm-button>
-    <br>
-    <sm-list class="divided">
+<div class="ui grid" style="height: 80vh;">
+  <!-- <sm-list class="divided">
       <sm-item *ngFor="let group of groups" [ngClass]="{'item-selected': group.name === group_selected?.name}" (click)="selecte_group(group)">
         <i style="color: red; cursor: pointer;" (click)="group_selected = group; confirmDeleteGroup.show();">x</i>
         {{group.name}}
       </sm-item>
-    </sm-list>
+    </sm-list> -->
+  <div class="two wide column">
+    <sm-button class="fluid yellow" icon="plus" (click)="createGroupModel.show({inverted: false})">Nuevo grupo</sm-button>
+    <br>
+    <div class="ui vertical fluid tabular menu">
+      <a class="item" *ngFor="let group of groups" routerLink="/dashboard/base/{{base_id}}/groups/group/{{group._id}}/colonies" routerLinkActive="active" >
+        {{group.name}}
+      </a>
+    </div>
 
     <h5 *ngIf="groups.length == 0">
       Aún no hay grupos registrados.
     </h5>
   </div>
-
-  <div class="two wide column" style="border-right: 1px solid black;">
-    <sm-list class="divided">
-      <sm-item *ngFor="let colony of colonies">
-        <i style="color: red; cursor: pointer;" (click)="delete_colony(colony)">x</i>
-        {{colony.label}}
-      </sm-item>
-    </sm-list>
-
-    <h5 *ngIf="colonies.length == 0 && group_selected">
-      Aún no hay colonias registradas en este grupo.
-    </h5>
-
-    <h5 *ngIf="colonies.length == 0 && !group_selected">
-      Selecciona un grupo
-    </h5>
+  <div class="fourteen wide stretched column">
+    <router-outlet></router-outlet>
   </div>
 
-  <div class="eleven wide column">
-    <h3 *ngIf="group_selected">{{group_selected.name}}</h3>
-    <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom">
-      <agm-marker *ngFor="let colony of colonies" [label]="colony.label" [latitude]="colony.latitude" [longitude]="colony.longitude"></agm-marker>
-    </agm-map>
-    <br>
-    <form [formGroup]="colonyForm">
-      <div class="ui input fluid" [ngClass]="{'disabled': !group_selected}">
-        <input type="text" #search formControlName="name">
+
+
+
+
+
+
+  <sm-modal title="Nuevo grupo" #createGroupModel>
+    <modal-content>
+      <div class="ui fluid input">
+        <input type="text" [(ngModel)]="new_group_name" placeholder="Ingresa nombre de grupo">
       </div>
-    </form>
+    </modal-content>
 
-  </div>
-</div>
+    <modal-actions>
+      <div class="ui buttons">
+        <button class="ui negative button" (click)="createGroupModel.hide()">Cancelar</button>
+        <button class="ui button primary" [disabled]="!new_group_name" (click)="create_group(); createGroupModel.hide();" style="margin-left: 10px;">Guardar
+          grupo</button>
+      </div>
+    </modal-actions>
+  </sm-modal>
 
+  <sm-modal class="basic" title="Eliminar grupo" #confirmDeleteGroup>
+    <modal-content>
+      <p>Se eliminaran las colonias y tarifas relacionadas a este grupo.</p>
+    </modal-content>
 
+    <modal-actions>
+      <div class="ui buttons">
+        <button class="ui button" (click)="confirmDeleteGroup.hide()">Cancelar</button>
+        <button class="ui button negative" (click)="delete_group(); confirmDeleteGroup.hide();" style="margin-left: 10px;">Eliminar
+          grupo</button>
+      </div>
+    </modal-actions>
+  </sm-modal>
 
-<sm-modal title="Nuevo grupo" #createGroupModel>
-  <modal-content>
-    <div class="ui fluid input">
-      <input type="text" [(ngModel)]="new_group_name" placeholder="Ingresa nombre de grupo">
-    </div>
-  </modal-content>
-
-  <modal-actions>
-    <div class="ui buttons">
-      <button class="ui negative button" (click)="createGroupModel.hide()">Cancelar</button>
-      <button class="ui button primary" [disabled]="!new_group_name" (click)="create_group(); createGroupModel.hide();" style="margin-left: 10px;">Guardar grupo</button>
-    </div>
-  </modal-actions>
-</sm-modal>
-
-<sm-modal class="basic" title="Eliminar grupo" #confirmDeleteGroup>
-  <modal-content>
-    <p>Se eliminaran las colonias y tarifas relacionadas a este grupo.</p>
-  </modal-content>
-
-  <modal-actions>
-    <div class="ui buttons">
-      <button class="ui button" (click)="confirmDeleteGroup.hide()">Cancelar</button>
-      <button class="ui button negative" (click)="delete_group(); confirmDeleteGroup.hide();" style="margin-left: 10px;">Eliminar grupo</button>
-    </div>
-  </modal-actions>
-</sm-modal>
-
-<style>
-  .item-selected {
-    background-color: #FFF8E1;
-  }
-</style>
+  <style>
+    .item-selected {
+      background-color: #FFF8E1;
+    }
+  </style>

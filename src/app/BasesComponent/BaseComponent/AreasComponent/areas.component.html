@@ -1,0 +1,38 @@
+<div class="ui grid" style="height: 100%;">
+  <div class="two wide column" style="border-right: 1px solid black;">
+    <sm-button class="fluid yellow" icon="plus">Nueva area</sm-button>
+
+
+
+  </div>
+
+  <div class="three wide column">
+
+    <div class="ui form">
+      <div class="field">
+        <input type="text" placeholder="Nombre area">
+      </div>
+    </div> <br>
+      <div class="ui form">
+          <div class="field">
+              <div class="two fields">
+                <div class="field">
+                  <input type="number"  placeholder="Latitud">
+                </div>
+                <div class="field">
+                  <input type="number"  placeholder="Longitud">
+                </div>
+              </div>
+            </div>
+            <button class="ui icon button yellow"><i class="icon plus"></i></button>
+      </div>
+  </div>
+
+  <div class="eleven wide column">
+    <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom">
+      	<agm-polygon [paths]="polygon"></agm-polygon>
+    </agm-map>
+
+
+  </div>
+</div>

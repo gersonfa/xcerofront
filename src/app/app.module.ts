@@ -41,6 +41,9 @@ import { CommentsComponent } from './DriversComponent/DriverComponent/CommentsCo
 import { ReportsComponent } from './DriversComponent/DriverComponent/ReportsComponent/reports.component';
 import { NoticeComponent } from './NoticeComponent/notice.component';
 import { ReportDriversComponent } from './ReportDriversComponent/report.driver.component';
+import { AreasComponent } from './BasesComponent/BaseComponent/AreasComponent/areas.component';
+import { ColoniesComponent } from './BasesComponent/BaseComponent/ColoniesComponent/colonies.component';
+import { GroupComponent } from './BasesComponent/BaseComponent/GroupComponent/group.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -58,7 +61,12 @@ const routes: Routes = [
     { path: 'bases/new', component: BaseCreateComponent},
     { path: 'base/:id', component: BaseComponent, children: [
       { path: '', redirectTo: 'groups', pathMatch: 'full' },
-      { path: 'groups', component: GroupsComponent },
+      { path: 'groups', component: GroupsComponent, children: [
+        { path: 'group/:id', component: GroupComponent, children: [
+          { path: 'colonies', component: ColoniesComponent },
+          { path: 'areas', component: AreasComponent }
+        ]}
+      ] },
       { path: 'places', component: PlacesComponent }
     ]},
     { path: 'tariff', component: TariffComponent },
@@ -98,7 +106,10 @@ const routes: Routes = [
     CommentsComponent,
     ReportsComponent,
     NoticeComponent,
-    ReportDriversComponent
+    ReportDriversComponent,
+    AreasComponent,
+    ColoniesComponent,
+    GroupComponent
   ],
   imports: [
     BrowserModule,

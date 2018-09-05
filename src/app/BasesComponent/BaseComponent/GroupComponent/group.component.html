@@ -1,0 +1,16 @@
+<div class="fourteen wide stretched column" *ngIf="group_selected">
+  <div class="ui grid">
+    <div class="sixteen wide column">
+      <div class="ui secondary pointing menu">
+        <a class="item" routerLink="colonies" routerLinkActive="active">
+          Colonias
+        </a>
+        <a class="item" routerLink="areas" routerLinkActive="active">
+          Areas
+        </a>
+      </div>
+      <router-outlet></router-outlet>
+    </div>
+
+  </div>
+</div>

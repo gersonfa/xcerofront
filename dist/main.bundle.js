@@ -17,25 +17,71 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 
 /***/ }),
 
-/***/ "./src/app/BasesComponent/BaseComponent/GroupsComponent/groups.component.html":
+/***/ "./src/app/BasesComponent/BaseComponent/AreasComponent/areas.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"ui padded grid\" style=\"height: 80vh;\">\r\n  <div class=\"three wide column\" style=\"border-right: 1px solid black;\">\r\n    <sm-button class=\"fluid yellow\" icon=\"plus\" (click)=\"createGroupModel.show({inverted: false})\">Crear nuevo grupo</sm-button>\r\n    <br>\r\n    <sm-list class=\"divided\">\r\n      <sm-item *ngFor=\"let group of groups\" [ngClass]=\"{'item-selected': group.name === group_selected?.name}\" (click)=\"selecte_group(group)\">\r\n        <i style=\"color: red; cursor: pointer;\" (click)=\"group_selected = group; confirmDeleteGroup.show();\">x</i>\r\n        {{group.name}}\r\n      </sm-item>\r\n    </sm-list>\r\n\r\n    <h5 *ngIf=\"groups.length == 0\">\r\n      Aún no hay grupos registrados.\r\n    </h5>\r\n  </div>\r\n\r\n  <div class=\"two wide column\" style=\"border-right: 1px solid black;\">\r\n    <sm-list class=\"divided\">\r\n      <sm-item *ngFor=\"let colony of colonies\">\r\n        <i style=\"color: red; cursor: pointer;\" (click)=\"delete_colony(colony)\">x</i>\r\n        {{colony.label}}\r\n      </sm-item>\r\n    </sm-list>\r\n\r\n    <h5 *ngIf=\"colonies.length == 0 && group_selected\">\r\n      Aún no hay colonias registradas en este grupo.\r\n    </h5>\r\n\r\n    <h5 *ngIf=\"colonies.length == 0 && !group_selected\">\r\n      Selecciona un grupo\r\n    </h5>\r\n  </div>\r\n\r\n  <div class=\"eleven wide column\">\r\n    <h3 *ngIf=\"group_selected\">{{group_selected.name}}</h3>\r\n    <agm-map [latitude]=\"latitude\" [longitude]=\"longitude\" [scrollwheel]=\"false\" [zoom]=\"zoom\">\r\n      <agm-marker *ngFor=\"let colony of colonies\" [label]=\"colony.label\" [latitude]=\"colony.latitude\" [longitude]=\"colony.longitude\"></agm-marker>\r\n    </agm-map>\r\n    <br>\r\n    <form [formGroup]=\"colonyForm\">\r\n      <div class=\"ui input fluid\" [ngClass]=\"{'disabled': !group_selected}\">\r\n        <input type=\"text\" #search formControlName=\"name\">\r\n      </div>\r\n    </form>\r\n\r\n  </div>\r\n</div>\r\n\r\n\r\n\r\n<sm-modal title=\"Nuevo grupo\" #createGroupModel>\r\n  <modal-content>\r\n    <div class=\"ui fluid input\">\r\n      <input type=\"text\" [(ngModel)]=\"new_group_name\" placeholder=\"Ingresa nombre de grupo\">\r\n    </div>\r\n  </modal-content>\r\n\r\n  <modal-actions>\r\n    <div class=\"ui buttons\">\r\n      <button class=\"ui negative button\" (click)=\"createGroupModel.hide()\">Cancelar</button>\r\n      <button class=\"ui button primary\" [disabled]=\"!new_group_name\" (click)=\"create_group(); createGroupModel.hide();\" style=\"margin-left: 10px;\">Guardar grupo</button>\r\n    </div>\r\n  </modal-actions>\r\n</sm-modal>\r\n\r\n<sm-modal class=\"basic\" title=\"Eliminar grupo\" #confirmDeleteGroup>\r\n  <modal-content>\r\n    <p>Se eliminaran las colonias y tarifas relacionadas a este grupo.</p>\r\n  </modal-content>\r\n\r\n  <modal-actions>\r\n    <div class=\"ui buttons\">\r\n      <button class=\"ui button\" (click)=\"confirmDeleteGroup.hide()\">Cancelar</button>\r\n      <button class=\"ui button negative\" (click)=\"delete_group(); confirmDeleteGroup.hide();\" style=\"margin-left: 10px;\">Eliminar grupo</button>\r\n    </div>\r\n  </modal-actions>\r\n</sm-modal>\r\n\r\n<style>\r\n  .item-selected {\r\n    background-color: #FFF8E1;\r\n  }\r\n</style>\r\n"
+module.exports = "<div class=\"ui grid\" style=\"height: 100%;\">\r\n  <div class=\"two wide column\" style=\"border-right: 1px solid black;\">\r\n    <sm-button class=\"fluid yellow\" icon=\"plus\">Nueva area</sm-button>\r\n\r\n\r\n\r\n  </div>\r\n\r\n  <div class=\"three wide column\">\r\n\r\n    <div class=\"ui form\">\r\n      <div class=\"field\">\r\n        <input type=\"text\" placeholder=\"Nombre area\">\r\n      </div>\r\n    </div> <br>\r\n      <div class=\"ui form\">\r\n          <div class=\"field\">\r\n              <div class=\"two fields\">\r\n                <div class=\"field\">\r\n                  <input type=\"number\"  placeholder=\"Latitud\">\r\n                </div>\r\n                <div class=\"field\">\r\n                  <input type=\"number\"  placeholder=\"Longitud\">\r\n                </div>\r\n              </div>\r\n            </div>\r\n            <button class=\"ui icon button yellow\"><i class=\"icon plus\"></i></button>\r\n      </div>\r\n  </div>\r\n\r\n  <div class=\"eleven wide column\">\r\n    <agm-map [latitude]=\"latitude\" [longitude]=\"longitude\" [scrollwheel]=\"false\" [zoom]=\"zoom\">\r\n      \t<agm-polygon [paths]=\"polygon\"></agm-polygon>\r\n    </agm-map>\r\n\r\n\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
-/***/ "./src/app/BasesComponent/BaseComponent/GroupsComponent/groups.component.ts":
+/***/ "./src/app/BasesComponent/BaseComponent/AreasComponent/areas.component.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GroupsComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AreasComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var AreasComponent = /** @class */ (function () {
+    function AreasComponent() {
+        this.zoom = 9;
+        this.latitude = 18.703139;
+        this.longitude = -97.911509;
+        this.polygon = [
+            { lat: 18.994334, lng: -98.212743 },
+            { lat: 18.999015, lng: -98.209808 },
+            { lat: 18.996578, lng: -98.219326 }
+        ];
+    }
+    AreasComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            template: __webpack_require__("./src/app/BasesComponent/BaseComponent/AreasComponent/areas.component.html")
+        }),
+        __metadata("design:paramtypes", [])
+    ], AreasComponent);
+    return AreasComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/BasesComponent/BaseComponent/ColoniesComponent/colonies.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"ui grid\" style=\"height: 100%;\">\r\n    <div class=\"two wide column\" style=\"border-right: 1px solid black;\">\r\n        <sm-list class=\"divided\">\r\n          <sm-item *ngFor=\"let colony of colonies\">\r\n            <i style=\"color: red; cursor: pointer;\" (click)=\"delete_colony(colony)\">x</i>\r\n            {{colony.label}}\r\n          </sm-item>\r\n        </sm-list>\r\n\r\n        <h5 *ngIf=\"colonies.length == 0 && group_selected\">\r\n          Aún no hay colonias registradas en este grupo.\r\n        </h5>\r\n\r\n        <h5 *ngIf=\"colonies.length == 0 && !group_selected\">\r\n          Selecciona un grupo\r\n        </h5>\r\n      </div>\r\n\r\n      <div class=\"fourteen wide column\">\r\n         <agm-map [latitude]=\"latitude\" [longitude]=\"longitude\" [scrollwheel]=\"false\" [zoom]=\"zoom\">\r\n          <agm-marker *ngFor=\"let colony of colonies\" [label]=\"colony.label\" [latitude]=\"colony.latitude\" [longitude]=\"colony.longitude\"></agm-marker>\r\n        </agm-map>\r\n        <br>\r\n        <form [formGroup]=\"colonyForm\">\r\n          <div class=\"ui input fluid\">\r\n            <input type=\"text\" #search formControlName=\"name\">\r\n          </div>\r\n        </form>\r\n\r\n\r\n      </div>\r\n</div>\r\n"
+
+/***/ }),
+
+/***/ "./src/app/BasesComponent/BaseComponent/ColoniesComponent/colonies.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ColoniesComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_group_service__ = __webpack_require__("./src/app/_services/group.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__agm_core__ = __webpack_require__("./node_modules/@agm/core/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__agm_core__ = __webpack_require__("./node_modules/@agm/core/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng_snotify__ = __webpack_require__("./node_modules/ng-snotify/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_colony_service__ = __webpack_require__("./src/app/_services/colony.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_ng_snotify__ = __webpack_require__("./node_modules/ng-snotify/index.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -51,10 +97,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
-var GroupsComponent = /** @class */ (function () {
-    function GroupsComponent(groupService, colonyService, route, fb, mapsAPILoader, ngZone, snotifyService) {
-        this.groupService = groupService;
+var ColoniesComponent = /** @class */ (function () {
+    function ColoniesComponent(colonyService, route, fb, mapsAPILoader, ngZone, snotifyService) {
         this.colonyService = colonyService;
         this.route = route;
         this.fb = fb;
@@ -65,18 +109,28 @@ var GroupsComponent = /** @class */ (function () {
         this.new_group_name = '';
         this.colonies = [];
     }
-    GroupsComponent.prototype.ngOnInit = function () {
+    ColoniesComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.zoom = 9;
         this.latitude = 18.703139;
         this.longitude = -97.911509;
         this.subscription = this.route.parent.params.subscribe(function (params) {
-            _this.base_id = params['id'];
+            _this.group_id = params['id'];
+            console.log(_this.group_id);
         });
-        this.groupService.group_by_base(this.base_id).subscribe(function (groups) {
-            _this.groups = groups;
+        this.colonyService.colony_by_group(this.group_id).subscribe(function (colonies) {
+            _this.colonies = [];
+            colonies.map(function (colony) {
+                var marker = {
+                    longitude: Number(colony.coords[0]),
+                    latitude: Number(colony.coords[1]),
+                    label: colony.name,
+                    _id: colony._id
+                };
+                _this.colonies.push(marker);
+            });
         });
-        this.name = this.fb.control('', __WEBPACK_IMPORTED_MODULE_3__angular_forms__["Validators"].required);
+        this.name = this.fb.control('', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["Validators"].required);
         this.colonyForm = this.fb.group({
             name: this.name,
             place_id: '',
@@ -95,13 +149,11 @@ var GroupsComponent = /** @class */ (function () {
                     if (place.geometry === undefined || place.geometry === null) {
                         return;
                     }
-                    console.log(place);
-                    //set latitude, longitude and zoom
                     _this.name.setValue(place.name);
                     _this.colonyForm.value.place_id = place.place_id;
                     _this.colonyForm.value.lat = place.geometry.location.lat();
                     _this.colonyForm.value.lng = place.geometry.location.lng();
-                    _this.colonyService.colony_create(_this.group_selected._id, _this.colonyForm.value).subscribe(function (colony) {
+                    _this.colonyService.colony_create(_this.group_id, _this.colonyForm.value).subscribe(function (colony) {
                         var marker = {
                             longitude: Number(colony.coords[0]),
                             latitude: Number(colony.coords[1]),
@@ -121,6 +173,124 @@ var GroupsComponent = /** @class */ (function () {
             });
         });
     };
+    ColoniesComponent.prototype.ngOnDestroy = function () {
+        this.subscription.unsubscribe();
+    };
+    ColoniesComponent.prototype.delete_colony = function (colony) {
+        var _this = this;
+        this.colonyService.colony_delete(colony._id).subscribe(function (colony_deleted) { return _this.colonies = _this.colonies.filter(function (c) { return c._id !== colony_deleted._id; }); });
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])("search"),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"])
+    ], ColoniesComponent.prototype, "searchElementRef", void 0);
+    ColoniesComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            template: __webpack_require__("./src/app/BasesComponent/BaseComponent/ColoniesComponent/colonies.component.html")
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__services_colony_service__["a" /* ColonyService */],
+            __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */],
+            __WEBPACK_IMPORTED_MODULE_2__angular_forms__["FormBuilder"],
+            __WEBPACK_IMPORTED_MODULE_3__agm_core__["b" /* MapsAPILoader */],
+            __WEBPACK_IMPORTED_MODULE_0__angular_core__["NgZone"],
+            __WEBPACK_IMPORTED_MODULE_4_ng_snotify__["b" /* SnotifyService */]])
+    ], ColoniesComponent);
+    return ColoniesComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/BasesComponent/BaseComponent/GroupComponent/group.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"fourteen wide stretched column\" *ngIf=\"group_selected\">\r\n  <div class=\"ui grid\">\r\n    <div class=\"sixteen wide column\">\r\n      <div class=\"ui secondary pointing menu\">\r\n        <a class=\"item\" routerLink=\"colonies\" routerLinkActive=\"active\">\r\n          Colonias\r\n        </a>\r\n        <a class=\"item\" routerLink=\"areas\" routerLinkActive=\"active\">\r\n          Areas\r\n        </a>\r\n      </div>\r\n      <router-outlet></router-outlet>\r\n    </div>\r\n\r\n  </div>\r\n</div>\r\n"
+
+/***/ }),
+
+/***/ "./src/app/BasesComponent/BaseComponent/GroupComponent/group.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GroupComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+var GroupComponent = /** @class */ (function () {
+    function GroupComponent() {
+    }
+    GroupComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            template: __webpack_require__("./src/app/BasesComponent/BaseComponent/GroupComponent/group.component.html")
+        })
+    ], GroupComponent);
+    return GroupComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/BasesComponent/BaseComponent/GroupsComponent/groups.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"ui grid\" style=\"height: 80vh;\">\r\n  <!-- <sm-list class=\"divided\">\r\n      <sm-item *ngFor=\"let group of groups\" [ngClass]=\"{'item-selected': group.name === group_selected?.name}\" (click)=\"selecte_group(group)\">\r\n        <i style=\"color: red; cursor: pointer;\" (click)=\"group_selected = group; confirmDeleteGroup.show();\">x</i>\r\n        {{group.name}}\r\n      </sm-item>\r\n    </sm-list> -->\r\n  <div class=\"two wide column\">\r\n    <sm-button class=\"fluid yellow\" icon=\"plus\" (click)=\"createGroupModel.show({inverted: false})\">Nuevo grupo</sm-button>\r\n    <br>\r\n    <div class=\"ui vertical fluid tabular menu\">\r\n      <a class=\"item\" *ngFor=\"let group of groups\" routerLink=\"/dashboard/base/{{base_id}}/groups/group/{{group._id}}/colonies\" routerLinkActive=\"active\" >\r\n        {{group.name}}\r\n      </a>\r\n    </div>\r\n\r\n    <h5 *ngIf=\"groups.length == 0\">\r\n      Aún no hay grupos registrados.\r\n    </h5>\r\n  </div>\r\n  <div class=\"fourteen wide stretched column\">\r\n    <router-outlet></router-outlet>\r\n  </div>\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n  <sm-modal title=\"Nuevo grupo\" #createGroupModel>\r\n    <modal-content>\r\n      <div class=\"ui fluid input\">\r\n        <input type=\"text\" [(ngModel)]=\"new_group_name\" placeholder=\"Ingresa nombre de grupo\">\r\n      </div>\r\n    </modal-content>\r\n\r\n    <modal-actions>\r\n      <div class=\"ui buttons\">\r\n        <button class=\"ui negative button\" (click)=\"createGroupModel.hide()\">Cancelar</button>\r\n        <button class=\"ui button primary\" [disabled]=\"!new_group_name\" (click)=\"create_group(); createGroupModel.hide();\" style=\"margin-left: 10px;\">Guardar\r\n          grupo</button>\r\n      </div>\r\n    </modal-actions>\r\n  </sm-modal>\r\n\r\n  <sm-modal class=\"basic\" title=\"Eliminar grupo\" #confirmDeleteGroup>\r\n    <modal-content>\r\n      <p>Se eliminaran las colonias y tarifas relacionadas a este grupo.</p>\r\n    </modal-content>\r\n\r\n    <modal-actions>\r\n      <div class=\"ui buttons\">\r\n        <button class=\"ui button\" (click)=\"confirmDeleteGroup.hide()\">Cancelar</button>\r\n        <button class=\"ui button negative\" (click)=\"delete_group(); confirmDeleteGroup.hide();\" style=\"margin-left: 10px;\">Eliminar\r\n          grupo</button>\r\n      </div>\r\n    </modal-actions>\r\n  </sm-modal>\r\n\r\n  <style>\r\n    .item-selected {\r\n      background-color: #FFF8E1;\r\n    }\r\n  </style>\r\n"
+
+/***/ }),
+
+/***/ "./src/app/BasesComponent/BaseComponent/GroupsComponent/groups.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GroupsComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_group_service__ = __webpack_require__("./src/app/_services/group.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_colony_service__ = __webpack_require__("./src/app/_services/colony.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+var GroupsComponent = /** @class */ (function () {
+    function GroupsComponent(groupService, colonyService, route, router, fb) {
+        this.groupService = groupService;
+        this.colonyService = colonyService;
+        this.route = route;
+        this.router = router;
+        this.fb = fb;
+        this.groups = [];
+        this.new_group_name = '';
+        this.colonies = [];
+    }
+    GroupsComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.subscription = this.route.parent.params.subscribe(function (params) {
+            _this.base_id = params['id'];
+        });
+        this.groupService.group_by_base(this.base_id).subscribe(function (groups) {
+            _this.groups = groups;
+            if (_this.groups.length > 0) {
+                //this.group_selected = groups[0];
+            }
+        });
+    };
     GroupsComponent.prototype.ngOnDestroy = function () {
         this.subscription.unsubscribe();
     };
@@ -136,32 +306,11 @@ var GroupsComponent = /** @class */ (function () {
         this.groupService.group_delete(this.base_id, this.group_selected._id).subscribe(function (group) {
             _this.groups = _this.groups.filter(function (g) { return g._id != group._id; });
             if (_this.groups.length > 0) {
-                _this.selecte_group(_this.groups[0]);
             }
             else {
                 _this.colonies = [];
             }
         });
-    };
-    GroupsComponent.prototype.selecte_group = function (group) {
-        var _this = this;
-        this.group_selected = group;
-        this.colonyService.colony_by_group(this.group_selected._id).subscribe(function (colonies) {
-            _this.colonies = [];
-            colonies.map(function (colony) {
-                var marker = {
-                    longitude: Number(colony.coords[0]),
-                    latitude: Number(colony.coords[1]),
-                    label: colony.name,
-                    _id: colony._id
-                };
-                _this.colonies.push(marker);
-            });
-        });
-    };
-    GroupsComponent.prototype.delete_colony = function (colony) {
-        var _this = this;
-        this.colonyService.colony_delete(colony._id).subscribe(function (colony_deleted) { return _this.colonies = _this.colonies.filter(function (c) { return c._id !== colony_deleted._id; }); });
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])("search"),
@@ -172,12 +321,10 @@ var GroupsComponent = /** @class */ (function () {
             template: __webpack_require__("./src/app/BasesComponent/BaseComponent/GroupsComponent/groups.component.html")
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__services_group_service__["a" /* GroupService */],
-            __WEBPACK_IMPORTED_MODULE_5__services_colony_service__["a" /* ColonyService */],
+            __WEBPACK_IMPORTED_MODULE_4__services_colony_service__["a" /* ColonyService */],
             __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */],
-            __WEBPACK_IMPORTED_MODULE_3__angular_forms__["FormBuilder"],
-            __WEBPACK_IMPORTED_MODULE_4__agm_core__["b" /* MapsAPILoader */],
-            __WEBPACK_IMPORTED_MODULE_0__angular_core__["NgZone"],
-            __WEBPACK_IMPORTED_MODULE_6_ng_snotify__["b" /* SnotifyService */]])
+            __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */],
+            __WEBPACK_IMPORTED_MODULE_3__angular_forms__["FormBuilder"]])
     ], GroupsComponent);
     return GroupsComponent;
 }());
@@ -464,7 +611,7 @@ module.exports = "/deep/ .logo-xcero {\r\n  width: 6em !important;\r\n}\r\n\r\n/
 /***/ "./src/app/DashboradComponent/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<sm-menu title=\"XCero\" logoClass=\"logo-xcero\" class=\"ui inverted\" logo=\"assets/xcero_oficial.png\">\r\n\r\n  <sm-menu class=\"menu right secondary\">\r\n    <a class=\"item yellow\" sm-item routerLink=\"drivers\" routerLinkActive=\"active\">Conductores</a>\r\n    <a class=\"item yellow\" routerLink=\"tariff\" routerLinkActive=\"active\" sm-item>Tarifas</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"bases\" routerLinkActive=\"active\">Bases</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"notices\" routerLinkActive=\"active\">Avisos</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"reports\" routerLinkActive=\"active\">Reportes</a>\r\n    <a class=\"item\" (click)=\"logOut()\">\r\n      <i class=\"icon power off\"></i>\r\n    </a>\r\n  </sm-menu>\r\n</sm-menu>\r\n\r\n<router-outlet></router-outlet>\r\n\r\n<style>\r\n  .logo-xcero {\r\n    width: 6em !important;\r\n  }\r\n</style>\r\n"
+module.exports = "<sm-menu title=\"XCero\" logoClass=\"logo-xcero\" class=\"ui inverted\" logo=\"assets/xcero_oficial.png\">\r\n\r\n  <sm-menu class=\"menu right secondary\">\r\n    <a class=\"item yellow\" sm-item routerLink=\"drivers\" routerLinkActive=\"active\">Conductores</a>\r\n    <a class=\"item yellow\" routerLink=\"tariff\" routerLinkActive=\"active\" sm-item>Tarifas</a>\r\n    <a class=\"item yellow\" sm-item  routerLinkActive=\"active\">Bases</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"notices\" routerLinkActive=\"active\">Avisos</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"reports\" routerLinkActive=\"active\">Reportes</a>\r\n    <a class=\"item\" (click)=\"logOut()\">\r\n      <i class=\"icon power off\"></i>\r\n    </a>\r\n  </sm-menu>\r\n</sm-menu>\r\n\r\n<router-outlet></router-outlet>\r\n\r\n<style>\r\n  .logo-xcero {\r\n    width: 6em !important;\r\n  }\r\n</style>\r\n"
 
 /***/ }),
 
@@ -1745,7 +1892,7 @@ var TariffComponent = /** @class */ (function () {
     TariffComponent.prototype.saveTariff = function () {
         var _this = this;
         var gp1 = this.groups_places.find(function (gp) { return gp._id === _this.group_selected; });
-        var gp2 = this.groups_places_available.find(function (gp) { return gp._id === _this.second_group_selected; });
+        var gp2 = this.groups_places.find(function (gp) { return gp._id === _this.second_group_selected; });
         var tariff = {};
         if (gp1.type === "group") {
             if (gp2.type === "group") {
@@ -1785,7 +1932,7 @@ var TariffComponent = /** @class */ (function () {
             _this.tariffs.push(tariff_created);
             _this.tariffs = _this.tariffs.sort(_this.sortTariffs);
             _this.cost = null;
-            _this.selectGroup(gp2);
+            _this.second_group_selected = '';
         });
     };
     TariffComponent.prototype.deleteTariff = function (tariffId) {
@@ -2590,12 +2737,18 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__DriversComponent_DriverComponent_ReportsComponent_reports_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/ReportsComponent/reports.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__NoticeComponent_notice_component__ = __webpack_require__("./src/app/NoticeComponent/notice.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__ReportDriversComponent_report_driver_component__ = __webpack_require__("./src/app/ReportDriversComponent/report.driver.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__BasesComponent_BaseComponent_AreasComponent_areas_component__ = __webpack_require__("./src/app/BasesComponent/BaseComponent/AreasComponent/areas.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_42__BasesComponent_BaseComponent_ColoniesComponent_colonies_component__ = __webpack_require__("./src/app/BasesComponent/BaseComponent/ColoniesComponent/colonies.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_43__BasesComponent_BaseComponent_GroupComponent_group_component__ = __webpack_require__("./src/app/BasesComponent/BaseComponent/GroupComponent/group.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
+
 
 
 
@@ -2653,7 +2806,12 @@ var routes = [
             { path: 'bases/new', component: __WEBPACK_IMPORTED_MODULE_16__BasesComponent_BaseCreateComponent_base_create_component__["a" /* BaseCreateComponent */] },
             { path: 'base/:id', component: __WEBPACK_IMPORTED_MODULE_18__BasesComponent_BaseComponent_base_component__["a" /* BaseComponent */], children: [
                     { path: '', redirectTo: 'groups', pathMatch: 'full' },
-                    { path: 'groups', component: __WEBPACK_IMPORTED_MODULE_29__BasesComponent_BaseComponent_GroupsComponent_groups_component__["a" /* GroupsComponent */] },
+                    { path: 'groups', component: __WEBPACK_IMPORTED_MODULE_29__BasesComponent_BaseComponent_GroupsComponent_groups_component__["a" /* GroupsComponent */], children: [
+                            { path: 'group/:id', component: __WEBPACK_IMPORTED_MODULE_43__BasesComponent_BaseComponent_GroupComponent_group_component__["a" /* GroupComponent */], children: [
+                                    { path: 'colonies', component: __WEBPACK_IMPORTED_MODULE_42__BasesComponent_BaseComponent_ColoniesComponent_colonies_component__["a" /* ColoniesComponent */] },
+                                    { path: 'areas', component: __WEBPACK_IMPORTED_MODULE_41__BasesComponent_BaseComponent_AreasComponent_areas_component__["a" /* AreasComponent */] }
+                                ] }
+                        ] },
                     { path: 'places', component: __WEBPACK_IMPORTED_MODULE_27__PlacesComponent_places_component__["a" /* PlacesComponent */] }
                 ] },
             { path: 'tariff', component: __WEBPACK_IMPORTED_MODULE_21__TariffComponent_tariff_component__["a" /* TariffComponent */] },
@@ -2696,7 +2854,10 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_37__DriversComponent_DriverComponent_CommentsComponent_comments_component__["a" /* CommentsComponent */],
                 __WEBPACK_IMPORTED_MODULE_38__DriversComponent_DriverComponent_ReportsComponent_reports_component__["a" /* ReportsComponent */],
                 __WEBPACK_IMPORTED_MODULE_39__NoticeComponent_notice_component__["a" /* NoticeComponent */],
-                __WEBPACK_IMPORTED_MODULE_40__ReportDriversComponent_report_driver_component__["a" /* ReportDriversComponent */]
+                __WEBPACK_IMPORTED_MODULE_40__ReportDriversComponent_report_driver_component__["a" /* ReportDriversComponent */],
+                __WEBPACK_IMPORTED_MODULE_41__BasesComponent_BaseComponent_AreasComponent_areas_component__["a" /* AreasComponent */],
+                __WEBPACK_IMPORTED_MODULE_42__BasesComponent_BaseComponent_ColoniesComponent_colonies_component__["a" /* ColoniesComponent */],
+                __WEBPACK_IMPORTED_MODULE_43__BasesComponent_BaseComponent_GroupComponent_group_component__["a" /* GroupComponent */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
