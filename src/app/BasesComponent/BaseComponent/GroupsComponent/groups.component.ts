@@ -52,6 +52,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
         this.groups = groups;
         if (this.groups.length > 0) {
           //this.group_selected = groups[0];
+          this.router.navigate([`/dashboard/base/${this.base_id}/groups/group/${this.groups[0]._id}/colonies`])
         }
       }
     )

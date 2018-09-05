@@ -8,8 +8,9 @@
   <div class="two wide column">
     <sm-button class="fluid yellow" icon="plus" (click)="createGroupModel.show({inverted: false})">Nuevo grupo</sm-button>
     <br>
-    <div class="ui vertical fluid tabular menu">
-      <a class="item" *ngFor="let group of groups" routerLink="/dashboard/base/{{base_id}}/groups/group/{{group._id}}/colonies" routerLinkActive="active" >
+    <div class="ui vertical fluid tabular menu" style="height: 100%;">
+      <a class="item" *ngFor="let group of groups" routerLink="/dashboard/base/{{base_id}}/groups/group/{{group._id}}/colonies"
+        routerLinkActive="active">
         {{group.name}}
       </a>
     </div>
@@ -39,7 +40,8 @@
       <div class="ui buttons">
         <button class="ui negative button" (click)="createGroupModel.hide()">Cancelar</button>
         <button class="ui button primary" [disabled]="!new_group_name" (click)="create_group(); createGroupModel.hide();" style="margin-left: 10px;">Guardar
-          grupo</button>
+          grupo
+        </button>
       </div>
     </modal-actions>
   </sm-modal>
@@ -53,7 +55,8 @@
       <div class="ui buttons">
         <button class="ui button" (click)="confirmDeleteGroup.hide()">Cancelar</button>
         <button class="ui button negative" (click)="delete_group(); confirmDeleteGroup.hide();" style="margin-left: 10px;">Eliminar
-          grupo</button>
+          grupo
+        </button>
       </div>
     </modal-actions>
   </sm-modal>

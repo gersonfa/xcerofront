@@ -106,7 +106,7 @@ var ColoniesComponent = /** @class */ (function () {
         this.ngZone = ngZone;
         this.snotifyService = snotifyService;
         this.groups = [];
-        this.new_group_name = '';
+        this.new_group_name = "";
         this.colonies = [];
     }
     ColoniesComponent.prototype.ngOnInit = function () {
@@ -115,27 +115,26 @@ var ColoniesComponent = /** @class */ (function () {
         this.latitude = 18.703139;
         this.longitude = -97.911509;
         this.subscription = this.route.parent.params.subscribe(function (params) {
-            _this.group_id = params['id'];
-            console.log(_this.group_id);
-        });
-        this.colonyService.colony_by_group(this.group_id).subscribe(function (colonies) {
-            _this.colonies = [];
-            colonies.map(function (colony) {
-                var marker = {
-                    longitude: Number(colony.coords[0]),
-                    latitude: Number(colony.coords[1]),
-                    label: colony.name,
-                    _id: colony._id
-                };
-                _this.colonies.push(marker);
+            _this.group_id = params["id"];
+            _this.colonyService.colony_by_group(_this.group_id).subscribe(function (colonies) {
+                _this.colonies = [];
+                colonies.map(function (colony) {
+                    var marker = {
+                        longitude: Number(colony.coords[0]),
+                        latitude: Number(colony.coords[1]),
+                        label: colony.name,
+                        _id: colony._id
+                    };
+                    _this.colonies.push(marker);
+                });
             });
         });
-        this.name = this.fb.control('', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["Validators"].required);
+        this.name = this.fb.control("", __WEBPACK_IMPORTED_MODULE_2__angular_forms__["Validators"].required);
         this.colonyForm = this.fb.group({
             name: this.name,
-            place_id: '',
-            lat: '',
-            lng: ''
+            place_id: "",
+            lat: "",
+            lng: ""
         });
         this.mapsAPILoader.load().then(function () {
             var autocomplete = new google.maps.places.Autocomplete(_this.searchElementRef.nativeElement, {
@@ -153,7 +152,9 @@ var ColoniesComponent = /** @class */ (function () {
                     _this.colonyForm.value.place_id = place.place_id;
                     _this.colonyForm.value.lat = place.geometry.location.lat();
                     _this.colonyForm.value.lng = place.geometry.location.lng();
-                    _this.colonyService.colony_create(_this.group_id, _this.colonyForm.value).subscribe(function (colony) {
+                    _this.colonyService
+                        .colony_create(_this.group_id, _this.colonyForm.value)
+                        .subscribe(function (colony) {
                         var marker = {
                             longitude: Number(colony.coords[0]),
                             latitude: Number(colony.coords[1]),
@@ -165,8 +166,8 @@ var ColoniesComponent = /** @class */ (function () {
                     }, function (error) {
                         var body = JSON.parse(error._body);
                         console.log(body);
-                        if (body.error.includes('duplicate key')) {
-                            _this.snotifyService.error('La colonia ya esta registrada.');
+                        if (body.error.includes("duplicate key")) {
+                            _this.snotifyService.error("La colonia ya esta registrada.");
                         }
                     });
                 });
@@ -178,7 +179,11 @@ var ColoniesComponent = /** @class */ (function () {
     };
     ColoniesComponent.prototype.delete_colony = function (colony) {
         var _this = this;
-        this.colonyService.colony_delete(colony._id).subscribe(function (colony_deleted) { return _this.colonies = _this.colonies.filter(function (c) { return c._id !== colony_deleted._id; }); });
+        this.colonyService
+            .colony_delete(colony._id)
+            .subscribe(function (colony_deleted) {
+            return (_this.colonies = _this.colonies.filter(function (c) { return c._id !== colony_deleted._id; }));
+        });
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])("search"),
@@ -205,7 +210,7 @@ var ColoniesComponent = /** @class */ (function () {
 /***/ "./src/app/BasesComponent/BaseComponent/GroupComponent/group.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"fourteen wide stretched column\" *ngIf=\"group_selected\">\r\n  <div class=\"ui grid\">\r\n    <div class=\"sixteen wide column\">\r\n      <div class=\"ui secondary pointing menu\">\r\n        <a class=\"item\" routerLink=\"colonies\" routerLinkActive=\"active\">\r\n          Colonias\r\n        </a>\r\n        <a class=\"item\" routerLink=\"areas\" routerLinkActive=\"active\">\r\n          Areas\r\n        </a>\r\n      </div>\r\n      <router-outlet></router-outlet>\r\n    </div>\r\n\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"fourteen wide stretched column\" >\r\n  <div class=\"ui grid\">\r\n    <div class=\"sixteen wide column\">\r\n      <div class=\"ui secondary pointing menu\">\r\n        <a class=\"item\" routerLink=\"colonies\" routerLinkActive=\"active\">\r\n          Colonias\r\n        </a>\r\n        <!-- <a class=\"item\" routerLink=\"areas\" routerLinkActive=\"active\">\r\n          Areas\r\n        </a> -->\r\n      </div>\r\n      <router-outlet></router-outlet>\r\n    </div>\r\n\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -240,7 +245,7 @@ var GroupComponent = /** @class */ (function () {
 /***/ "./src/app/BasesComponent/BaseComponent/GroupsComponent/groups.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"ui grid\" style=\"height: 80vh;\">\r\n  <!-- <sm-list class=\"divided\">\r\n      <sm-item *ngFor=\"let group of groups\" [ngClass]=\"{'item-selected': group.name === group_selected?.name}\" (click)=\"selecte_group(group)\">\r\n        <i style=\"color: red; cursor: pointer;\" (click)=\"group_selected = group; confirmDeleteGroup.show();\">x</i>\r\n        {{group.name}}\r\n      </sm-item>\r\n    </sm-list> -->\r\n  <div class=\"two wide column\">\r\n    <sm-button class=\"fluid yellow\" icon=\"plus\" (click)=\"createGroupModel.show({inverted: false})\">Nuevo grupo</sm-button>\r\n    <br>\r\n    <div class=\"ui vertical fluid tabular menu\">\r\n      <a class=\"item\" *ngFor=\"let group of groups\" routerLink=\"/dashboard/base/{{base_id}}/groups/group/{{group._id}}/colonies\" routerLinkActive=\"active\" >\r\n        {{group.name}}\r\n      </a>\r\n    </div>\r\n\r\n    <h5 *ngIf=\"groups.length == 0\">\r\n      Aún no hay grupos registrados.\r\n    </h5>\r\n  </div>\r\n  <div class=\"fourteen wide stretched column\">\r\n    <router-outlet></router-outlet>\r\n  </div>\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n  <sm-modal title=\"Nuevo grupo\" #createGroupModel>\r\n    <modal-content>\r\n      <div class=\"ui fluid input\">\r\n        <input type=\"text\" [(ngModel)]=\"new_group_name\" placeholder=\"Ingresa nombre de grupo\">\r\n      </div>\r\n    </modal-content>\r\n\r\n    <modal-actions>\r\n      <div class=\"ui buttons\">\r\n        <button class=\"ui negative button\" (click)=\"createGroupModel.hide()\">Cancelar</button>\r\n        <button class=\"ui button primary\" [disabled]=\"!new_group_name\" (click)=\"create_group(); createGroupModel.hide();\" style=\"margin-left: 10px;\">Guardar\r\n          grupo</button>\r\n      </div>\r\n    </modal-actions>\r\n  </sm-modal>\r\n\r\n  <sm-modal class=\"basic\" title=\"Eliminar grupo\" #confirmDeleteGroup>\r\n    <modal-content>\r\n      <p>Se eliminaran las colonias y tarifas relacionadas a este grupo.</p>\r\n    </modal-content>\r\n\r\n    <modal-actions>\r\n      <div class=\"ui buttons\">\r\n        <button class=\"ui button\" (click)=\"confirmDeleteGroup.hide()\">Cancelar</button>\r\n        <button class=\"ui button negative\" (click)=\"delete_group(); confirmDeleteGroup.hide();\" style=\"margin-left: 10px;\">Eliminar\r\n          grupo</button>\r\n      </div>\r\n    </modal-actions>\r\n  </sm-modal>\r\n\r\n  <style>\r\n    .item-selected {\r\n      background-color: #FFF8E1;\r\n    }\r\n  </style>\r\n"
+module.exports = "<div class=\"ui grid\" style=\"height: 80vh;\">\r\n  <!-- <sm-list class=\"divided\">\r\n      <sm-item *ngFor=\"let group of groups\" [ngClass]=\"{'item-selected': group.name === group_selected?.name}\" (click)=\"selecte_group(group)\">\r\n        <i style=\"color: red; cursor: pointer;\" (click)=\"group_selected = group; confirmDeleteGroup.show();\">x</i>\r\n        {{group.name}}\r\n      </sm-item>\r\n    </sm-list> -->\r\n  <div class=\"two wide column\">\r\n    <sm-button class=\"fluid yellow\" icon=\"plus\" (click)=\"createGroupModel.show({inverted: false})\">Nuevo grupo</sm-button>\r\n    <br>\r\n    <div class=\"ui vertical fluid tabular menu\" style=\"height: 100%;\">\r\n      <a class=\"item\" *ngFor=\"let group of groups\" routerLink=\"/dashboard/base/{{base_id}}/groups/group/{{group._id}}/colonies\"\r\n        routerLinkActive=\"active\">\r\n        {{group.name}}\r\n      </a>\r\n    </div>\r\n\r\n    <h5 *ngIf=\"groups.length == 0\">\r\n      Aún no hay grupos registrados.\r\n    </h5>\r\n  </div>\r\n  <div class=\"fourteen wide stretched column\">\r\n    <router-outlet></router-outlet>\r\n  </div>\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n  <sm-modal title=\"Nuevo grupo\" #createGroupModel>\r\n    <modal-content>\r\n      <div class=\"ui fluid input\">\r\n        <input type=\"text\" [(ngModel)]=\"new_group_name\" placeholder=\"Ingresa nombre de grupo\">\r\n      </div>\r\n    </modal-content>\r\n\r\n    <modal-actions>\r\n      <div class=\"ui buttons\">\r\n        <button class=\"ui negative button\" (click)=\"createGroupModel.hide()\">Cancelar</button>\r\n        <button class=\"ui button primary\" [disabled]=\"!new_group_name\" (click)=\"create_group(); createGroupModel.hide();\" style=\"margin-left: 10px;\">Guardar\r\n          grupo\r\n        </button>\r\n      </div>\r\n    </modal-actions>\r\n  </sm-modal>\r\n\r\n  <sm-modal class=\"basic\" title=\"Eliminar grupo\" #confirmDeleteGroup>\r\n    <modal-content>\r\n      <p>Se eliminaran las colonias y tarifas relacionadas a este grupo.</p>\r\n    </modal-content>\r\n\r\n    <modal-actions>\r\n      <div class=\"ui buttons\">\r\n        <button class=\"ui button\" (click)=\"confirmDeleteGroup.hide()\">Cancelar</button>\r\n        <button class=\"ui button negative\" (click)=\"delete_group(); confirmDeleteGroup.hide();\" style=\"margin-left: 10px;\">Eliminar\r\n          grupo\r\n        </button>\r\n      </div>\r\n    </modal-actions>\r\n  </sm-modal>\r\n\r\n  <style>\r\n    .item-selected {\r\n      background-color: #FFF8E1;\r\n    }\r\n  </style>\r\n"
 
 /***/ }),
 
@@ -288,6 +293,7 @@ var GroupsComponent = /** @class */ (function () {
             _this.groups = groups;
             if (_this.groups.length > 0) {
                 //this.group_selected = groups[0];
+                _this.router.navigate(["/dashboard/base/" + _this.base_id + "/groups/group/" + _this.groups[0]._id + "/colonies"]);
             }
         });
     };
@@ -611,7 +617,7 @@ module.exports = "/deep/ .logo-xcero {\r\n  width: 6em !important;\r\n}\r\n\r\n/
 /***/ "./src/app/DashboradComponent/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<sm-menu title=\"XCero\" logoClass=\"logo-xcero\" class=\"ui inverted\" logo=\"assets/xcero_oficial.png\">\r\n\r\n  <sm-menu class=\"menu right secondary\">\r\n    <a class=\"item yellow\" sm-item routerLink=\"drivers\" routerLinkActive=\"active\">Conductores</a>\r\n    <a class=\"item yellow\" routerLink=\"tariff\" routerLinkActive=\"active\" sm-item>Tarifas</a>\r\n    <a class=\"item yellow\" sm-item  routerLinkActive=\"active\">Bases</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"notices\" routerLinkActive=\"active\">Avisos</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"reports\" routerLinkActive=\"active\">Reportes</a>\r\n    <a class=\"item\" (click)=\"logOut()\">\r\n      <i class=\"icon power off\"></i>\r\n    </a>\r\n  </sm-menu>\r\n</sm-menu>\r\n\r\n<router-outlet></router-outlet>\r\n\r\n<style>\r\n  .logo-xcero {\r\n    width: 6em !important;\r\n  }\r\n</style>\r\n"
+module.exports = "<sm-menu title=\"XCero\" logoClass=\"logo-xcero\" class=\"ui inverted\" logo=\"assets/xcero_oficial.png\">\r\n\r\n  <sm-menu class=\"menu right secondary\">\r\n    <a class=\"item yellow\" sm-item routerLink=\"drivers\" routerLinkActive=\"active\">Conductores</a>\r\n    <a class=\"item yellow\" routerLink=\"tariff\" routerLinkActive=\"active\" sm-item>Tarifas</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"bases\" routerLinkActive=\"active\">Bases</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"notices\" routerLinkActive=\"active\">Avisos</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"reports\" routerLinkActive=\"active\">Reportes</a>\r\n    <a class=\"item\" (click)=\"logOut()\">\r\n      <i class=\"icon power off\"></i>\r\n    </a>\r\n  </sm-menu>\r\n</sm-menu>\r\n\r\n<router-outlet></router-outlet>\r\n\r\n<style>\r\n  .logo-xcero {\r\n    width: 6em !important;\r\n  }\r\n</style>\r\n"
 
 /***/ }),
 
