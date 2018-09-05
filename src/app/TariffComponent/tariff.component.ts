@@ -143,7 +143,7 @@ export class TariffComponent implements OnInit {
   saveTariff() {
 
     const gp1 = this.groups_places.find(gp => gp._id === this.group_selected);
-    const gp2 = this.groups_places.find(
+    const gp2 = this.groups_places_available.find(
       gp => gp._id === this.second_group_selected
     );
     let tariff = {};
@@ -184,7 +184,7 @@ export class TariffComponent implements OnInit {
         this.tariffs.push(tariff_created);
         this.tariffs = this.tariffs.sort(this.sortTariffs);
         this.cost = null;
-        this.second_group_selected = '';
+        this.selectGroup(gp2);
       });
   }
 

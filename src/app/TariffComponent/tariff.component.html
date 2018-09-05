@@ -7,7 +7,7 @@
         <h4 class="ui dividing header">Nueva tarifa</h4>
 
         <div class="field">
-          <select [(ngModel)]="group_selected">
+          <select [(ngModel)]="group_selected" (change)="selectGroup()">
             <option value="">Selecciona un grupo o lugar de origen</option>
             <option *ngFor="let gp of groups_places" [value]="gp._id">{{gp.base + ' - ' + gp.name}}</option>
           </select>
@@ -15,10 +15,10 @@
 
         <div class="ui active centered inline loader" style="margin-top: 20px;" *ngIf="loading_available"></div>
 
-        <div class="field" *ngIf="group_selected && groups_places.length > 0 && !loading_available">
+        <div class="field" *ngIf="group_selected && groups_places_available.length > 0 && !loading_available">
           <select [(ngModel)]="second_group_selected">
             <option value="">Selecciona un grupo o lugar de destino</option>
-            <option *ngFor="let gp of groups_places" [value]="gp._id">{{gp.base + ' - ' + gp.name}}</option>
+            <option *ngFor="let gp of groups_places_available" [value]="gp._id">{{gp.base + ' - ' + gp.name}}</option>
           </select>
         </div>
 
