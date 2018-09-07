@@ -44,6 +44,7 @@ import { ReportDriversComponent } from './ReportDriversComponent/report.driver.c
 import { AreasComponent } from './BasesComponent/BaseComponent/AreasComponent/areas.component';
 import { ColoniesComponent } from './BasesComponent/BaseComponent/ColoniesComponent/colonies.component';
 import { GroupComponent } from './BasesComponent/BaseComponent/GroupComponent/group.component';
+import { AreaService } from './_services/area.service';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -63,6 +64,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'groups', pathMatch: 'full' },
       { path: 'groups', component: GroupsComponent, children: [
         { path: 'group/:id', component: GroupComponent, children: [
+          { path: '', redirectTo: 'colonies', pathMatch: 'full' },
           { path: 'colonies', component: ColoniesComponent },
           { path: 'areas', component: AreasComponent }
         ]}
@@ -142,7 +144,8 @@ const routes: Routes = [
     PlacesService,
     SiteService,
     { provide: 'SnotifyToastConfig', useValue: ToastDefaults},
-    SnotifyService
+    SnotifyService,
+    AreaService
   ],
   bootstrap: [AppComponent]
 })

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone, OnChanges } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Group } from "../../../_models/group";
 import { GroupService } from "../../../_services/group.service";
@@ -32,13 +32,12 @@ export class GroupsComponent implements OnInit, OnDestroy {
   public colonies: any[] = [];
 
   public selected_group: any;
+  public url: string = '';
 
   constructor(
     private groupService: GroupService,
-    private colonyService: ColonyService,
     private route: ActivatedRoute,
     private router: Router,
-    private fb: FormBuilder,
   ) { }
 
   ngOnInit() {
@@ -52,7 +51,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
         this.groups = groups;
         if (this.groups.length > 0) {
           //this.group_selected = groups[0];
-          this.router.navigate([`/dashboard/base/${this.base_id}/groups/group/${this.groups[0]._id}/colonies`])
+          this.router.navigate([`/dashboard/base/${this.base_id}/groups/group/${this.groups[0]._id}`]);
         }
       }
     )
@@ -62,6 +61,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
+
 
   create_group() {
     this.groupService.group_create(this.base_id, { name: this.new_group_name }).subscribe(

@@ -1,38 +1,52 @@
 <div class="ui grid" style="height: 100%;">
-  <div class="two wide column" style="border-right: 1px solid black;">
-    <sm-button class="fluid yellow" icon="plus">Nueva area</sm-button>
+  <div class="two wide column">
 
+      <div class="ui list">
+          <div class="item" *ngFor="let area of areas_show()" [ngClass]="{'selected': area._id == selected_polygon._id}">
+            <div class="header"> <i style="color: red; cursor: pointer;" (click)="delete_polygon(area)">x</i> {{area.name}}</div>
+          </div>
+        </div>
 
+      <h5 *ngIf="polygons.length == 0" style="margin-top: 2em;">
+          Aún no hay áreas registradas en este grupo.
+        </h5>
 
   </div>
 
-  <div class="three wide column">
-
-    <div class="ui form">
-      <div class="field">
-        <input type="text" placeholder="Nombre area">
-      </div>
-    </div> <br>
-      <div class="ui form">
-          <div class="field">
-              <div class="two fields">
-                <div class="field">
-                  <input type="number"  placeholder="Latitud">
-                </div>
-                <div class="field">
-                  <input type="number"  placeholder="Longitud">
-                </div>
+  <div class="fourteen wide column">
+    <div>
+        <div class="ui form" style="display: inline-block; width: 70%; margin-bottom: -3em;" *ngIf="creating">
+              <div class="field">
+                <input type="text" placeholder="Nombre área" [(ngModel)]="name">
               </div>
-            </div>
-            <button class="ui icon button yellow"><i class="icon plus"></i></button>
-      </div>
-  </div>
+          </div>
 
-  <div class="eleven wide column">
-    <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom">
-      	<agm-polygon [paths]="polygon"></agm-polygon>
-    </agm-map>
+          <button class="ui button yellow" icon="plus" style="display: inline-block;
+              float: right;" (click)="new_polygon()" *ngIf="!creating">Nueva area</button>
+
+          <button class="ui button red" icon="plus" style="display: inline-block;
+      float: right;" (click)="cancel_polygon()" *ngIf="creating">Cancelar</button>
+
+<button class="ui button yellow" icon="plus" style="display: inline-block;
+float: right;" (click)="save_polygon()"  *ngIf="creating" [disabled]="!name" [ngClass]="{'loading disabled': loading}">Guardar</button>
+    </div>
+
+    <div style="margin-top: 3em;">
+        <agm-map #AGM [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom">
+          	<agm-polygon (polyClick)="select_polygon(area)" *ngFor="let area of polygons" [paths]="area.paths" [fillColor]="area.group != group_id ? 'yellow': ''"></agm-polygon>
+          </agm-map>
+    </div>
 
 
   </div>
 </div>
+
+<style>
+  agm-map {
+    height: 600px;
+  }
+
+  .selected {
+    background-color: orange;
+  }
+</style>

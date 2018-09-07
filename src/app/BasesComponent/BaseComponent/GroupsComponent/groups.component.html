@@ -8,9 +8,9 @@
   <div class="two wide column">
     <sm-button class="fluid yellow" icon="plus" (click)="createGroupModel.show({inverted: false})">Nuevo grupo</sm-button>
     <br>
-    <div class="ui vertical fluid tabular menu" style="height: 100%;">
-      <a class="item" *ngFor="let group of groups" routerLink="/dashboard/base/{{base_id}}/groups/group/{{group._id}}/colonies"
-        routerLinkActive="active">
+    <div class="ui vertical fluid tabular menu" style="height: 80%;">
+      <a class="item" *ngFor="let group of groups" routerLink="/dashboard/base/{{base_id}}/groups/group/{{group._id}}"
+         routerLinkActive="active">
         {{group.name}}
       </a>
     </div>
@@ -22,11 +22,6 @@
   <div class="fourteen wide stretched column">
     <router-outlet></router-outlet>
   </div>
-
-
-
-
-
 
 
   <sm-modal title="Nuevo grupo" #createGroupModel>

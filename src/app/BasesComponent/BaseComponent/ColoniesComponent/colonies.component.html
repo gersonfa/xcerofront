@@ -1,5 +1,5 @@
 <div class="ui grid" style="height: 100%;">
-    <div class="two wide column" style="border-right: 1px solid black;">
+    <div class="two wide column">
         <sm-list class="divided">
           <sm-item *ngFor="let colony of colonies">
             <i style="color: red; cursor: pointer;" (click)="delete_colony(colony)">x</i>
@@ -7,13 +7,11 @@
           </sm-item>
         </sm-list>
 
-        <h5 *ngIf="colonies.length == 0 && group_selected">
+        <h5 *ngIf="colonies.length == 0">
           Aún no hay colonias registradas en este grupo.
         </h5>
 
-        <h5 *ngIf="colonies.length == 0 && !group_selected">
-          Selecciona un grupo
-        </h5>
+
       </div>
 
       <div class="fourteen wide column">
