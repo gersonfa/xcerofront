@@ -84,4 +84,9 @@ export class DriversService {
     return this.http.get(`${API_URL}/api/report`)
       .map(r => r.json());
   }
+
+  service_global(params): Observable<any[]> {
+    return this.http.get(`${API_URL}/api/global_service`, { params })
+      .map(r => r.json());
+  }
 }

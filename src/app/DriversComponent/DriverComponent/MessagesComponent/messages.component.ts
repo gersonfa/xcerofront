@@ -28,13 +28,16 @@ export class MessagesComponent implements OnInit {
   }
 
   send() {
-    if (this.body != null && this.body != '') {
+    if (this.body != null && this.body !== '') {
       const inbox = {
         date: (new Date).getTime(),
         body: this.body
       }
       this.driversService.driver_inbox_create(this.driver_id, inbox).subscribe(
-        inbox_c => this.inboxs.push(inbox_c)
+        inbox_c => {
+          this.inboxs.unshift(inbox_c);
+          this.body = '';
+        }
       )
     }
   }

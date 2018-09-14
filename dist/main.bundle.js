@@ -48,13 +48,13 @@ var AreasComponent = /** @class */ (function () {
     function AreasComponent(areaService, route) {
         this.areaService = areaService;
         this.route = route;
-        this.zoom = 15;
+        this.zoom = 11;
         this.latitude = 19.0443254;
         this.longitude = -98.2019682;
         this.paths = [
-            { lat: 19.045198, lng: -98.200123 },
-            { lat: 19.042277, lng: -98.192656 },
-            { lat: 19.035421, lng: -98.198235 }
+            { lat: 19.059588, lng: -98.617376 },
+            { lat: 19.029136, lng: -98.571992 },
+            { lat: 19.037514, lng: -98.618716 }
         ];
         this.polygons = [];
         this.name = '';
@@ -692,7 +692,7 @@ module.exports = "/deep/ .logo-xcero {\r\n  width: 6em !important;\r\n}\r\n\r\n/
 /***/ "./src/app/DashboradComponent/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<sm-menu title=\"XCero\" logoClass=\"logo-xcero\" class=\"ui inverted\" logo=\"assets/xcero_oficial.png\">\r\n\r\n  <sm-menu class=\"menu right secondary\">\r\n    <a class=\"item yellow\" sm-item routerLink=\"drivers\" routerLinkActive=\"active\">Conductores</a>\r\n    <a class=\"item yellow\" routerLink=\"tariff\" routerLinkActive=\"active\" sm-item>Tarifas</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"bases\" routerLinkActive=\"active\">Bases</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"notices\" routerLinkActive=\"active\">Avisos</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"reports\" routerLinkActive=\"active\">Reportes</a>\r\n    <a class=\"item\" (click)=\"logOut()\">\r\n      <i class=\"icon power off\"></i>\r\n    </a>\r\n  </sm-menu>\r\n</sm-menu>\r\n\r\n<router-outlet></router-outlet>\r\n\r\n<style>\r\n  .logo-xcero {\r\n    width: 6em !important;\r\n  }\r\n</style>\r\n"
+module.exports = "<sm-menu title=\"XCero\" logoClass=\"logo-xcero\" class=\"ui inverted\" logo=\"assets/xcero_oficial.png\">\r\n\r\n  <sm-menu class=\"menu right secondary\">\r\n      <a class=\"item yellow\" sm-item routerLink=\"services\" routerLinkActive=\"active\">Servicios</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"drivers\" routerLinkActive=\"active\">Conductores</a>\r\n    <a class=\"item yellow\" routerLink=\"tariff\" routerLinkActive=\"active\" sm-item>Tarifas</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"bases\" routerLinkActive=\"active\">Bases</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"notices\" routerLinkActive=\"active\">Avisos</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"reports\" routerLinkActive=\"active\">Reportes</a>\r\n    <a class=\"item\" (click)=\"logOut()\">\r\n      <i class=\"icon power off\"></i>\r\n    </a>\r\n  </sm-menu>\r\n</sm-menu>\r\n\r\n<router-outlet></router-outlet>\r\n\r\n<style>\r\n  .logo-xcero {\r\n    width: 6em !important;\r\n  }\r\n</style>\r\n"
 
 /***/ }),
 
@@ -832,12 +832,15 @@ var MessagesComponent = /** @class */ (function () {
     };
     MessagesComponent.prototype.send = function () {
         var _this = this;
-        if (this.body != null && this.body != '') {
+        if (this.body != null && this.body !== '') {
             var inbox = {
                 date: (new Date).getTime(),
                 body: this.body
             };
-            this.driversService.driver_inbox_create(this.driver_id, inbox).subscribe(function (inbox_c) { return _this.inboxs.push(inbox_c); });
+            this.driversService.driver_inbox_create(this.driver_id, inbox).subscribe(function (inbox_c) {
+                _this.inboxs.unshift(inbox_c);
+                _this.body = '';
+            });
         }
     };
     MessagesComponent = __decorate([
@@ -1274,6 +1277,100 @@ var DriversComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_drivers_service__["a" /* DriversService */]])
     ], DriversComponent);
     return DriversComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/GlobalServicesComponent/global.services.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"ui padded grid\">\r\n  <div class=\"row\">\r\n    <div class=\"sixteen wide column\" style=\"margin-bottom: 10px;\">\r\n      <div class=\"ui input\">\r\n        <input placeholder=\"Fecha inicio\" [(ngModel)]=\"dateTime\" [owlDateTimeTrigger]=\"dt\" [owlDateTime]=\"dt\">\r\n        <owl-date-time #dt></owl-date-time>\r\n      </div>\r\n\r\n      <div class=\"ui input\" style=\"margin-left: 10px;\">\r\n        <input placeholder=\"Fecha fin\" [(ngModel)]=\"dateTime2\" [owlDateTimeTrigger]=\"dt2\" [owlDateTime]=\"dt2\">\r\n        <owl-date-time #dt2></owl-date-time>\r\n      </div>\r\n\r\n      <button class=\"ui button\" (click)=\"search()\" [ngClass]=\"{'loading disabled': loading}\" [disabled]=\"dateTime == undefined || dateTime2 == undefined\"\r\n        style=\"margin-left: 10px;\">Buscar</button>\r\n      <button class=\"ui button\" (click)=\"clean()\">Borrar</button>\r\n      <span style=\"float: right;\">Total servicios: {{total()}}</span>\r\n    </div>\r\n\r\n    <div class=\"three wide column\">\r\n      <table class=\"ui very compact table\" style=\"max-width: 100%;\r\n      table-layout: fixed;\">\r\n        <thead>\r\n          <tr>\r\n            <th>#Unidad</th>\r\n            <th>#Servicios</th>\r\n          </tr>\r\n        </thead>\r\n        <tbody>\r\n          <tr *ngFor=\"let unit of units; let i = index;\" [ngClass]=\"{'selected': unit_selected && unit_selected.unit_number == unit.unit_number}\">\r\n            <td>\r\n              <div class=\"ui input\" style=\"width: 70%;\">\r\n                <input type=\"number\" [(ngModel)]=\"unit.unit_number\" (keyup.enter)=\"add_unit(unit.unit_number, i)\"\r\n                  (keyup.backspace)=\"delete(unit.unit_number, i)\">\r\n              </div>\r\n            </td>\r\n            <td (click)=\"unit_selected = unit\">{{unit.services.length > 0 ? unit.services.length : ''}}</td>\r\n          </tr>\r\n        </tbody>\r\n      </table>\r\n    </div>\r\n\r\n    <div class=\"thirteen wide column\">\r\n      <table class=\"ui very compact table\" >\r\n        <thead>\r\n          <tr>\r\n            <th>Cliente</th>\r\n            <th>Origen</th>\r\n            <th>Destino</th>\r\n            <th>Hora</th>\r\n            <th>Costo</th>\r\n          </tr>\r\n        </thead>\r\n        <tbody *ngIf=\"unit_selected\">\r\n          <tr *ngFor=\"let service of unit_selected.services\">\r\n            <td>{{service.user.full_name}}</td>\r\n            <td>{{service.details}}</td>\r\n            <td>{{service.destiny_details}}</td>\r\n            <td>{{service.end_time | date:'dd/MM/yy HH:mm'}}</td>\r\n            <td>{{calculateTotal(service) | currency:'MXN':'symbol-narrow'}}</td>\r\n          </tr>\r\n        </tbody>\r\n      </table>\r\n\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n<style>\r\n  .selected {\r\n    background-color: lightgoldenrodyellow;\r\n  }\r\n</style>\r\n"
+
+/***/ }),
+
+/***/ "./src/app/GlobalServicesComponent/global.services.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GlobalServicesComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_drivers_service__ = __webpack_require__("./src/app/_services/drivers.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var GlobalServicesComponent = /** @class */ (function () {
+    function GlobalServicesComponent(driversService) {
+        this.driversService = driversService;
+        this.dateTime = new Date;
+        this.dateTime2 = new Date;
+        this.units = [{ unit_number: '', services: [] }];
+        this.loading = false;
+    }
+    GlobalServicesComponent.prototype.ngOnInit = function () {
+        this.dateTime.setHours(0, 0, 0, 0);
+        this.dateTime2.setHours(23, 59, 59, 59);
+    };
+    GlobalServicesComponent.prototype.add_unit = function (value, i) {
+        if (value === '' || value === undefined) {
+            return;
+        }
+        if (i === 0) {
+            this.units.push({ unit_number: value, services: [] });
+            this.units[i].unit_number = '';
+            this.units[i].services = [];
+        }
+    };
+    GlobalServicesComponent.prototype.delete = function (value, i) {
+        if (value === '' || value === null) {
+            this.units.splice(i, 1);
+        }
+    };
+    GlobalServicesComponent.prototype.search = function () {
+        var _this = this;
+        this.loading = true;
+        this.unit_selected = null;
+        var init_date = this.dateTime.getTime();
+        var end_date = this.dateTime2.getTime();
+        var unit_numbers = this.units.filter(function (u) { return u.unit_number; }).map(function (u) { return u.unit_number; });
+        this.driversService.service_global({ init_date: init_date, end_date: end_date, unit_numbers: JSON.stringify(unit_numbers) }).subscribe(function (services) {
+            _this.units = services;
+            _this.loading = false;
+        });
+    };
+    GlobalServicesComponent.prototype.clean = function () {
+        this.units = [{ unit_number: '', services: [] }];
+    };
+    GlobalServicesComponent.prototype.calculateTotal = function (s) {
+        var total = s.tariff ? s.tariff.cost : 0;
+        s.fees.map(function (f) {
+            total += f.price;
+        });
+        return total;
+    };
+    GlobalServicesComponent.prototype.total = function () {
+        var total = 0;
+        this.units.map(function (u) {
+            total += u.services.length;
+        });
+        return total;
+    };
+    GlobalServicesComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            template: __webpack_require__("./src/app/GlobalServicesComponent/global.services.component.html")
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_drivers_service__["a" /* DriversService */]])
+    ], GlobalServicesComponent);
+    return GlobalServicesComponent;
 }());
 
 
@@ -2540,6 +2637,10 @@ var DriversService = /** @class */ (function () {
         return this.http.get(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/report")
             .map(function (r) { return r.json(); });
     };
+    DriversService.prototype.service_global = function (params) {
+        return this.http.get(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/global_service", { params: params })
+            .map(function (r) { return r.json(); });
+    };
     DriversService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_angular2_jwt__["AuthHttp"]])
@@ -2826,6 +2927,7 @@ var AppComponent = /** @class */ (function () {
 
 "use strict";
 /* unused harmony export authHttpServiceFactory */
+/* unused harmony export DefaultInit */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/platform-browser.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_angular2_jwt__ = __webpack_require__("./node_modules/angular2-jwt/angular2-jwt.js");
@@ -2838,42 +2940,55 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_ngx_bar_rating__ = __webpack_require__("./node_modules/ngx-bar-rating/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_ngx_pagination__ = __webpack_require__("./node_modules/ngx-pagination/dist/ngx-pagination.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__app_component__ = __webpack_require__("./src/app/app.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__LoginComponent_login_component__ = __webpack_require__("./src/app/LoginComponent/login.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__services_authentication_service__ = __webpack_require__("./src/app/_services/authentication.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__guards_authentication_guard__ = __webpack_require__("./src/app/_guards/authentication.guard.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__DashboradComponent_dashboard_component__ = __webpack_require__("./src/app/DashboradComponent/dashboard.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__BasesComponent_bases_component__ = __webpack_require__("./src/app/BasesComponent/bases.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__BasesComponent_BaseCreateComponent_base_create_component__ = __webpack_require__("./src/app/BasesComponent/BaseCreateComponent/base.create.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__services_bases_service__ = __webpack_require__("./src/app/_services/bases.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__BasesComponent_BaseComponent_base_component__ = __webpack_require__("./src/app/BasesComponent/BaseComponent/base.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__services_group_service__ = __webpack_require__("./src/app/_services/group.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__services_colony_service__ = __webpack_require__("./src/app/_services/colony.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__TariffComponent_tariff_component__ = __webpack_require__("./src/app/TariffComponent/tariff.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__services_tariff_service__ = __webpack_require__("./src/app/_services/tariff.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__DriversComponent_drivers_component__ = __webpack_require__("./src/app/DriversComponent/drivers.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__DriversComponent_DriverFormComponent_driver_form_component__ = __webpack_require__("./src/app/DriversComponent/DriverFormComponent/driver.form.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__services_drivers_service__ = __webpack_require__("./src/app/_services/drivers.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__services_places_service__ = __webpack_require__("./src/app/_services/places.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__PlacesComponent_places_component__ = __webpack_require__("./src/app/PlacesComponent/places.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__services_site_service__ = __webpack_require__("./src/app/_services/site.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__BasesComponent_BaseComponent_GroupsComponent_groups_component__ = __webpack_require__("./src/app/BasesComponent/BaseComponent/GroupsComponent/groups.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30_ng_snotify__ = __webpack_require__("./node_modules/ng-snotify/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__DriversComponent_DriverComponent_driver_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/driver.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__DriversComponent_DriverComponent_ServicesComponent_services_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/ServicesComponent/services.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__DriversComponent_DriverComponent_MessagesComponent_messages_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/MessagesComponent/messages.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__TariffComponent_CheckTariffComponent_check_tariff_component__ = __webpack_require__("./src/app/TariffComponent/CheckTariffComponent/check.tariff.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__TariffComponent_SearchTariff_search_tariff_component__ = __webpack_require__("./src/app/TariffComponent/SearchTariff/search.tariff.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__TariffComponent_EditTariffComponent_edit_tariff_component__ = __webpack_require__("./src/app/TariffComponent/EditTariffComponent/edit.tariff.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__DriversComponent_DriverComponent_CommentsComponent_comments_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/CommentsComponent/comments.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__DriversComponent_DriverComponent_ReportsComponent_reports_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/ReportsComponent/reports.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__NoticeComponent_notice_component__ = __webpack_require__("./src/app/NoticeComponent/notice.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__ReportDriversComponent_report_driver_component__ = __webpack_require__("./src/app/ReportDriversComponent/report.driver.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__BasesComponent_BaseComponent_AreasComponent_areas_component__ = __webpack_require__("./src/app/BasesComponent/BaseComponent/AreasComponent/areas.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_42__BasesComponent_BaseComponent_ColoniesComponent_colonies_component__ = __webpack_require__("./src/app/BasesComponent/BaseComponent/ColoniesComponent/colonies.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_43__BasesComponent_BaseComponent_GroupComponent_group_component__ = __webpack_require__("./src/app/BasesComponent/BaseComponent/GroupComponent/group.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__services_area_service__ = __webpack_require__("./src/app/_services/area.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_platform_browser_animations__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/animations.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__app_component__ = __webpack_require__("./src/app/app.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__LoginComponent_login_component__ = __webpack_require__("./src/app/LoginComponent/login.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__services_authentication_service__ = __webpack_require__("./src/app/_services/authentication.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__guards_authentication_guard__ = __webpack_require__("./src/app/_guards/authentication.guard.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__DashboradComponent_dashboard_component__ = __webpack_require__("./src/app/DashboradComponent/dashboard.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__BasesComponent_bases_component__ = __webpack_require__("./src/app/BasesComponent/bases.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__BasesComponent_BaseCreateComponent_base_create_component__ = __webpack_require__("./src/app/BasesComponent/BaseCreateComponent/base.create.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__services_bases_service__ = __webpack_require__("./src/app/_services/bases.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__BasesComponent_BaseComponent_base_component__ = __webpack_require__("./src/app/BasesComponent/BaseComponent/base.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__services_group_service__ = __webpack_require__("./src/app/_services/group.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__services_colony_service__ = __webpack_require__("./src/app/_services/colony.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__TariffComponent_tariff_component__ = __webpack_require__("./src/app/TariffComponent/tariff.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__services_tariff_service__ = __webpack_require__("./src/app/_services/tariff.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__DriversComponent_drivers_component__ = __webpack_require__("./src/app/DriversComponent/drivers.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__DriversComponent_DriverFormComponent_driver_form_component__ = __webpack_require__("./src/app/DriversComponent/DriverFormComponent/driver.form.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__services_drivers_service__ = __webpack_require__("./src/app/_services/drivers.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__services_places_service__ = __webpack_require__("./src/app/_services/places.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__PlacesComponent_places_component__ = __webpack_require__("./src/app/PlacesComponent/places.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__services_site_service__ = __webpack_require__("./src/app/_services/site.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__BasesComponent_BaseComponent_GroupsComponent_groups_component__ = __webpack_require__("./src/app/BasesComponent/BaseComponent/GroupsComponent/groups.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31_ng_snotify__ = __webpack_require__("./node_modules/ng-snotify/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__DriversComponent_DriverComponent_driver_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/driver.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__DriversComponent_DriverComponent_ServicesComponent_services_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/ServicesComponent/services.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__DriversComponent_DriverComponent_MessagesComponent_messages_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/MessagesComponent/messages.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__TariffComponent_CheckTariffComponent_check_tariff_component__ = __webpack_require__("./src/app/TariffComponent/CheckTariffComponent/check.tariff.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__TariffComponent_SearchTariff_search_tariff_component__ = __webpack_require__("./src/app/TariffComponent/SearchTariff/search.tariff.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__TariffComponent_EditTariffComponent_edit_tariff_component__ = __webpack_require__("./src/app/TariffComponent/EditTariffComponent/edit.tariff.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__DriversComponent_DriverComponent_CommentsComponent_comments_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/CommentsComponent/comments.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__DriversComponent_DriverComponent_ReportsComponent_reports_component__ = __webpack_require__("./src/app/DriversComponent/DriverComponent/ReportsComponent/reports.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__NoticeComponent_notice_component__ = __webpack_require__("./src/app/NoticeComponent/notice.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__ReportDriversComponent_report_driver_component__ = __webpack_require__("./src/app/ReportDriversComponent/report.driver.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_42__BasesComponent_BaseComponent_AreasComponent_areas_component__ = __webpack_require__("./src/app/BasesComponent/BaseComponent/AreasComponent/areas.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_43__BasesComponent_BaseComponent_ColoniesComponent_colonies_component__ = __webpack_require__("./src/app/BasesComponent/BaseComponent/ColoniesComponent/colonies.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__BasesComponent_BaseComponent_GroupComponent_group_component__ = __webpack_require__("./src/app/BasesComponent/BaseComponent/GroupComponent/group.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_45__services_area_service__ = __webpack_require__("./src/app/_services/area.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_46__GlobalServicesComponent_global_services_component__ = __webpack_require__("./src/app/GlobalServicesComponent/global.services.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_47_ng_pick_datetime__ = __webpack_require__("./node_modules/ng-pick-datetime/picker.js");
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2926,42 +3041,59 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
+
+
 function authHttpServiceFactory(http, options) {
     return new __WEBPACK_IMPORTED_MODULE_1_angular2_jwt__["AuthHttp"](new __WEBPACK_IMPORTED_MODULE_1_angular2_jwt__["AuthConfig"]({
         headerPrefix: 'BEARER',
         globalHeaders: [{ 'Content-Type': 'application/json' }]
     }), http, options);
 }
+var DefaultInit = /** @class */ (function (_super) {
+    __extends(DefaultInit, _super);
+    function DefaultInit() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.setBtnLabel = 'Establecer';
+        _this.cancelBtnLabel = 'Cancelar';
+        _this.rangeFromLabel = 'Desde';
+        _this.rangeToLabel = 'A';
+        return _this;
+    }
+    return DefaultInit;
+}(__WEBPACK_IMPORTED_MODULE_47_ng_pick_datetime__["b" /* OwlDateTimeIntl */]));
+
 var routes = [
-    { path: 'login', component: __WEBPACK_IMPORTED_MODULE_11__LoginComponent_login_component__["a" /* LoginComponent */] },
+    { path: 'login', component: __WEBPACK_IMPORTED_MODULE_12__LoginComponent_login_component__["a" /* LoginComponent */] },
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-    { path: 'dashboard', component: __WEBPACK_IMPORTED_MODULE_14__DashboradComponent_dashboard_component__["a" /* DashboardComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_authentication_guard__["a" /* AuthGuard */]], children: [
+    { path: 'dashboard', component: __WEBPACK_IMPORTED_MODULE_15__DashboradComponent_dashboard_component__["a" /* DashboardComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_14__guards_authentication_guard__["a" /* AuthGuard */]], children: [
             { path: '', redirectTo: 'drivers', pathMatch: 'full' },
-            { path: 'bases', component: __WEBPACK_IMPORTED_MODULE_15__BasesComponent_bases_component__["a" /* BasesComponent */] },
-            { path: 'bases/new', component: __WEBPACK_IMPORTED_MODULE_16__BasesComponent_BaseCreateComponent_base_create_component__["a" /* BaseCreateComponent */] },
-            { path: 'base/:id', component: __WEBPACK_IMPORTED_MODULE_18__BasesComponent_BaseComponent_base_component__["a" /* BaseComponent */], children: [
+            { path: 'bases', component: __WEBPACK_IMPORTED_MODULE_16__BasesComponent_bases_component__["a" /* BasesComponent */] },
+            { path: 'bases/new', component: __WEBPACK_IMPORTED_MODULE_17__BasesComponent_BaseCreateComponent_base_create_component__["a" /* BaseCreateComponent */] },
+            { path: 'base/:id', component: __WEBPACK_IMPORTED_MODULE_19__BasesComponent_BaseComponent_base_component__["a" /* BaseComponent */], children: [
                     { path: '', redirectTo: 'groups', pathMatch: 'full' },
-                    { path: 'groups', component: __WEBPACK_IMPORTED_MODULE_29__BasesComponent_BaseComponent_GroupsComponent_groups_component__["a" /* GroupsComponent */], children: [
-                            { path: 'group/:id', component: __WEBPACK_IMPORTED_MODULE_43__BasesComponent_BaseComponent_GroupComponent_group_component__["a" /* GroupComponent */], children: [
+                    { path: 'groups', component: __WEBPACK_IMPORTED_MODULE_30__BasesComponent_BaseComponent_GroupsComponent_groups_component__["a" /* GroupsComponent */], children: [
+                            { path: 'group/:id', component: __WEBPACK_IMPORTED_MODULE_44__BasesComponent_BaseComponent_GroupComponent_group_component__["a" /* GroupComponent */], children: [
                                     { path: '', redirectTo: 'colonies', pathMatch: 'full' },
-                                    { path: 'colonies', component: __WEBPACK_IMPORTED_MODULE_42__BasesComponent_BaseComponent_ColoniesComponent_colonies_component__["a" /* ColoniesComponent */] },
-                                    { path: 'areas', component: __WEBPACK_IMPORTED_MODULE_41__BasesComponent_BaseComponent_AreasComponent_areas_component__["a" /* AreasComponent */] }
+                                    { path: 'colonies', component: __WEBPACK_IMPORTED_MODULE_43__BasesComponent_BaseComponent_ColoniesComponent_colonies_component__["a" /* ColoniesComponent */] },
+                                    { path: 'areas', component: __WEBPACK_IMPORTED_MODULE_42__BasesComponent_BaseComponent_AreasComponent_areas_component__["a" /* AreasComponent */] }
                                 ] }
                         ] },
-                    { path: 'places', component: __WEBPACK_IMPORTED_MODULE_27__PlacesComponent_places_component__["a" /* PlacesComponent */] }
+                    { path: 'places', component: __WEBPACK_IMPORTED_MODULE_28__PlacesComponent_places_component__["a" /* PlacesComponent */] }
                 ] },
-            { path: 'tariff', component: __WEBPACK_IMPORTED_MODULE_21__TariffComponent_tariff_component__["a" /* TariffComponent */] },
-            { path: 'drivers', component: __WEBPACK_IMPORTED_MODULE_23__DriversComponent_drivers_component__["a" /* DriversComponent */] },
-            { path: 'drivers/create', component: __WEBPACK_IMPORTED_MODULE_24__DriversComponent_DriverFormComponent_driver_form_component__["a" /* DriverFormComponent */] },
-            { path: 'driver/:id', component: __WEBPACK_IMPORTED_MODULE_31__DriversComponent_DriverComponent_driver_component__["a" /* DriverComponent */], children: [
+            { path: 'tariff', component: __WEBPACK_IMPORTED_MODULE_22__TariffComponent_tariff_component__["a" /* TariffComponent */] },
+            { path: 'drivers', component: __WEBPACK_IMPORTED_MODULE_24__DriversComponent_drivers_component__["a" /* DriversComponent */] },
+            { path: 'drivers/create', component: __WEBPACK_IMPORTED_MODULE_25__DriversComponent_DriverFormComponent_driver_form_component__["a" /* DriverFormComponent */] },
+            { path: 'driver/:id', component: __WEBPACK_IMPORTED_MODULE_32__DriversComponent_DriverComponent_driver_component__["a" /* DriverComponent */], children: [
                     { path: '', redirectTo: 'services', pathMatch: 'full' },
-                    { path: 'services', component: __WEBPACK_IMPORTED_MODULE_32__DriversComponent_DriverComponent_ServicesComponent_services_component__["a" /* ServicesComponent */] },
-                    { path: 'inbox', component: __WEBPACK_IMPORTED_MODULE_33__DriversComponent_DriverComponent_MessagesComponent_messages_component__["a" /* MessagesComponent */] },
-                    { path: 'comments', component: __WEBPACK_IMPORTED_MODULE_37__DriversComponent_DriverComponent_CommentsComponent_comments_component__["a" /* CommentsComponent */] },
-                    { path: 'reports', component: __WEBPACK_IMPORTED_MODULE_38__DriversComponent_DriverComponent_ReportsComponent_reports_component__["a" /* ReportsComponent */] }
+                    { path: 'services', component: __WEBPACK_IMPORTED_MODULE_33__DriversComponent_DriverComponent_ServicesComponent_services_component__["a" /* ServicesComponent */] },
+                    { path: 'inbox', component: __WEBPACK_IMPORTED_MODULE_34__DriversComponent_DriverComponent_MessagesComponent_messages_component__["a" /* MessagesComponent */] },
+                    { path: 'comments', component: __WEBPACK_IMPORTED_MODULE_38__DriversComponent_DriverComponent_CommentsComponent_comments_component__["a" /* CommentsComponent */] },
+                    { path: 'reports', component: __WEBPACK_IMPORTED_MODULE_39__DriversComponent_DriverComponent_ReportsComponent_reports_component__["a" /* ReportsComponent */] }
                 ] },
-            { path: 'notices', component: __WEBPACK_IMPORTED_MODULE_39__NoticeComponent_notice_component__["a" /* NoticeComponent */] },
-            { path: 'reports', component: __WEBPACK_IMPORTED_MODULE_40__ReportDriversComponent_report_driver_component__["a" /* ReportDriversComponent */] }
+            { path: 'notices', component: __WEBPACK_IMPORTED_MODULE_40__NoticeComponent_notice_component__["a" /* NoticeComponent */] },
+            { path: 'reports', component: __WEBPACK_IMPORTED_MODULE_41__ReportDriversComponent_report_driver_component__["a" /* ReportDriversComponent */] },
+            { path: 'services', component: __WEBPACK_IMPORTED_MODULE_46__GlobalServicesComponent_global_services_component__["a" /* GlobalServicesComponent */] }
         ] }
 ];
 var AppModule = /** @class */ (function () {
@@ -2970,30 +3102,31 @@ var AppModule = /** @class */ (function () {
     AppModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_5__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_10__app_component__["a" /* AppComponent */],
-                __WEBPACK_IMPORTED_MODULE_11__LoginComponent_login_component__["a" /* LoginComponent */],
-                __WEBPACK_IMPORTED_MODULE_14__DashboradComponent_dashboard_component__["a" /* DashboardComponent */],
-                __WEBPACK_IMPORTED_MODULE_15__BasesComponent_bases_component__["a" /* BasesComponent */],
-                __WEBPACK_IMPORTED_MODULE_16__BasesComponent_BaseCreateComponent_base_create_component__["a" /* BaseCreateComponent */],
-                __WEBPACK_IMPORTED_MODULE_18__BasesComponent_BaseComponent_base_component__["a" /* BaseComponent */],
-                __WEBPACK_IMPORTED_MODULE_21__TariffComponent_tariff_component__["a" /* TariffComponent */],
-                __WEBPACK_IMPORTED_MODULE_23__DriversComponent_drivers_component__["a" /* DriversComponent */],
-                __WEBPACK_IMPORTED_MODULE_24__DriversComponent_DriverFormComponent_driver_form_component__["a" /* DriverFormComponent */],
-                __WEBPACK_IMPORTED_MODULE_31__DriversComponent_DriverComponent_driver_component__["a" /* DriverComponent */],
-                __WEBPACK_IMPORTED_MODULE_27__PlacesComponent_places_component__["a" /* PlacesComponent */],
-                __WEBPACK_IMPORTED_MODULE_29__BasesComponent_BaseComponent_GroupsComponent_groups_component__["a" /* GroupsComponent */],
-                __WEBPACK_IMPORTED_MODULE_32__DriversComponent_DriverComponent_ServicesComponent_services_component__["a" /* ServicesComponent */],
-                __WEBPACK_IMPORTED_MODULE_33__DriversComponent_DriverComponent_MessagesComponent_messages_component__["a" /* MessagesComponent */],
-                __WEBPACK_IMPORTED_MODULE_34__TariffComponent_CheckTariffComponent_check_tariff_component__["a" /* CheckTariffComponent */],
-                __WEBPACK_IMPORTED_MODULE_35__TariffComponent_SearchTariff_search_tariff_component__["a" /* SearchTariffComponent */],
-                __WEBPACK_IMPORTED_MODULE_36__TariffComponent_EditTariffComponent_edit_tariff_component__["a" /* EditTariffComponent */],
-                __WEBPACK_IMPORTED_MODULE_37__DriversComponent_DriverComponent_CommentsComponent_comments_component__["a" /* CommentsComponent */],
-                __WEBPACK_IMPORTED_MODULE_38__DriversComponent_DriverComponent_ReportsComponent_reports_component__["a" /* ReportsComponent */],
-                __WEBPACK_IMPORTED_MODULE_39__NoticeComponent_notice_component__["a" /* NoticeComponent */],
-                __WEBPACK_IMPORTED_MODULE_40__ReportDriversComponent_report_driver_component__["a" /* ReportDriversComponent */],
-                __WEBPACK_IMPORTED_MODULE_41__BasesComponent_BaseComponent_AreasComponent_areas_component__["a" /* AreasComponent */],
-                __WEBPACK_IMPORTED_MODULE_42__BasesComponent_BaseComponent_ColoniesComponent_colonies_component__["a" /* ColoniesComponent */],
-                __WEBPACK_IMPORTED_MODULE_43__BasesComponent_BaseComponent_GroupComponent_group_component__["a" /* GroupComponent */]
+                __WEBPACK_IMPORTED_MODULE_11__app_component__["a" /* AppComponent */],
+                __WEBPACK_IMPORTED_MODULE_12__LoginComponent_login_component__["a" /* LoginComponent */],
+                __WEBPACK_IMPORTED_MODULE_15__DashboradComponent_dashboard_component__["a" /* DashboardComponent */],
+                __WEBPACK_IMPORTED_MODULE_16__BasesComponent_bases_component__["a" /* BasesComponent */],
+                __WEBPACK_IMPORTED_MODULE_17__BasesComponent_BaseCreateComponent_base_create_component__["a" /* BaseCreateComponent */],
+                __WEBPACK_IMPORTED_MODULE_19__BasesComponent_BaseComponent_base_component__["a" /* BaseComponent */],
+                __WEBPACK_IMPORTED_MODULE_22__TariffComponent_tariff_component__["a" /* TariffComponent */],
+                __WEBPACK_IMPORTED_MODULE_24__DriversComponent_drivers_component__["a" /* DriversComponent */],
+                __WEBPACK_IMPORTED_MODULE_25__DriversComponent_DriverFormComponent_driver_form_component__["a" /* DriverFormComponent */],
+                __WEBPACK_IMPORTED_MODULE_32__DriversComponent_DriverComponent_driver_component__["a" /* DriverComponent */],
+                __WEBPACK_IMPORTED_MODULE_28__PlacesComponent_places_component__["a" /* PlacesComponent */],
+                __WEBPACK_IMPORTED_MODULE_30__BasesComponent_BaseComponent_GroupsComponent_groups_component__["a" /* GroupsComponent */],
+                __WEBPACK_IMPORTED_MODULE_33__DriversComponent_DriverComponent_ServicesComponent_services_component__["a" /* ServicesComponent */],
+                __WEBPACK_IMPORTED_MODULE_34__DriversComponent_DriverComponent_MessagesComponent_messages_component__["a" /* MessagesComponent */],
+                __WEBPACK_IMPORTED_MODULE_35__TariffComponent_CheckTariffComponent_check_tariff_component__["a" /* CheckTariffComponent */],
+                __WEBPACK_IMPORTED_MODULE_36__TariffComponent_SearchTariff_search_tariff_component__["a" /* SearchTariffComponent */],
+                __WEBPACK_IMPORTED_MODULE_37__TariffComponent_EditTariffComponent_edit_tariff_component__["a" /* EditTariffComponent */],
+                __WEBPACK_IMPORTED_MODULE_38__DriversComponent_DriverComponent_CommentsComponent_comments_component__["a" /* CommentsComponent */],
+                __WEBPACK_IMPORTED_MODULE_39__DriversComponent_DriverComponent_ReportsComponent_reports_component__["a" /* ReportsComponent */],
+                __WEBPACK_IMPORTED_MODULE_40__NoticeComponent_notice_component__["a" /* NoticeComponent */],
+                __WEBPACK_IMPORTED_MODULE_41__ReportDriversComponent_report_driver_component__["a" /* ReportDriversComponent */],
+                __WEBPACK_IMPORTED_MODULE_42__BasesComponent_BaseComponent_AreasComponent_areas_component__["a" /* AreasComponent */],
+                __WEBPACK_IMPORTED_MODULE_43__BasesComponent_BaseComponent_ColoniesComponent_colonies_component__["a" /* ColoniesComponent */],
+                __WEBPACK_IMPORTED_MODULE_44__BasesComponent_BaseComponent_GroupComponent_group_component__["a" /* GroupComponent */],
+                __WEBPACK_IMPORTED_MODULE_46__GlobalServicesComponent_global_services_component__["a" /* GlobalServicesComponent */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
@@ -3002,13 +3135,16 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_2__angular_http__["HttpModule"],
                 __WEBPACK_IMPORTED_MODULE_6__angular_forms__["ReactiveFormsModule"],
                 __WEBPACK_IMPORTED_MODULE_3_ng_semantic__["NgSemanticModule"],
-                __WEBPACK_IMPORTED_MODULE_30_ng_snotify__["a" /* SnotifyModule */],
+                __WEBPACK_IMPORTED_MODULE_31_ng_snotify__["a" /* SnotifyModule */],
                 __WEBPACK_IMPORTED_MODULE_7_ngx_bar_rating__["a" /* BarRatingModule */],
-                __WEBPACK_IMPORTED_MODULE_9__angular_router__["c" /* RouterModule */].forRoot(routes, { useHash: true }),
+                __WEBPACK_IMPORTED_MODULE_10__angular_router__["c" /* RouterModule */].forRoot(routes, { useHash: true }),
                 __WEBPACK_IMPORTED_MODULE_4__agm_core__["a" /* AgmCoreModule */].forRoot({
                     apiKey: 'AIzaSyAogodmHuA-P4Ais69knDP1HBlLOWCrCdg',
                     libraries: ['places']
-                })
+                }),
+                __WEBPACK_IMPORTED_MODULE_47_ng_pick_datetime__["c" /* OwlDateTimeModule */],
+                __WEBPACK_IMPORTED_MODULE_47_ng_pick_datetime__["d" /* OwlNativeDateTimeModule */],
+                __WEBPACK_IMPORTED_MODULE_9__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */]
             ],
             providers: [
                 {
@@ -3016,20 +3152,22 @@ var AppModule = /** @class */ (function () {
                     useFactory: authHttpServiceFactory,
                     deps: [__WEBPACK_IMPORTED_MODULE_2__angular_http__["Http"], __WEBPACK_IMPORTED_MODULE_2__angular_http__["RequestOptions"]]
                 },
-                __WEBPACK_IMPORTED_MODULE_12__services_authentication_service__["a" /* AuthenticationService */],
-                __WEBPACK_IMPORTED_MODULE_13__guards_authentication_guard__["a" /* AuthGuard */],
-                __WEBPACK_IMPORTED_MODULE_17__services_bases_service__["a" /* BaseService */],
-                __WEBPACK_IMPORTED_MODULE_19__services_group_service__["a" /* GroupService */],
-                __WEBPACK_IMPORTED_MODULE_20__services_colony_service__["a" /* ColonyService */],
-                __WEBPACK_IMPORTED_MODULE_22__services_tariff_service__["a" /* TariffService */],
-                __WEBPACK_IMPORTED_MODULE_25__services_drivers_service__["a" /* DriversService */],
-                __WEBPACK_IMPORTED_MODULE_26__services_places_service__["a" /* PlacesService */],
-                __WEBPACK_IMPORTED_MODULE_28__services_site_service__["a" /* SiteService */],
-                { provide: 'SnotifyToastConfig', useValue: __WEBPACK_IMPORTED_MODULE_30_ng_snotify__["c" /* ToastDefaults */] },
-                __WEBPACK_IMPORTED_MODULE_30_ng_snotify__["b" /* SnotifyService */],
-                __WEBPACK_IMPORTED_MODULE_44__services_area_service__["a" /* AreaService */]
+                __WEBPACK_IMPORTED_MODULE_13__services_authentication_service__["a" /* AuthenticationService */],
+                __WEBPACK_IMPORTED_MODULE_14__guards_authentication_guard__["a" /* AuthGuard */],
+                __WEBPACK_IMPORTED_MODULE_18__services_bases_service__["a" /* BaseService */],
+                __WEBPACK_IMPORTED_MODULE_20__services_group_service__["a" /* GroupService */],
+                __WEBPACK_IMPORTED_MODULE_21__services_colony_service__["a" /* ColonyService */],
+                __WEBPACK_IMPORTED_MODULE_23__services_tariff_service__["a" /* TariffService */],
+                __WEBPACK_IMPORTED_MODULE_26__services_drivers_service__["a" /* DriversService */],
+                __WEBPACK_IMPORTED_MODULE_27__services_places_service__["a" /* PlacesService */],
+                __WEBPACK_IMPORTED_MODULE_29__services_site_service__["a" /* SiteService */],
+                { provide: 'SnotifyToastConfig', useValue: __WEBPACK_IMPORTED_MODULE_31_ng_snotify__["c" /* ToastDefaults */] },
+                __WEBPACK_IMPORTED_MODULE_31_ng_snotify__["b" /* SnotifyService */],
+                __WEBPACK_IMPORTED_MODULE_45__services_area_service__["a" /* AreaService */],
+                { provide: __WEBPACK_IMPORTED_MODULE_47_ng_pick_datetime__["a" /* OWL_DATE_TIME_LOCALE */], useValue: 'mx' },
+                { provide: __WEBPACK_IMPORTED_MODULE_47_ng_pick_datetime__["b" /* OwlDateTimeIntl */], useClass: DefaultInit },
             ],
-            bootstrap: [__WEBPACK_IMPORTED_MODULE_10__app_component__["a" /* AppComponent */]]
+            bootstrap: [__WEBPACK_IMPORTED_MODULE_11__app_component__["a" /* AppComponent */]]
         })
     ], AppModule);
     return AppModule;

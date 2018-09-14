@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BarRatingModule } from "ngx-bar-rating";
 import {NgxPaginationModule} from 'ngx-pagination';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { Routes, RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
@@ -45,12 +46,21 @@ import { AreasComponent } from './BasesComponent/BaseComponent/AreasComponent/ar
 import { ColoniesComponent } from './BasesComponent/BaseComponent/ColoniesComponent/colonies.component';
 import { GroupComponent } from './BasesComponent/BaseComponent/GroupComponent/group.component';
 import { AreaService } from './_services/area.service';
+import { GlobalServicesComponent } from './GlobalServicesComponent/global.services.component';
+import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE, OwlDateTimeIntl  } from 'ng-pick-datetime';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
     headerPrefix: 'BEARER',
     globalHeaders: [{ 'Content-Type': 'application/json' }]
   }), http, options);
+}
+
+export class DefaultInit extends OwlDateTimeIntl {
+  setBtnLabel = 'Establecer';
+  cancelBtnLabel = 'Cancelar';
+  rangeFromLabel = 'Desde';
+  rangeToLabel = 'A';
 }
 
 const routes: Routes = [
@@ -82,7 +92,8 @@ const routes: Routes = [
       {path: 'reports', component: ReportsComponent}
     ]},
     { path: 'notices', component: NoticeComponent },
-    { path: 'reports', component: ReportDriversComponent }
+    { path: 'reports', component: ReportDriversComponent },
+    {path: 'services', component: GlobalServicesComponent }
   ]}
 ];
 
@@ -111,7 +122,8 @@ const routes: Routes = [
     ReportDriversComponent,
     AreasComponent,
     ColoniesComponent,
-    GroupComponent
+    GroupComponent,
+    GlobalServicesComponent
   ],
   imports: [
     BrowserModule,
@@ -126,7 +138,10 @@ const routes: Routes = [
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAogodmHuA-P4Ais69knDP1HBlLOWCrCdg',
       libraries: ['places']
-    })
+    }),
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
+    BrowserAnimationsModule
   ],
   providers: [
     {
@@ -143,9 +158,11 @@ const routes: Routes = [
     DriversService,
     PlacesService,
     SiteService,
-    { provide: 'SnotifyToastConfig', useValue: ToastDefaults},
+    { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
     SnotifyService,
-    AreaService
+    AreaService,
+    { provide: OWL_DATE_TIME_LOCALE, useValue: 'mx' },
+    { provide: OwlDateTimeIntl, useClass: DefaultInit },
   ],
   bootstrap: [AppComponent]
 })

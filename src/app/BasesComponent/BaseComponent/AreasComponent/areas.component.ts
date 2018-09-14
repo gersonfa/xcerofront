@@ -8,7 +8,7 @@ import { ActivatedRoute } from "@angular/router";
 })
 
 export class AreasComponent implements OnInit, OnDestroy {
-  zoom = 15;
+  zoom = 11;
   latitude = 19.0443254;
   longitude = -98.2019682;
 
@@ -16,9 +16,9 @@ export class AreasComponent implements OnInit, OnDestroy {
   sub: any;
 
   paths: LatLngLiteral[] = [
-    {lat: 19.045198, lng: -98.200123 },
-    {lat: 19.042277, lng: -98.192656 },
-    {lat: 19.035421, lng: -98.198235}
+    {lat: 19.059588, lng: -98.617376 },
+    {lat: 19.029136, lng: -98.571992 },
+    {lat: 19.037514, lng: -98.618716}
   ];
 
   polygon: any;

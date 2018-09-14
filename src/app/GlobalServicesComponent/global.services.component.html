@@ -1,0 +1,73 @@
+<div class="ui padded grid">
+  <div class="row">
+    <div class="sixteen wide column" style="margin-bottom: 10px;">
+      <div class="ui input">
+        <input placeholder="Fecha inicio" [(ngModel)]="dateTime" [owlDateTimeTrigger]="dt" [owlDateTime]="dt">
+        <owl-date-time #dt></owl-date-time>
+      </div>
+
+      <div class="ui input" style="margin-left: 10px;">
+        <input placeholder="Fecha fin" [(ngModel)]="dateTime2" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2">
+        <owl-date-time #dt2></owl-date-time>
+      </div>
+
+      <button class="ui button" (click)="search()" [ngClass]="{'loading disabled': loading}" [disabled]="dateTime == undefined || dateTime2 == undefined"
+        style="margin-left: 10px;">Buscar</button>
+      <button class="ui button" (click)="clean()">Borrar</button>
+      <span style="float: right;">Total servicios: {{total()}}</span>
+    </div>
+
+    <div class="three wide column">
+      <table class="ui very compact table" style="max-width: 100%;
+      table-layout: fixed;">
+        <thead>
+          <tr>
+            <th>#Unidad</th>
+            <th>#Servicios</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let unit of units; let i = index;" [ngClass]="{'selected': unit_selected && unit_selected.unit_number == unit.unit_number}">
+            <td>
+              <div class="ui input" style="width: 70%;">
+                <input type="number" [(ngModel)]="unit.unit_number" (keyup.enter)="add_unit(unit.unit_number, i)"
+                  (keyup.backspace)="delete(unit.unit_number, i)">
+              </div>
+            </td>
+            <td (click)="unit_selected = unit">{{unit.services.length > 0 ? unit.services.length : ''}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="thirteen wide column">
+      <table class="ui very compact table" >
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Origen</th>
+            <th>Destino</th>
+            <th>Hora</th>
+            <th>Costo</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="unit_selected">
+          <tr *ngFor="let service of unit_selected.services">
+            <td>{{service.user.full_name}}</td>
+            <td>{{service.details}}</td>
+            <td>{{service.destiny_details}}</td>
+            <td>{{service.end_time | date:'dd/MM/yy HH:mm'}}</td>
+            <td>{{calculateTotal(service) | currency:'MXN':'symbol-narrow'}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  .selected {
+    background-color: lightgoldenrodyellow;
+  }
+</style>
