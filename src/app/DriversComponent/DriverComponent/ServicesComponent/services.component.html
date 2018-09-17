@@ -29,11 +29,11 @@
               <tr *ngFor="let service of services" [ngClass]="{'negative': service.state == 'canceled', 'positive': service.state == 'completed'}">
                 <td>{{service.user?.full_name}}</td>
                 <td>{{
-                  service.origin_colony ? service.origin_colony?.name : service.origin_place?.name
+                  service.details
                   }}</td>
                 <td>
                   {{
-                    service.destiny_colony ? service.destiny_colony?.name : service.destiny_place?.name
+                    service.destiny_details
                   }}
                 </td>
                 <td>{{service.state == 'completed' ? 'Completado' :
