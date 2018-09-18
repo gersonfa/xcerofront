@@ -6,19 +6,10 @@
       <div class="active section">{{base?.name}}</div>
     </div>
     <button class="ui red button" style="float: right;" (click)="modal.show()">Eliminar base</button>
-    <div class="ui top attached tabular menu" style="margin-top: 2em;">
-      <a class="item" routerLink="groups" routerLinkActive="active">
-        Grupos
-      </a>
-      <a class="item" routerLink="places" routerLinkActive="active">
-        Lugares
-      </a>
-    </div>
-    <div class="ui bottom attached segment">
+  </div>
 
+  <div class="thirteen wide column">
       <router-outlet></router-outlet>
-    </div>
-
   </div>
 
   <div class="ui three wide column" style="border-left: 2px solid black;" *ngIf="base">

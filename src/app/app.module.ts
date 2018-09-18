@@ -79,6 +79,7 @@ const routes: Routes = [
           { path: 'areas', component: AreasComponent }
         ]}
       ] },
+      //  Esta ruta se deja de usar
       { path: 'places', component: PlacesComponent }
     ]},
     { path: 'tariff', component: TariffComponent },

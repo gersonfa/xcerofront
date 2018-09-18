@@ -33,7 +33,7 @@ float: right;" (click)="save_polygon()"  *ngIf="creating" [disabled]="!name" [ng
 
     <div style="margin-top: 3em;">
         <agm-map #AGM [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom">
-          	<agm-polygon (polyClick)="select_polygon(area)" *ngFor="let area of polygons" [paths]="area.paths" [fillColor]="area.group != group_id ? 'yellow': ''"></agm-polygon>
+          	<agm-polygon (polyClick)="select_polygon(area)" *ngFor="let area of polygons" [paths]="area.paths" [fillColor]="area.group != group_id ? 'yellow': 'black'"></agm-polygon>
           </agm-map>
     </div>
 

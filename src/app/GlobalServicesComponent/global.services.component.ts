@@ -12,6 +12,8 @@ export class GlobalServicesComponent implements OnInit {
   public units: any[] = [{unit_number: '', services: []}];
   loading: boolean = false;
   unit_selected: any;
+  public state: string = 'completed';
+  show_reason: boolean = false;
 
   constructor(
     private driversService: DriversService
@@ -40,11 +42,18 @@ export class GlobalServicesComponent implements OnInit {
   search() {
     this.loading = true;
     this.unit_selected = null;
+
+    if (this.state === 'negated') {
+      this.show_reason = true;
+    } else {
+      this.show_reason = false;
+    }
+
     const init_date = this.dateTime.getTime();
     const end_date = this.dateTime2.getTime();
     const unit_numbers = this.units.filter(u => u.unit_number).map(u => u.unit_number);
 
-    this.driversService.service_global({init_date, end_date, unit_numbers: JSON.stringify(unit_numbers)}).subscribe(
+    this.driversService.service_global({init_date, end_date, state: this.state, unit_numbers: JSON.stringify(unit_numbers)}).subscribe(
       services => {
         this.units = services;
         this.loading = false;
@@ -54,6 +63,7 @@ export class GlobalServicesComponent implements OnInit {
 
   clean() {
     this.units = [{unit_number: '', services: []}];
+    this.unit_selected = null;
   }
 
   calculateTotal(s) {

@@ -1,6 +1,7 @@
 <div class="ui padded grid">
   <div class="row">
     <div class="sixteen wide column" style="margin-bottom: 10px;">
+
       <div class="ui input">
         <input placeholder="Fecha inicio" [(ngModel)]="dateTime" [owlDateTimeTrigger]="dt" [owlDateTime]="dt">
         <owl-date-time #dt></owl-date-time>
@@ -9,6 +10,14 @@
       <div class="ui input" style="margin-left: 10px;">
         <input placeholder="Fecha fin" [(ngModel)]="dateTime2" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2">
         <owl-date-time #dt2></owl-date-time>
+      </div>
+      <div class="field" style="display: inline-block;
+      margin-left: 10px;">
+        <select class="ui dropdown" [(ngModel)]="state">
+          <option value="completed">Completados</option>
+          <option value="canceled">Cancelados</option>
+          <option value="negated">Negados</option>
+        </select>
       </div>
 
       <button class="ui button" (click)="search()" [ngClass]="{'loading disabled': loading}" [disabled]="dateTime == undefined || dateTime2 == undefined"
@@ -41,12 +50,13 @@
     </div>
 
     <div class="thirteen wide column">
-      <table class="ui very compact table" >
+      <table class="ui very compact table">
         <thead>
           <tr>
             <th>Cliente</th>
             <th>Origen</th>
-            <th>Destino</th>
+            <th *ngIf="!show_reason">Destino</th>
+            <th *ngIf="show_reason">Razón de negación</th>
             <th>Hora</th>
             <th>Costo</th>
           </tr>
@@ -55,7 +65,8 @@
           <tr *ngFor="let service of unit_selected.services">
             <td>{{service.user.full_name}}</td>
             <td>{{service.details}}</td>
-            <td>{{service.destiny_details}}</td>
+            <td *ngIf="!show_reason">{{service.destiny_details}}</td>
+            <td *ngIf="show_reason">{{service.reason_negated}}</td>
             <td>{{service.end_time | date:'dd/MM/yy HH:mm'}}</td>
             <td>{{calculateTotal(service) | currency:'MXN':'symbol-narrow'}}</td>
           </tr>
