@@ -3149,7 +3149,7 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_7_ngx_bar_rating__["a" /* BarRatingModule */],
                 __WEBPACK_IMPORTED_MODULE_10__angular_router__["c" /* RouterModule */].forRoot(routes, { useHash: true }),
                 __WEBPACK_IMPORTED_MODULE_4__agm_core__["a" /* AgmCoreModule */].forRoot({
-                    apiKey: 'AIzaSyAogodmHuA-P4Ais69knDP1HBlLOWCrCdg',
+                    apiKey: 'AIzaSyAn1XlqM5ds_ZrPavxj-Nh-rpJ3z5hBdXI',
                     libraries: ['places']
                 }),
                 __WEBPACK_IMPORTED_MODULE_47_ng_pick_datetime__["c" /* OwlDateTimeModule */],

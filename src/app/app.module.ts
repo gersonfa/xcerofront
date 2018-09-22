@@ -137,7 +137,7 @@ const routes: Routes = [
     BarRatingModule,
     RouterModule.forRoot(routes, {useHash: true}),
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyAogodmHuA-P4Ais69knDP1HBlLOWCrCdg',
+      apiKey: 'AIzaSyAn1XlqM5ds_ZrPavxj-Nh-rpJ3z5hBdXI',
       libraries: ['places']
     }),
     OwlDateTimeModule,
