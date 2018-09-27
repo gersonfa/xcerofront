@@ -74,8 +74,8 @@ const routes: Routes = [
       { path: '', redirectTo: 'groups', pathMatch: 'full' },
       { path: 'groups', component: GroupsComponent, children: [
         { path: 'group/:id', component: GroupComponent, children: [
-          { path: '', redirectTo: 'colonies', pathMatch: 'full' },
-          { path: 'colonies', component: ColoniesComponent },
+          { path: '', redirectTo: 'areas', pathMatch: 'full' },
+          /* { path: 'colonies', component: ColoniesComponent }, */
           { path: 'areas', component: AreasComponent }
         ]}
       ] },
