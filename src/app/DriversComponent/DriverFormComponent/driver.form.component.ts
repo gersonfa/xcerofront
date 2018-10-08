@@ -20,6 +20,9 @@ export class DriverFormComponent implements OnInit {
   full_name: FormControl;
   unit_number: FormControl;
   role: FormControl;
+  license_plate: FormControl;
+  brand_car: FormControl;
+  model_car: FormControl;
 
   public imageURL: string = "http://via.placeholder.com/250x300";
 
@@ -36,6 +39,9 @@ export class DriverFormComponent implements OnInit {
     this.email = this.fb.control("");
     this.full_name = this.fb.control("", Validators.required);
     this.unit_number = this.fb.control('', Validators.required);
+    this.license_plate = this.fb.control('', Validators.required);
+    this.brand_car = this.fb.control('', Validators.required);
+    this.model_car = this.fb.control('', Validators.required);
     this.role = this.fb.control('Driver', Validators.required);
     //this.image = this.fb.control(this.imageURL, Validators.required);
 
@@ -46,7 +52,10 @@ export class DriverFormComponent implements OnInit {
       full_name: this.full_name,
       role: this.role,
       image: this.imageURL,
-      unit_number: this.unit_number
+      unit_number: this.unit_number,
+      license_plate: this.license_plate,
+      brand_car: this.brand_car,
+      model_car: this.model_car
     });
   }
 

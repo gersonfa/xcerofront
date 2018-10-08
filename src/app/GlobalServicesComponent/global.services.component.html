@@ -27,6 +27,7 @@
     </div>
 
     <div class="four wide column">
+      <button class="ui yellow button" (click)="can_copy = !can_copy">{{can_copy ? 'Editar' : 'Copiar'}}</button>
       <table class="ui very compact table" style="max-width: 100%;
       table-layout: fixed;">
         <thead>
@@ -38,10 +39,13 @@
         <tbody>
           <tr *ngFor="let unit of units; let i = index;" [ngClass]="{'selected': unit_selected && unit_selected.unit_number == unit.unit_number}">
             <td>
-              <div class="ui input" style="width: 70%;">
+              <div class="ui input" style="width: 70%;" *ngIf="!can_copy">
                 <input type="number" [(ngModel)]="unit.unit_number" (keyup.enter)="add_unit(unit.unit_number, i)"
                   (keyup.backspace)="delete(unit.unit_number, i)">
               </div>
+              <span *ngIf="can_copy">
+                  {{unit.unit_number}}
+              </span>
             </td>
             <td (click)="unit_selected = unit">{{unit.services.length > 0 ? unit.services.length : ''}}</td>
           </tr>
@@ -57,7 +61,8 @@
             <th>Origen</th>
             <th *ngIf="!show_reason">Destino</th>
             <th *ngIf="show_reason">Razón de negación</th>
-            <th>Hora</th>
+            <th>Hora inicializado</th>
+            <th>Hora finalizado</th>
             <th>Costo</th>
           </tr>
         </thead>
@@ -67,6 +72,7 @@
             <td>{{service.details}}</td>
             <td *ngIf="!show_reason">{{service.destiny_details}}</td>
             <td *ngIf="show_reason">{{service.reason_negated}}</td>
+            <td>{{service.start_time | date:'dd/MM/yy HH:mm'}}</td>
             <td>{{service.end_time | date:'dd/MM/yy HH:mm'}}</td>
             <td>{{calculateTotal(service) | currency:'MXN':'symbol-narrow'}}</td>
           </tr>

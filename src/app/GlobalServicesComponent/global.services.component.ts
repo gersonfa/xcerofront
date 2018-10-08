@@ -15,6 +15,8 @@ export class GlobalServicesComponent implements OnInit {
   public state: string = 'completed';
   show_reason: boolean = false;
 
+  can_copy: boolean = true;
+
   constructor(
     private driversService: DriversService
   ) {}
@@ -55,7 +57,7 @@ export class GlobalServicesComponent implements OnInit {
 
     this.driversService.service_global({init_date, end_date, state: this.state, unit_numbers: JSON.stringify(unit_numbers)}).subscribe(
       services => {
-        this.units = services;
+        this.units = services.sort((a, b) => a.unit_number - b.unit_number);
         this.loading = false;
       }
     )
