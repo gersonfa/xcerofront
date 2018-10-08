@@ -22,7 +22,9 @@
           <div class="meta">
             Unidad: {{driver?.unit_number}} <br>
             Usuario: {{driver?.account}} <br>
-            {{driver?.email}}
+            {{driver?.email}} <br>
+            {{driver?.model_car}}  {{driver?.model_car}} <br>
+            {{driver?.license_placte}}
           </div>
           <div class="description">
             <bar-rating *ngIf="driver" [(rate)]="driver.rating" [max]="5" [readOnly]="true"></bar-rating>
@@ -95,15 +97,15 @@
           </div>
           <div class="field">
             <label>Marca</label>
-            <input type="number" name="unit_number" placeholder="Marca" [(ngModel)]="driver_updated.brand_card">
+            <input type="text" name="brand" placeholder="Marca" [(ngModel)]="driver_updated.brand_card">
           </div>
           <div class="field">
             <label>Modelo</label>
-            <input type="number" name="unit_number" placeholder="Modelo" [(ngModel)]="driver_updated.model_car">
+            <input type="text" name="model" placeholder="Modelo" [(ngModel)]="driver_updated.model_car">
           </div>
           <div class="field">
             <label>Placa</label>
-            <input type="number" name="unit_number" placeholder="Placa" [(ngModel)]="driver_updated.license_plate">
+            <input type="text" name="license" placeholder="Placa" [(ngModel)]="driver_updated.license_plate">
           </div>
           <div class="field">
             <label>Nombre de usuario</label>
