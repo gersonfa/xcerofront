@@ -16,6 +16,7 @@ export class GlobalServicesComponent implements OnInit {
   show_reason: boolean = false;
 
   can_copy: boolean = true;
+  counter: any;
 
   constructor(
     private driversService: DriversService
@@ -60,6 +61,10 @@ export class GlobalServicesComponent implements OnInit {
         this.units = services.sort((a, b) => a.unit_number - b.unit_number);
         this.loading = false;
       }
+    )
+
+    this.driversService.service_count().subscribe(
+      count => this.counter = count
     )
   }
 

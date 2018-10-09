@@ -89,4 +89,9 @@ export class DriversService {
     return this.http.get(`${API_URL}/api/global_service`, { params })
       .map(r => r.json());
   }
+
+  service_count(): Observable<any> {
+    return this.http.get(`${API_URL}/api/service/counter`)
+      .map(r => r.json())
+  }
 }
