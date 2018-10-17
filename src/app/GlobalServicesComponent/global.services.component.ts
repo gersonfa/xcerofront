@@ -16,7 +16,7 @@ export class GlobalServicesComponent implements OnInit {
   show_reason: boolean = false;
 
   can_copy: boolean = true;
-  counter: any;
+  counter: any = [];
 
   constructor(
     private driversService: DriversService
@@ -63,7 +63,7 @@ export class GlobalServicesComponent implements OnInit {
       }
     )
 
-    this.driversService.service_count().subscribe(
+    this.driversService.service_count({init_date, end_date}).subscribe(
       count => this.counter = count
     )
   }
@@ -88,6 +88,12 @@ export class GlobalServicesComponent implements OnInit {
       total += u.services.length;
     });
 
+    return total;
+  }
+
+  total_request() {
+    let total = 0;
+    this.counter.map(c => total += c.count)
     return total;
   }
 }

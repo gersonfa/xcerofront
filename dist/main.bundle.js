@@ -1324,6 +1324,7 @@ var GlobalServicesComponent = /** @class */ (function () {
         this.state = 'completed';
         this.show_reason = false;
         this.can_copy = true;
+        this.counter = [];
     }
     GlobalServicesComponent.prototype.ngOnInit = function () {
         this.dateTime.setHours(0, 0, 0, 0);
@@ -1361,7 +1362,7 @@ var GlobalServicesComponent = /** @class */ (function () {
             _this.units = services.sort(function (a, b) { return a.unit_number - b.unit_number; });
             _this.loading = false;
         });
-        this.driversService.service_count().subscribe(function (count) { return _this.counter = count; });
+        this.driversService.service_count({ init_date: init_date, end_date: end_date }).subscribe(function (count) { return _this.counter = count; });
     };
     GlobalServicesComponent.prototype.clean = function () {
         this.units = [{ unit_number: '', services: [] }];
@@ -1379,6 +1380,11 @@ var GlobalServicesComponent = /** @class */ (function () {
         this.units.map(function (u) {
             total += u.services.length;
         });
+        return total;
+    };
+    GlobalServicesComponent.prototype.total_request = function () {
+        var total = 0;
+        this.counter.map(function (c) { return total += c.count; });
         return total;
     };
     GlobalServicesComponent = __decorate([
@@ -2658,8 +2664,8 @@ var DriversService = /** @class */ (function () {
         return this.http.get(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/global_service", { params: params })
             .map(function (r) { return r.json(); });
     };
-    DriversService.prototype.service_count = function () {
-        return this.http.get(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/service/counter")
+    DriversService.prototype.service_count = function (params) {
+        return this.http.get(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/service/counter", { params: params })
             .map(function (r) { return r.json(); });
     };
     DriversService = __decorate([
