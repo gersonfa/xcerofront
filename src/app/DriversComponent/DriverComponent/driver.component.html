@@ -23,8 +23,8 @@
             Unidad: {{driver?.unit_number}} <br>
             Usuario: {{driver?.account}} <br>
             {{driver?.email}} <br>
-            {{driver?.model_car}}  {{driver?.model_car}} <br>
-            {{driver?.license_placte}}
+            {{driver?.brand_car}}  {{driver?.model_car}} <br>
+            {{driver?.license_plate}}
           </div>
           <div class="description">
             <bar-rating *ngIf="driver" [(rate)]="driver.rating" [max]="5" [readOnly]="true"></bar-rating>
