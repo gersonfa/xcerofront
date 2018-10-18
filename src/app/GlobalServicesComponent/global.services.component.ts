@@ -63,7 +63,7 @@ export class GlobalServicesComponent implements OnInit {
       }
     )
 
-    this.driversService.service_count({init_date, end_date}).subscribe(
+    this.driversService.service_count({init_date: init_date - 20000000, end_date}).subscribe(
       count => this.counter = count
     )
   }
