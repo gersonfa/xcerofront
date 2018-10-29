@@ -94,4 +94,14 @@ export class DriversService {
     return this.http.get(`${API_URL}/api/service/counter`, { params })
       .map(r => r.json());
   }
+
+  analysis_list(params): Observable<any> {
+    return this.http.get(`${API_URL}/api/analysis`, { params })
+      .map(r => r.json());
+  }
+
+  analysis_details(analysis): Observable<any> {
+    return this.http.get(`${API_URL}/api/analysis/${analysis._id}`)
+      .map(r => r.json());
+  }
 }

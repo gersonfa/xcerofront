@@ -2,3 +2,7 @@ agm-map {
     height: 600px;
   }
 
+  .ui .modal .transition .visible .active {
+    margin-top: 0 !important;
+  }
+

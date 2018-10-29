@@ -66,6 +66,10 @@ export class GlobalServicesComponent implements OnInit {
     this.driversService.service_count({init_date: init_date - 20000000, end_date}).subscribe(
       count => this.counter = count
     )
+
+    this.driversService.analysis_list({init_date: init_date - 20000000, end_date}).subscribe(
+      res => console.log(res)
+    )
   }
 
   clean() {

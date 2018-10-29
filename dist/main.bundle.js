@@ -17,6 +17,126 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 
 /***/ }),
 
+/***/ "./src/app/AnalysisComponent/analysis.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"ui padded grid\">\r\n  <div class=\"row\">\r\n    <div class=\"sixteen wide column\" style=\"margin-bottom: 10px;\">\r\n\r\n      <div class=\"ui input\">\r\n        <input placeholder=\"Fecha inicio\" [(ngModel)]=\"dateTime\" [owlDateTimeTrigger]=\"dt\" [owlDateTime]=\"dt\">\r\n        <owl-date-time #dt></owl-date-time>\r\n      </div>\r\n\r\n      <div class=\"ui input\" style=\"margin-left: 10px;\">\r\n        <input placeholder=\"Fecha fin\" [(ngModel)]=\"dateTime2\" [owlDateTimeTrigger]=\"dt2\" [owlDateTime]=\"dt2\">\r\n        <owl-date-time #dt2></owl-date-time>\r\n      </div>\r\n\r\n\r\n      <button class=\"ui button\" (click)=\"search()\" [ngClass]=\"{'loading disabled': loading}\" [disabled]=\"dateTime == undefined || dateTime2 == undefined\"\r\n        style=\"margin-left: 10px;\">Buscar</button>\r\n      <span style=\"float: right;\">Completados: {{counter_analysis.completed}}</span>\r\n      <span style=\"float: right; margin-right: 1em;\">Cancelados: {{counter_analysis.canceled}}</span>\r\n      <span style=\"float: right; margin-right: 1em;\">Negados: {{counter_analysis.negated}}</span>\r\n      <span style=\"float: right;  margin-right: 1em;\">Conductores no disponibles: {{counter_analysis.unavailable}}</span>\r\n      <span style=\"float: right; margin-right: 1em;\">Peticiones realizadas: {{total_request()}}</span>\r\n    </div>\r\n\r\n    <div class=\"five wide column\" style=\"max-height: 85vh; overflow-y: scroll;\">\r\n      <table class=\"ui very compact table\">\r\n        <thead>\r\n          <tr>\r\n            <th>Tipo</th>\r\n            <th>Estado</th>\r\n            <th>Unidades</th>\r\n            <th>Hora</th>\r\n            <th></th>\r\n          </tr>\r\n        </thead>\r\n        <tbody>\r\n          <tr *ngFor=\"let a of services\">\r\n            <td>{{a.type == 'closest' ? 'Cercanos' : 'En base'}}</td>\r\n            <td>{{\r\n              a.service.state === 'negated' && a.drivers.length === 0 ? 'Conductores no disponibles' :\r\n              a.service.state === 'negated' ? 'Negado' :\r\n              a.service.state === 'completed' ? 'Completado' :\r\n              a.service.state === 'canceled' ? 'Cancelado' :\r\n              a.service.state === 'in_progress' ? 'En proceso' : 'En camino'\r\n              }}</td>\r\n            <td>{{a.drivers.length}}</td>\r\n            <td>{{a.service.request_time | date:'HH:mm dd/MM'}}</td>\r\n            <td>\r\n              <i class=\"eye icon\" (click)=\"get_analysis(a); details.show()\"></i>\r\n            </td>\r\n          </tr>\r\n        </tbody>\r\n      </table>\r\n    </div>\r\n\r\n    <div class=\"eleven wide column\">\r\n      <agm-map [latitude]=\"latitude\" [longitude]=\"longitude\" [scrollwheel]=\"false\" [zoom]=\"zoom\">\r\n        <agm-marker *ngFor=\"let marker of markers\" [latitude]=\"marker.latitude\" [longitude]=\"marker.longitude\"\r\n          [iconUrl]=\"marker.icon\"></agm-marker>\r\n      </agm-map>\r\n    </div>\r\n\r\n\r\n  </div>\r\n</div>\r\n\r\n\r\n<sm-modal class=\"\"  #details style=\"margin-top: 0;\">\r\n  <modal-content>\r\n    <h3 *ngIf=\"analysis\">Servicio: {{analysis?.service.request_time| date:'dd/MM/yyyy HH:mm'}}, {{\r\n      analysis.service.state === 'negated' && analysis.drivers.length === 0 ? 'Conductores no disponibles' :\r\n      analysis.service.state === 'negated' ? 'Negado' :\r\n      analysis.service.state === 'completed' ? 'Completado' :\r\n      analysis.service.state === 'canceled' ? 'Cancelado' :\r\n      analysis.service.state === 'in_progress' ? 'En proceso' : 'En camino'\r\n      }}</h3>\r\n    <div class=\"ui padded grid\">\r\n      <div class=\"five wide column\">\r\n        Cliente: {{analysis?.service.user.full_name}} <br>\r\n        Origen: {{analysis?.service.details}} <br>\r\n        Conductores: <br>\r\n        <div class=\"ui bulleted list\" *ngIf=\"analysis\">\r\n            <div class=\"item\" *ngFor=\"let driver of analysis.drivers\">{{driver.driver.full_name}}</div>\r\n          </div>\r\n      </div>\r\n      <div class=\"eleven wide column\">\r\n        <agm-map [latitude]=\"latitude\" [longitude]=\"longitude\" [scrollwheel]=\"false\" [zoom]=\"zoom\" style=\"height: 50vh;\">\r\n          <agm-marker *ngFor=\"let marker of analysis?.drivers\" [latitude]=\"marker.coords[1]\" [longitude]=\"marker.coords[0]\"\r\n            [iconUrl]=\"'assets/car.png'\" [label]=\"marker.driver.unit_number.toString()\"></agm-marker>\r\n          <agm-marker [latitude]=\"analysis?.service.origin_coords[1]\" [longitude]=\"analysis?.service.origin_coords[0]\"></agm-marker>\r\n        </agm-map>\r\n      </div>\r\n    </div>\r\n  </modal-content>\r\n  <modal-actions>\r\n    <div class=\"ui buttons\">\r\n      <div class=\"ui button primary\" (click)=\"details.hide()\">Cerrar</div>\r\n    </div>\r\n  </modal-actions>\r\n</sm-modal>\r\n\r\n<style>\r\n  .selected {\r\n    background-color: lightgoldenrodyellow;\r\n  }\r\n\r\n  agm-map {\r\n    height: 85vh;\r\n  }\r\n\r\n   /deep/.ui .modal .transition .visible .active {\r\n    margin-top: 0 !important;\r\n  }\r\n</style>\r\n"
+
+/***/ }),
+
+/***/ "./src/app/AnalysisComponent/analysis.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AnalysisComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_drivers_service__ = __webpack_require__("./src/app/_services/drivers.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var AnalysisComponent = /** @class */ (function () {
+    function AnalysisComponent(driversService) {
+        this.driversService = driversService;
+        this.dateTime = new Date();
+        this.dateTime2 = new Date();
+        this.loading = false;
+        this.counter = [];
+        this.services = [];
+        this.markers = [];
+        this.zoom = 12;
+        this.latitude = 19.040034;
+        this.longitude = -98.263005;
+        this.counter_analysis = {
+            negated: 0,
+            completed: 0,
+            canceled: 0,
+            unavailable: 0
+        };
+    }
+    AnalysisComponent.prototype.ngOnInit = function () {
+        this.dateTime.setHours(0, 0, 0, 0);
+        this.dateTime2.setHours(23, 59, 59, 59);
+    };
+    AnalysisComponent.prototype.search = function () {
+        var _this = this;
+        this.loading = true;
+        var init_date = this.dateTime.getTime();
+        var end_date = this.dateTime2.getTime();
+        this.driversService
+            .service_count({ init_date: init_date - 20000000, end_date: end_date })
+            .subscribe(function (count) { return (_this.counter = count); });
+        this.driversService
+            .analysis_list({ init_date: init_date - 20000000, end_date: end_date })
+            .subscribe(function (res) {
+            _this.counter_analysis = {
+                negated: 0,
+                completed: 0,
+                canceled: 0,
+                unavailable: 0
+            };
+            _this.services = res;
+            _this.services.map(function (s) {
+                if (s.drivers.length === 0) {
+                    _this.counter_analysis.unavailable += 1;
+                }
+                else if (s.service.state === 'negated') {
+                    _this.counter_analysis.negated += 1;
+                }
+                else if (s.service.state === 'completed') {
+                    _this.counter_analysis.completed += 1;
+                }
+                else if (s.service.state === 'canceled') {
+                    _this.counter_analysis.canceled += 1;
+                }
+            });
+            _this.loading = false;
+            _this.markers = _this.services.map(function (d) {
+                return {
+                    longitude: Number(d.service.origin_coords[0]),
+                    latitude: Number(d.service.origin_coords[1]),
+                    icon: d.drivers.length === 0
+                        ? 'assets/unavailable.png'
+                        : d.service.state === 'negated'
+                            ? 'assets/red.png'
+                            : d.service.state === 'canceled'
+                                ? 'assets/canceled.png'
+                                : 'assets/completed.png'
+                };
+            });
+        });
+    };
+    AnalysisComponent.prototype.total_request = function () {
+        var total = 0;
+        this.counter.map(function (c) { return (total += c.count); });
+        return total;
+    };
+    AnalysisComponent.prototype.get_analysis = function (a) {
+        var _this = this;
+        this.driversService.analysis_details(a).subscribe(function (res) {
+            _this.analysis = res;
+        });
+    };
+    AnalysisComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            template: __webpack_require__("./src/app/AnalysisComponent/analysis.component.html")
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_drivers_service__["a" /* DriversService */]])
+    ], AnalysisComponent);
+    return AnalysisComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/BasesComponent/BaseComponent/AreasComponent/areas.component.html":
 /***/ (function(module, exports) {
 
@@ -692,7 +812,7 @@ module.exports = "/deep/ .logo-xcero {\r\n  width: 6em !important;\r\n}\r\n\r\n/
 /***/ "./src/app/DashboradComponent/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<sm-menu title=\"XCero\" logoClass=\"logo-xcero\" class=\"ui inverted\" logo=\"assets/xcero_oficial.png\">\r\n\r\n  <sm-menu class=\"menu right secondary\">\r\n      <a class=\"item yellow\" sm-item routerLink=\"services\" routerLinkActive=\"active\">Servicios</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"drivers\" routerLinkActive=\"active\">Conductores</a>\r\n    <a class=\"item yellow\" routerLink=\"tariff\" routerLinkActive=\"active\" sm-item>Tarifas</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"bases\" routerLinkActive=\"active\">Bases</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"notices\" routerLinkActive=\"active\">Avisos</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"reports\" routerLinkActive=\"active\">Reportes</a>\r\n    <a class=\"item\" (click)=\"logOut()\">\r\n      <i class=\"icon power off\"></i>\r\n    </a>\r\n  </sm-menu>\r\n</sm-menu>\r\n\r\n<router-outlet></router-outlet>\r\n\r\n<style>\r\n  .logo-xcero {\r\n    width: 6em !important;\r\n  }\r\n</style>\r\n"
+module.exports = "<sm-menu title=\"XCero\" logoClass=\"logo-xcero\" class=\"ui inverted\" logo=\"assets/xcero_oficial.png\">\r\n\r\n  <sm-menu class=\"menu right secondary\">\r\n      <a class=\"item yellow\" sm-item routerLink=\"services\" routerLinkActive=\"active\">Servicios</a>\r\n      <a class=\"item yellow\" sm-item routerLink=\"analysis\" routerLinkActive=\"active\">Análisis</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"drivers\" routerLinkActive=\"active\">Conductores</a>\r\n    <a class=\"item yellow\" routerLink=\"tariff\" routerLinkActive=\"active\" sm-item>Tarifas</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"bases\" routerLinkActive=\"active\">Bases</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"notices\" routerLinkActive=\"active\">Avisos</a>\r\n    <a class=\"item yellow\" sm-item routerLink=\"reports\" routerLinkActive=\"active\">Reportes</a>\r\n    <a class=\"item\" (click)=\"logOut()\">\r\n      <i class=\"icon power off\"></i>\r\n    </a>\r\n  </sm-menu>\r\n</sm-menu>\r\n\r\n<router-outlet></router-outlet>\r\n\r\n<style>\r\n  .logo-xcero {\r\n    width: 6em !important;\r\n  }\r\n</style>\r\n"
 
 /***/ }),
 
@@ -1363,6 +1483,7 @@ var GlobalServicesComponent = /** @class */ (function () {
             _this.loading = false;
         });
         this.driversService.service_count({ init_date: init_date - 20000000, end_date: end_date }).subscribe(function (count) { return _this.counter = count; });
+        this.driversService.analysis_list({ init_date: init_date - 20000000, end_date: end_date }).subscribe(function (res) { return console.log(res); });
     };
     GlobalServicesComponent.prototype.clean = function () {
         this.units = [{ unit_number: '', services: [] }];
@@ -2668,6 +2789,14 @@ var DriversService = /** @class */ (function () {
         return this.http.get(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/service/counter", { params: params })
             .map(function (r) { return r.json(); });
     };
+    DriversService.prototype.analysis_list = function (params) {
+        return this.http.get(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/analysis", { params: params })
+            .map(function (r) { return r.json(); });
+    };
+    DriversService.prototype.analysis_details = function (analysis) {
+        return this.http.get(__WEBPACK_IMPORTED_MODULE_2__services_API_URL__["a" /* API_URL */] + "/api/analysis/" + analysis._id)
+            .map(function (r) { return r.json(); });
+    };
     DriversService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_angular2_jwt__["AuthHttp"]])
@@ -2907,7 +3036,7 @@ var TariffService = /** @class */ (function () {
 /***/ "./src/app/app.component.css":
 /***/ (function(module, exports) {
 
-module.exports = "agm-map {\r\n    height: 600px;\r\n  }\r\n\r\n"
+module.exports = "agm-map {\r\n    height: 600px;\r\n  }\r\n\r\n  .ui .modal .transition .visible .active {\r\n    margin-top: 0 !important;\r\n  }\r\n\r\n"
 
 /***/ }),
 
@@ -3006,6 +3135,7 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_45__services_area_service__ = __webpack_require__("./src/app/_services/area.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_46__GlobalServicesComponent_global_services_component__ = __webpack_require__("./src/app/GlobalServicesComponent/global.services.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_47_ng_pick_datetime__ = __webpack_require__("./node_modules/ng-pick-datetime/picker.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_48__AnalysisComponent_analysis_component__ = __webpack_require__("./src/app/AnalysisComponent/analysis.component.ts");
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -3022,6 +3152,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -3093,36 +3224,58 @@ var DefaultInit = /** @class */ (function (_super) {
 var routes = [
     { path: 'login', component: __WEBPACK_IMPORTED_MODULE_12__LoginComponent_login_component__["a" /* LoginComponent */] },
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-    { path: 'dashboard', component: __WEBPACK_IMPORTED_MODULE_15__DashboradComponent_dashboard_component__["a" /* DashboardComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_14__guards_authentication_guard__["a" /* AuthGuard */]], children: [
+    {
+        path: 'dashboard',
+        component: __WEBPACK_IMPORTED_MODULE_15__DashboradComponent_dashboard_component__["a" /* DashboardComponent */],
+        canActivate: [__WEBPACK_IMPORTED_MODULE_14__guards_authentication_guard__["a" /* AuthGuard */]],
+        children: [
             { path: '', redirectTo: 'drivers', pathMatch: 'full' },
             { path: 'bases', component: __WEBPACK_IMPORTED_MODULE_16__BasesComponent_bases_component__["a" /* BasesComponent */] },
             { path: 'bases/new', component: __WEBPACK_IMPORTED_MODULE_17__BasesComponent_BaseCreateComponent_base_create_component__["a" /* BaseCreateComponent */] },
-            { path: 'base/:id', component: __WEBPACK_IMPORTED_MODULE_19__BasesComponent_BaseComponent_base_component__["a" /* BaseComponent */], children: [
+            {
+                path: 'base/:id',
+                component: __WEBPACK_IMPORTED_MODULE_19__BasesComponent_BaseComponent_base_component__["a" /* BaseComponent */],
+                children: [
                     { path: '', redirectTo: 'groups', pathMatch: 'full' },
-                    { path: 'groups', component: __WEBPACK_IMPORTED_MODULE_30__BasesComponent_BaseComponent_GroupsComponent_groups_component__["a" /* GroupsComponent */], children: [
-                            { path: 'group/:id', component: __WEBPACK_IMPORTED_MODULE_44__BasesComponent_BaseComponent_GroupComponent_group_component__["a" /* GroupComponent */], children: [
+                    {
+                        path: 'groups',
+                        component: __WEBPACK_IMPORTED_MODULE_30__BasesComponent_BaseComponent_GroupsComponent_groups_component__["a" /* GroupsComponent */],
+                        children: [
+                            {
+                                path: 'group/:id',
+                                component: __WEBPACK_IMPORTED_MODULE_44__BasesComponent_BaseComponent_GroupComponent_group_component__["a" /* GroupComponent */],
+                                children: [
                                     { path: '', redirectTo: 'areas', pathMatch: 'full' },
                                     /* { path: 'colonies', component: ColoniesComponent }, */
                                     { path: 'areas', component: __WEBPACK_IMPORTED_MODULE_42__BasesComponent_BaseComponent_AreasComponent_areas_component__["a" /* AreasComponent */] }
-                                ] }
-                        ] },
+                                ]
+                            }
+                        ]
+                    },
                     //  Esta ruta se deja de usar
                     { path: 'places', component: __WEBPACK_IMPORTED_MODULE_28__PlacesComponent_places_component__["a" /* PlacesComponent */] }
-                ] },
+                ]
+            },
             { path: 'tariff', component: __WEBPACK_IMPORTED_MODULE_22__TariffComponent_tariff_component__["a" /* TariffComponent */] },
             { path: 'drivers', component: __WEBPACK_IMPORTED_MODULE_24__DriversComponent_drivers_component__["a" /* DriversComponent */] },
             { path: 'drivers/create', component: __WEBPACK_IMPORTED_MODULE_25__DriversComponent_DriverFormComponent_driver_form_component__["a" /* DriverFormComponent */] },
-            { path: 'driver/:id', component: __WEBPACK_IMPORTED_MODULE_32__DriversComponent_DriverComponent_driver_component__["a" /* DriverComponent */], children: [
+            {
+                path: 'driver/:id',
+                component: __WEBPACK_IMPORTED_MODULE_32__DriversComponent_DriverComponent_driver_component__["a" /* DriverComponent */],
+                children: [
                     { path: '', redirectTo: 'services', pathMatch: 'full' },
                     { path: 'services', component: __WEBPACK_IMPORTED_MODULE_33__DriversComponent_DriverComponent_ServicesComponent_services_component__["a" /* ServicesComponent */] },
                     { path: 'inbox', component: __WEBPACK_IMPORTED_MODULE_34__DriversComponent_DriverComponent_MessagesComponent_messages_component__["a" /* MessagesComponent */] },
                     { path: 'comments', component: __WEBPACK_IMPORTED_MODULE_38__DriversComponent_DriverComponent_CommentsComponent_comments_component__["a" /* CommentsComponent */] },
                     { path: 'reports', component: __WEBPACK_IMPORTED_MODULE_39__DriversComponent_DriverComponent_ReportsComponent_reports_component__["a" /* ReportsComponent */] }
-                ] },
+                ]
+            },
             { path: 'notices', component: __WEBPACK_IMPORTED_MODULE_40__NoticeComponent_notice_component__["a" /* NoticeComponent */] },
             { path: 'reports', component: __WEBPACK_IMPORTED_MODULE_41__ReportDriversComponent_report_driver_component__["a" /* ReportDriversComponent */] },
-            { path: 'services', component: __WEBPACK_IMPORTED_MODULE_46__GlobalServicesComponent_global_services_component__["a" /* GlobalServicesComponent */] }
-        ] }
+            { path: 'services', component: __WEBPACK_IMPORTED_MODULE_46__GlobalServicesComponent_global_services_component__["a" /* GlobalServicesComponent */] },
+            { path: 'analysis', component: __WEBPACK_IMPORTED_MODULE_48__AnalysisComponent_analysis_component__["a" /* AnalysisComponent */] }
+        ]
+    }
 ];
 var AppModule = /** @class */ (function () {
     function AppModule() {
@@ -3154,7 +3307,8 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_42__BasesComponent_BaseComponent_AreasComponent_areas_component__["a" /* AreasComponent */],
                 __WEBPACK_IMPORTED_MODULE_43__BasesComponent_BaseComponent_ColoniesComponent_colonies_component__["a" /* ColoniesComponent */],
                 __WEBPACK_IMPORTED_MODULE_44__BasesComponent_BaseComponent_GroupComponent_group_component__["a" /* GroupComponent */],
-                __WEBPACK_IMPORTED_MODULE_46__GlobalServicesComponent_global_services_component__["a" /* GlobalServicesComponent */]
+                __WEBPACK_IMPORTED_MODULE_46__GlobalServicesComponent_global_services_component__["a" /* GlobalServicesComponent */],
+                __WEBPACK_IMPORTED_MODULE_48__AnalysisComponent_analysis_component__["a" /* AnalysisComponent */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
@@ -3193,7 +3347,7 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_31_ng_snotify__["b" /* SnotifyService */],
                 __WEBPACK_IMPORTED_MODULE_45__services_area_service__["a" /* AreaService */],
                 { provide: __WEBPACK_IMPORTED_MODULE_47_ng_pick_datetime__["a" /* OWL_DATE_TIME_LOCALE */], useValue: 'mx' },
-                { provide: __WEBPACK_IMPORTED_MODULE_47_ng_pick_datetime__["b" /* OwlDateTimeIntl */], useClass: DefaultInit },
+                { provide: __WEBPACK_IMPORTED_MODULE_47_ng_pick_datetime__["b" /* OwlDateTimeIntl */], useClass: DefaultInit }
             ],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_11__app_component__["a" /* AppComponent */]]
         })

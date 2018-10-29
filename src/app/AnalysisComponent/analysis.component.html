@@ -1,0 +1,114 @@
+<div class="ui padded grid">
+  <div class="row">
+    <div class="sixteen wide column" style="margin-bottom: 10px;">
+
+      <div class="ui input">
+        <input placeholder="Fecha inicio" [(ngModel)]="dateTime" [owlDateTimeTrigger]="dt" [owlDateTime]="dt">
+        <owl-date-time #dt></owl-date-time>
+      </div>
+
+      <div class="ui input" style="margin-left: 10px;">
+        <input placeholder="Fecha fin" [(ngModel)]="dateTime2" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2">
+        <owl-date-time #dt2></owl-date-time>
+      </div>
+
+
+      <button class="ui button" (click)="search()" [ngClass]="{'loading disabled': loading}" [disabled]="dateTime == undefined || dateTime2 == undefined"
+        style="margin-left: 10px;">Buscar</button>
+      <span style="float: right;">Completados: {{counter_analysis.completed}}</span>
+      <span style="float: right; margin-right: 1em;">Cancelados: {{counter_analysis.canceled}}</span>
+      <span style="float: right; margin-right: 1em;">Negados: {{counter_analysis.negated}}</span>
+      <span style="float: right;  margin-right: 1em;">Conductores no disponibles: {{counter_analysis.unavailable}}</span>
+      <span style="float: right; margin-right: 1em;">Peticiones realizadas: {{total_request()}}</span>
+    </div>
+
+    <div class="five wide column" style="max-height: 85vh; overflow-y: scroll;">
+      <table class="ui very compact table">
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Unidades</th>
+            <th>Hora</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let a of services">
+            <td>{{a.type == 'closest' ? 'Cercanos' : 'En base'}}</td>
+            <td>{{
+              a.service.state === 'negated' && a.drivers.length === 0 ? 'Conductores no disponibles' :
+              a.service.state === 'negated' ? 'Negado' :
+              a.service.state === 'completed' ? 'Completado' :
+              a.service.state === 'canceled' ? 'Cancelado' :
+              a.service.state === 'in_progress' ? 'En proceso' : 'En camino'
+              }}</td>
+            <td>{{a.drivers.length}}</td>
+            <td>{{a.service.request_time | date:'HH:mm dd/MM'}}</td>
+            <td>
+              <i class="eye icon" (click)="get_analysis(a); details.show()"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="eleven wide column">
+      <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom">
+        <agm-marker *ngFor="let marker of markers" [latitude]="marker.latitude" [longitude]="marker.longitude"
+          [iconUrl]="marker.icon"></agm-marker>
+      </agm-map>
+    </div>
+
+
+  </div>
+</div>
+
+
+<sm-modal class=""  #details style="margin-top: 0;">
+  <modal-content>
+    <h3 *ngIf="analysis">Servicio: {{analysis?.service.request_time| date:'dd/MM/yyyy HH:mm'}}, {{
+      analysis.service.state === 'negated' && analysis.drivers.length === 0 ? 'Conductores no disponibles' :
+      analysis.service.state === 'negated' ? 'Negado' :
+      analysis.service.state === 'completed' ? 'Completado' :
+      analysis.service.state === 'canceled' ? 'Cancelado' :
+      analysis.service.state === 'in_progress' ? 'En proceso' : 'En camino'
+      }}</h3>
+    <div class="ui padded grid">
+      <div class="five wide column">
+        Cliente: {{analysis?.service.user.full_name}} <br>
+        Origen: {{analysis?.service.details}} <br>
+        Conductores: <br>
+        <div class="ui bulleted list" *ngIf="analysis">
+            <div class="item" *ngFor="let driver of analysis.drivers">{{driver.driver.full_name}}</div>
+          </div>
+      </div>
+      <div class="eleven wide column">
+        <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom" style="height: 50vh;">
+          <agm-marker *ngFor="let marker of analysis?.drivers" [latitude]="marker.coords[1]" [longitude]="marker.coords[0]"
+            [iconUrl]="'assets/car.png'" [label]="marker.driver.unit_number.toString()"></agm-marker>
+          <agm-marker [latitude]="analysis?.service.origin_coords[1]" [longitude]="analysis?.service.origin_coords[0]"></agm-marker>
+        </agm-map>
+      </div>
+    </div>
+  </modal-content>
+  <modal-actions>
+    <div class="ui buttons">
+      <div class="ui button primary" (click)="details.hide()">Cerrar</div>
+    </div>
+  </modal-actions>
+</sm-modal>
+
+<style>
+  .selected {
+    background-color: lightgoldenrodyellow;
+  }
+
+  agm-map {
+    height: 85vh;
+  }
+
+   /deep/.ui .modal .transition .visible .active {
+    margin-top: 0 !important;
+  }
+</style>
